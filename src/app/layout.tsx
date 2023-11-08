@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { Providers } from "./_providers";
 import './globals.css'
 
 export const metadata: Metadata = {
@@ -15,7 +16,16 @@ export default function RootLayout({
     <html>
       <body>
         <h3>header</h3>
+        <Providers
+          themeProps={{
+            attribute: "class",
+            // defaultTheme: "system",
+            defaultTheme: "light",
+            enableSystem: true,
+          }}
+        >
         {children}
+        </Providers>
       </body> 
     </html>
   )
