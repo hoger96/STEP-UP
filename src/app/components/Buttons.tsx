@@ -1,6 +1,6 @@
 'use client'
-import React, { MouseEventHandler } from "react";
 import {Button} from "@nextui-org/button";
+import { MouseEventHandler } from "react";
 
 interface IButtonProps{
   label: string;
