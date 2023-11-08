@@ -5,6 +5,7 @@ export default function Home() {
         <h1>메인 페이지</h1>
         <h3><a href="/mypage">나의 현황</a></h3>
         <h3><a href="/confirm">결재 현황</a></h3>
+        <h3><a href="/example">공통 컴포넌트 보러가기</a></h3>
     </div>
   )
 }
