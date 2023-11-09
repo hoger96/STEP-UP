@@ -15,12 +15,23 @@ export default function RootLayout({
   return (
     <html>
       <body>
-<<<<<<< HEAD
-=======
-        <div className="p-5 bg-gray-600">
-          <h1>Header</h1>
+        <div className="p-5 bg-gray-600 flex">
+          <p className="mr-3 text-white">STEP-UP</p>
+          <p>|</p>
+          <p className="mx-3 text-white">사원 이름</p>
+          <p>|</p>
+          <p className="mx-3 cursor-pointer text-white">
+            <a href="/mypage">나의 현황</a>
+          </p>
+          <p>|</p>
+          <p className="mx-3 cursor-pointer text-white">
+            <a href="/confirm">결재 현황</a>
+          </p>
+          <p>|</p>
+          <p className="mx-3 cursor-pointer text-white">
+            <a href="/example">공통 컴포넌트 보러가기</a>
+          </p>
         </div>
->>>>>>> b295bf0 (Feat: 헤더 생성)
         <Providers
           themeProps={{
             attribute: "class",
