@@ -7,8 +7,14 @@ import { CommonDatePicker } from "../components/DatePicker";
 import CommonTable from "../components/Table";
 import React from "react";
 import { Chip, ChipProps, Tooltip } from "@nextui-org/react";
+import CommonInput from "../components/Input";
 
 export default function Home() {
+
+  // ----------------------------- input -----------------------------------
+
+  const [inputValue, setInputValue] = useState<string>('')
+
   // ----------------------------- select ----------------------------------
   // select example data
   const exampleData = [
@@ -110,8 +116,10 @@ export default function Home() {
     Vacation: "warning",
   };
 
-  type Item = (typeof rows)[0];
+  const [currentPage, setCurrnetPage] = useState<number>(1)
 
+  type Item = typeof rows[0];
+  
   const renderCell = React.useCallback((items: Item, columnKey: string) => {
     const cellValue = items[columnKey as keyof Item];
 
@@ -153,12 +161,9 @@ export default function Home() {
     }
   }, []);
 
-  const [currentPage, setCurrnetPage] = useState<number>(1);
-
   return (
     <div>
       <h3>UI EXAMPLE</h3>
-      <br></br>
       <div>
         <div className="m-5">
           <h2>Button</h2>
@@ -186,7 +191,6 @@ export default function Home() {
             />
           </div>
         </div>
-
         <div className="m-5">
           <div>DATE PICKER</div>
           <div>
@@ -226,79 +230,108 @@ export default function Home() {
           </div>
         </div>
       </div>
-
-      <div className="m-5">
-        <h2>SELECT</h2>
-        <div>
-          <CommonSelect
-            data={exampleData}
-            selectValue={selectValue}
-            label="select"
-            labelType="outside-left"
-            placeholer="값을 선택해주세요."
-            onChange={acSelectChange}
-          />
-          <CommonSelect
-            data={exampleData}
-            selectValue={selectDefaultValue}
-            label="default"
-            labelType="outside-left"
-            onChange={(e: any) => {
-              setSelectDefaultValue([e.target.value]);
-            }}
-          />
-          <CommonSelect
-            data={exampleData}
-            value={selectValue}
-            label="disabled"
-            labelType="outside-left"
-            placeholer="값을 선택해주세요."
-            isDisabled={true}
-          />
-          <CommonSelect
-            data={exampleData}
-            value={selectValue}
-            label="required"
-            labelType="outside-left"
-            placeholer="값을 선택해주세요."
-            isRequired={true}
-            onChange={(e: any) => {
-              setSelectValue([e.target.value]);
-            }}
-          />
-          <CommonSelect
-            data={exampleData}
-            value={selectValue}
-            label="validation"
-            labelType="outside-left"
-            placeholer="값을 선택해주세요."
-            isRequired={true}
-            isInvalid={!selectValue?.length ? true : false}
-            errorMessage={!selectValue?.length ? "필수 선택 값입니다." : ""}
-            onChange={(e: any) => {
-              setSelectValue([e.target.value]);
-            }}
-          />
-        </div>
+    <div className="m-5">
+      <h2>SELECT</h2>
+      <div>
+        <CommonSelect 
+          data={exampleData}
+          selectValue={selectValue}
+          label="select"
+          labelType="outside-left"
+          placeholer="값을 선택해주세요."
+          onChange={acSelectChange}
+        />
+        <CommonSelect 
+          data={exampleData}
+          selectValue={selectDefaultValue}
+          label="default"
+          labelType="outside-left"
+          onChange={(e: any) => {setSelectDefaultValue([e.target.value])}}
+        />
+         <CommonSelect 
+          data={exampleData}
+          value={selectValue}
+          label="disabled"
+          labelType="outside-left"
+          placeholer="값을 선택해주세요."
+          isDisabled={true}
+        />
+        <CommonSelect 
+          data={exampleData}
+          value={selectValue}
+          label="required"
+          labelType="outside-left"
+          placeholer="값을 선택해주세요."
+          isRequired={true}
+          onChange={(e: any) => {setSelectValue([e.target.value])}}
+        />
+        <CommonSelect 
+          data={exampleData}
+          value={selectValue}
+          label="validation"
+          labelType="outside-left"
+          placeholer="값을 선택해주세요."
+          isRequired={true}
+          isInvalid={!selectValue?.length}
+          errorMessage={!selectValue?.length ? '필수 선택 값입니다.' : ''}
+          onChange={(e: any) => {setSelectValue([e.target.value])}}
+        />
       </div>
-
-      <div className="m-5">
-        <h2>TABLE</h2>
-        <div>
-          <CommonTable
-            tablekey="example table"
-            columns={columns}
-            rows={rows}
-            renderCell={renderCell}
-            emptyContent={"조회된 데이터가 없습니다."}
-            onChange={setCurrnetPage}
-            currentPage={currentPage}
-            pages={5}
-          />
-        </div>
-        <div>
-          <div>no data</div>
-          <CommonTable
+    </div>
+    <div className="m-5">
+      <h2>INPUT</h2>
+      <div>
+        <CommonInput 
+          value={inputValue} 
+          label="input"
+          placeholder="값을 입력해주세요."
+          onValueChange={setInputValue}
+        />
+        <CommonInput 
+          value={inputValue} 
+          label="disabled"
+          placeholder="값을 입력해주세요."
+          onValueChange={setInputValue}
+        />
+       <CommonInput 
+          value={inputValue} 
+          label="readonly"
+          placeholder="값을 입력해주세요."
+          onValueChange={setInputValue}
+        />
+        <CommonInput 
+          value={inputValue} 
+          label="required"
+          placeholder="값을 입력해주세요."
+          onValueChange={setInputValue}
+        />
+        <CommonInput 
+          value={inputValue} 
+          label="validation"
+          onValueChange={setInputValue}
+          isInvalid={!inputValue?.length}
+          placeholder="값을 입력해주세요."
+          errorMessage={!inputValue?.length ? "필수 입력 값입니다.": ''}
+        />
+      </div>
+    </div>
+    <div className="m-5">
+      <h2>TABLE</h2>
+      <div>
+        <CommonTable 
+          tablekey="example table"
+          columns={columns}
+          rows={rows}
+          renderCell={renderCell} 
+          emptyContent={"조회된 데이터가 없습니다."} 
+          onChange={setCurrnetPage} 
+          currentPage={currentPage} 
+          pages={5}        
+        />
+      </div>
+      <div>
+        <div>no data</div>
+          <CommonTable 
             tablekey="example table"
             columns={columns}
             rows={[]}
