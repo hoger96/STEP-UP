@@ -1,7 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import { DatePicker } from "@/app/components/DatePicker";
-import { ko } from "date-fns/locale";
+import { CommonDatePicker } from "@/app/components/DatePicker";
 
 export function SearchBar() {
   const now = new Date();
@@ -10,12 +9,12 @@ export function SearchBar() {
   const [endDate, setEndDate] = useState(new Date());
   return (
     <div className="flex">
-      <DatePicker
+      <CommonDatePicker
         name="마일리지 신청 일자"
         selected={startDate}
         onChange={(date: Date) => setStartDate(date)}
       />
-      <DatePicker
+      <CommonDatePicker
         name="~"
         selected={endDate}
         onChange={(date: Date) => setEndDate(date)}
