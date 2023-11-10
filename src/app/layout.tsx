@@ -15,7 +15,7 @@ export default function RootLayout({
 }) {
   return (
     <html>
-      <body>
+      <body className="bg-gray-200">
         <div className="p-5 bg-gray-600 flex">
           <p className="mr-3 text-white">STEP-UP</p>
           <p>|</p>
@@ -41,7 +41,7 @@ export default function RootLayout({
             enableSystem: true,
           }}
         >
-          {children}
+          <div className="m-10">{children}</div>
         </Providers>
       </body>
     </html>
