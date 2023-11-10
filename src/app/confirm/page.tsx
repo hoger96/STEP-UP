@@ -1,5 +1,4 @@
-import CommonButton from "../components/Buttons";
-import { SearchBar } from "./_components/SearchDatePicker";
+import { SearchBar } from "./_components/SearchBar";
 
 export default function Confirm() {
   return (
