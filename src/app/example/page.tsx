@@ -6,8 +6,10 @@ import CommonButton from "../components/Buttons";
 import { CommonDatePicker } from "../components/DatePicker";
 import CommonTable from "../components/Table";
 import React from "react";
-import { Chip, ChipProps, Tooltip } from "@nextui-org/react";
+import { Chip, ChipProps, Tooltip, useDisclosure } from "@nextui-org/react";
 import CommonInput from "../components/Input";
+import CommonModal from "../components/Confirm";
+import ModalExample from "../mypage/_components/ModalExample";
 
 export default function Home() {
   // ----------------------------- input -----------------------------------
@@ -160,6 +162,10 @@ export default function Home() {
     }
   }, []);
 
+  // ------------------------ confrim -------------------------------------
+
+  const {isOpen, onOpen, onClose, onOpenChange} = useDisclosure();
+
   return (
     <div>
       <h3>UI EXAMPLE</h3>
@@ -228,7 +234,6 @@ export default function Home() {
             />
           </div>
         </div>
-      </div>
       <div className="m-5">
         <h2>SELECT</h2>
         <div>
@@ -349,6 +354,27 @@ export default function Home() {
           />
         </div>
       </div>
+      {/* <div className="m-5">
+        <div>Modal Popup</div>
+        <CommonButton 
+          label={"모달 오픈"} 
+          size={"sm"} 
+          radius={"sm"} 
+          color={"default"} 
+          variant={"flat"} 
+          onClick={isOpen} 
+        />
+        <CommonModal 
+            confirmBtn={"확인"}
+            contents={<ModalExample />}
+            title={"컨펌 모달"}
+            isOpen={isOpen}
+            size={'2xl'}
+            onConfirmBtn={() => { console.log('confirm btn click'); } } 
+            onClose={onClose}        
+          />
+      </div> */}
     </div>
+  </div>
   );
 }

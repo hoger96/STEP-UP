@@ -22,11 +22,34 @@ export function CommonSelect(props: {
     <div>
       <div>
         <Select 
+         classNames={{
+          label: "text-left align-middle mt-2 font-semibold w-64",
+        }}
+        listboxProps={{
+          itemClasses: {
+            base: [
+              "text-default-500",
+              "transition-opacity",
+              "data-[hover=true]:text-foreground",
+              "data-[hover=true]:bg-default-100",
+              "dark:data-[hover=true]:bg-default-50",
+              "data-[selectable=true]:focus:bg-default-50",
+              "data-[pressed=true]:opacity-70",
+              "data-[focus-visible=true]:ring-default-500",
+            ],
+          },
+        }}
+        popoverProps={{
+          classNames: {
+            base: "before:bg-default-200",
+            content: "p-0 border-small border-divider bg-background",
+          },
+        }}
           labelPlacement={props.labelType}
           label={props.label} 
           value={props.value}
           placeholder={props.placeholer}
-          className="max-w-xs" 
+          className="max-w-lg" 
           isDisabled={props.isDisabled}
           isRequired={props.isRequired}
           isInvalid={props.isInvalid}
