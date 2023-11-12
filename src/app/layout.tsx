@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Providers } from "./_providers";
 import "./globals.css";
-import Link from "next/link";
+import Header from "./components/Header";
 
 export const metadata: Metadata = {
   title: "Step-Up",
@@ -15,23 +15,10 @@ export default function RootLayout({
 }) {
   return (
     <html>
-      <body className="bg-gray-200">
-        <div className="p-5 bg-gray-600 flex">
-          <p className="mr-3 text-white">STEP-UP</p>
-          <p>|</p>
-          <p className="mx-3 text-white">사원 이름</p>
-          <p>|</p>
-          <p className="mx-3 cursor-pointer text-white">
-            <Link href="/mypage/KimYoungHyeon">나의 현황</Link>
-          </p>
-          <p>|</p>
-          <p className="mx-3 cursor-pointer text-white">
-            <Link href="/confirm">결재 현황</Link>
-          </p>
-          <p>|</p>
-          <p className="mx-3 cursor-pointer text-white">
-            <Link href="/example">공통 컴포넌트 보러가기</Link>
-          </p>
+      <body>
+        {/* TODO: Header 공통 컴포넌트로 빼기 */}
+        <div>
+          <Header />
         </div>
         <Providers
           themeProps={{
@@ -40,8 +27,9 @@ export default function RootLayout({
             defaultTheme: "light",
             enableSystem: true,
           }}
-        >
-          <div className="m-10">{children}</div>
+        ><div>
+          <div className="min-h-full h-screen bg-scroll bg-gray-30">{children}</div>
+        </div>
         </Providers>
       </body>
     </html>

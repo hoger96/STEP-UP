@@ -20,6 +20,13 @@ export default function CommonInput(props: {
   return (
     <div>
     <Input
+     classNames={{
+      label: "text-left font-semibold w-24",
+      input: [
+        "min-w-full w-64",
+        "placeholder:text-gray-400",
+      ]
+      }}
         type={props.type ? props.type : 'text'}
         value={props.value}
         label={props.label}
@@ -33,7 +40,6 @@ export default function CommonInput(props: {
         isDisabled={props.isDisabled}
         isInvalid={props.isInvalid}
         onValueChange={props.onValueChange}
-        onClear={props.onClear}
     />
     </div>
   )

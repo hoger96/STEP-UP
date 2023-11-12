@@ -54,7 +54,7 @@ export function SearchBar() {
 
   return (
     <div className="flex bg-white rounded-2xl p-2 justify-between">
-      <div className="flex mr-2">
+      <div className="flex">
         <CommonDatePicker
           name="마일리지 신청 일자"
           selected={startDate}
@@ -66,7 +66,7 @@ export function SearchBar() {
           onChange={(date: Date) => setEndDate(date)}
         />
       </div>
-      <div className="mr-2 w-500">
+      <div>
         <CommonSelect
           data={statusData}
           selectValue={confirmStatus}
@@ -75,7 +75,7 @@ export function SearchBar() {
           onChange={handleSelectStatus}
         />
       </div>
-      <div className="mr-2">
+      <div>
         <CommonSelect
           data={searchData}
           selectValue={searchCondition}
@@ -84,22 +84,24 @@ export function SearchBar() {
           onChange={handleSelectCondition}
         />
       </div>
-      <div className="mr-2">
-        <CommonInput
-          value={keyword}
-          placeholder="검색어를 입력해 주세요."
-          onValueChange={setKeyword}
-        />
-      </div>
-      <div>
-        <CommonButton
-          label="검색"
-          size="md"
-          radius="md"
-          color="default"
-          variant="solid"
-          onClick={() => clickButton()}
-        />
+      <div className="flex">
+        <div className="mr-2">
+          <CommonInput
+            value={keyword}
+            placeholder="검색어를 입력해 주세요."
+            onValueChange={setKeyword}
+          />
+        </div>
+        <div>
+          <CommonButton
+            label="검색"
+            size="md"
+            radius="md"
+            color="default"
+            variant="solid"
+            onClick={() => clickButton()}
+          />
+        </div>
       </div>
     </div>
   );
