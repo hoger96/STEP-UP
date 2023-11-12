@@ -6,11 +6,13 @@ import {
   TableColumn,
   TableRow,
   TableCell,
-  Pagination
+  Pagination,
+  getKeyValue
 } from "@nextui-org/react";
 
 interface CommonTableProps {
-  renderCell(item: any, columnKey: React.Key): React.ReactNode;
+  renderCell?: any;
+  useRenderCell?: boolean;
   onChange?: ((page: number) => void) | undefined;
   currentPage?: number | undefined;
   pages?: number | undefined;
@@ -48,7 +50,13 @@ export default function CommonTable(props: CommonTableProps){
         <TableBody emptyContent={props.emptyContent} items={props.rows}>
           {(item: any) => (
             <TableRow key={item.key}>
-             {(columnKey) => <TableCell>{props.renderCell(item, columnKey)}</TableCell>}
+             {(columnKey) => {
+                if(props.useRenderCell ? props.useRenderCell : false){
+                  return <TableCell>{props.renderCell(item, columnKey)}</TableCell>
+                }else{
+                  return <TableCell>{getKeyValue(item, columnKey)}</TableCell>
+                }
+              }}
             </TableRow>
           )}
       </TableBody>

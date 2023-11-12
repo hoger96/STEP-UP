@@ -163,8 +163,7 @@ export default function Home() {
   }, []);
 
   // ------------------------ confrim -------------------------------------
-
-  const {isOpen, onOpen, onClose, onOpenChange} = useDisclosure();
+  // const {isOpen, onOpen, onClose, onOpenChange} = useDisclosure();
 
   return (
     <div>
@@ -336,6 +335,7 @@ export default function Home() {
             tablekey="example table"
             columns={columns}
             rows={rows}
+            useRenderCell={true}
             renderCell={renderCell}
             emptyContent={"조회된 데이터가 없습니다."}
             onChange={setCurrnetPage}
@@ -344,12 +344,22 @@ export default function Home() {
           />
         </div>
         <div>
+          <CommonTable
+              tablekey="example table 1"
+              columns={columns}
+              rows={rows}
+              emptyContent={"조회된 데이터가 없습니다."}
+              onChange={setCurrnetPage}
+              currentPage={currentPage}
+              pages={5}    
+              />
+        </div>
+        <div>
           <div>no data</div>
           <CommonTable
             tablekey="example table"
             columns={columns}
             rows={[]}
-            renderCell={renderCell}
             emptyContent={"조회된 데이터가 없습니다."}
           />
         </div>
