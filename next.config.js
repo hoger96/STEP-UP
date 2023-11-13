@@ -1,5 +1,6 @@
 /** @type {import('next').NextConfig} */
-const nextConfig = {
+
+module.exports = {
   pageExtensions: ['js', 'jsx', 'mdx', 'ts', 'tsx'],
   reactStrictMode: false,
   experimental: {
@@ -11,14 +12,9 @@ const nextConfig = {
   async rewrites() {
     return [
       {
-        source:'/stepup/api/:path*',
-        destination: 'http://192.168.0.101:28080/stepup/api/:path*'
-      }
-    ]    
-  }
-}
-
-
- 
-
-module.exports = nextConfig
+        source: '/stepup/api/:path*',
+        destination: `http://192.168.0.101:28080/stepup/api/:path*`,
+      },
+    ];
+  },
+};
