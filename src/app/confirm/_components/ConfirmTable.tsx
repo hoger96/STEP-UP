@@ -19,9 +19,12 @@ export default function ConfirmTable({
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(
-          `/management/approval?searchType=${searchData?.searchType}&keyword=${searchData?.keyword}&approvalStatus=${searchData?.approvalStatus}&startDate=${searchData?.startDate}&endDate=${searchData?.endDate}&currentPage=1&limit=10`
-        );
+        const url = `/management/approval?searchType=${searchData?.searchType}&keyword=${searchData?.keyword}&approvalStatus=${searchData?.approvalStatus}&startDate=${searchData?.startDate}&endDate=${searchData?.endDate}&currentPage=1&limit=10`;
+        const response = await fetch(url);
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
         const result = await response.json();
         setData(result);
       } catch (error) {
