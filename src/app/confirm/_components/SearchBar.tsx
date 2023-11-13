@@ -5,7 +5,7 @@ import { CommonSelect } from "@/app/components/Select";
 import CommonInput from "@/app/components/Input";
 import CommonButton from "@/app/components/Buttons";
 
-export function SearchBar() {
+export function SearchBar({ onSearch }) {
   const now = new Date();
   const oneMonthAgo = new Date(now.setMonth(now.getMonth() - 1));
   const [startDate, setStartDate] = useState(oneMonthAgo);
@@ -13,47 +13,46 @@ export function SearchBar() {
 
   const statusData = [
     { label: "전체", value: "ALL" },
-    { label: "대기", value: "wait" },
-    { label: "반려", value: "fail" },
-    { label: "완료", value: "success" },
+    { label: "대기", value: "WAIT" },
+    { label: "반려", value: "REJECT" },
+    { label: "완료", value: "APPROVAL" },
   ];
-  const [confirmStatus, setconfirmStatus] = useState<string[]>();
+  const [approvalStatus, setApprovalStatus] = useState<string[]>();
   function handleSelectStatus(e: any) {
-    setconfirmStatus([e.target.value]);
+    setApprovalStatus([e.target.value]);
   }
 
   const searchData = [
     { label: "전체", value: "ALL" },
-    { label: "사원 명", value: "name" },
+    { label: "사원 명", value: "USER_NM" },
   ];
-  const [searchCondition, setsearchCondition] = useState<string[]>();
+  const [searchType, setSearchType] = useState<string[]>();
   function handleSelectCondition(e: any) {
-    setsearchCondition([e.target.value]);
+    setSearchType([e.target.value]);
   }
   useEffect(() => {
-    setconfirmStatus(["ALL"]);
-    setsearchCondition(["ALL"]);
+    setApprovalStatus(["ALL"]);
+    setSearchType(["ALL"]);
   }, []);
 
   const [keyword, setKeyword] = useState<string>("");
 
-  const clickButton = () => {
-    console.log(
-      "startDate: ",
-      JSON.stringify(startDate).replace(/T.*/, ""),
-      "endDate: ",
-      JSON.stringify(endDate).replace(/T.*/, ""),
-      "결재상태: ",
-      confirmStatus,
-      "검색조건: ",
-      searchCondition,
-      "검색어: ",
-      keyword
-    );
+  const handleSearch = () => {
+    const formattedStartDate = startDate.toISOString().split("T")[0];
+    const formattedEndDate = endDate.toISOString().split("T")[0];
+
+    const searchParams = {
+      searchType: searchType?.toString(),
+      keyword: keyword,
+      approvalStatus: approvalStatus?.toString(),
+      startDate: formattedStartDate,
+      endDate: formattedEndDate,
+    };
+    onSearch(searchParams);
   };
 
   return (
-    <div className="flex bg-white rounded-2xl p-2 justify-between">
+    <div className="flex bg-gray-100 rounded-2xl p-2 justify-between">
       <div className="flex">
         <CommonDatePicker
           name="마일리지 신청 일자"
@@ -69,7 +68,7 @@ export function SearchBar() {
       <div>
         <CommonSelect
           data={statusData}
-          selectValue={confirmStatus}
+          selectValue={approvalStatus}
           label="결재 상태"
           labelType="outside-left"
           onChange={handleSelectStatus}
@@ -78,7 +77,7 @@ export function SearchBar() {
       <div>
         <CommonSelect
           data={searchData}
-          selectValue={searchCondition}
+          selectValue={searchType}
           label="검색 조건"
           labelType="outside-left"
           onChange={handleSelectCondition}
@@ -99,7 +98,7 @@ export function SearchBar() {
             radius="md"
             color="default"
             variant="solid"
-            onClick={() => clickButton()}
+            onClick={() => handleSearch()}
           />
         </div>
       </div>
