@@ -1,9 +1,22 @@
 "use client"
 
 import { Card, CardBody } from '@nextui-org/react'
-import React from 'react'
+import React, { useEffect } from 'react'
 
 export default function StepupStatus(props) {
+    const fetchData = async() => {
+        try {
+            const res = await (await fetch('/stepup/api/management/approval')).json()
+            console.log('res', res?.body)
+        } catch (e) {
+            console.error(e)
+        }
+    }
+
+      useEffect(() => {
+          fetchData();
+      }, [])
+
   return (
     <div>
         <div className='flex max-w-[1500px] m-auto my-4'>
