@@ -1,13 +1,10 @@
-import { SearchBar } from "./_components/SearchBar";
+import ConfirmContainer from "./_components/ConfirmContainer";
 
 export default function Confirm() {
   return (
     <div>
       <div>
-        <SearchBar />
-      </div>
-      <div>
-        contents
+        <ConfirmContainer />
       </div>
     </div>
   );
