@@ -1,10 +1,16 @@
-import Image from "next/image";
+import { ReactChild, ReactFragment, ReactPortal } from "react";
+import StepupStatus from "../_components/StepupStatus";
+import StepupTabs from "../_components/StepupTabContainer";
 
-export default function Mypage(props) {
+export default function Mypage(props: { params: { id: boolean | ReactChild | ReactFragment | ReactPortal | null | undefined; }; }) {
   return (
     <div>
-      <h1>나의 현황 페이지</h1>
-      parameter: {props.params.id}
+      <div>
+        <StepupStatus />
+      </div>
+      <div>
+        <StepupTabs />
+      </div>
     </div>
   );
 }
