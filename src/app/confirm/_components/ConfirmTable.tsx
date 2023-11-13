@@ -19,11 +19,12 @@ export default function ConfirmTable({
   useEffect(() => {
     const fetchData = async () => {
       try {
-        console.log("searchData", searchData);
-        const response = await fetch("/management/approval");
+        const response = await fetch(
+          `/management/approval?searchType=${searchData?.searchType}&keyword=${searchData?.keyword}&approvalStatus=${searchData?.approvalStatus}&startDate=${searchData?.startDate}&endDate=${searchData?.endDate}&currentPage=1&limit=10`
+        );
+
         const result = await response.json();
         setData(result);
-        console.log("result", result);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
