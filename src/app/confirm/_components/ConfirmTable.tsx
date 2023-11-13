@@ -22,7 +22,6 @@ export default function ConfirmTable({
         const response = await fetch(
           `/management/approval?searchType=${searchData?.searchType}&keyword=${searchData?.keyword}&approvalStatus=${searchData?.approvalStatus}&startDate=${searchData?.startDate}&endDate=${searchData?.endDate}&currentPage=1&limit=10`
         );
-
         const result = await response.json();
         setData(result);
       } catch (error) {
