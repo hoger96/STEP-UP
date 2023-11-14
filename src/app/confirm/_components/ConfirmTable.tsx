@@ -115,6 +115,10 @@ export default function ConfirmTable({
     });
   };
 
+  const handleOpenPopup = (e: Event) => {
+    console.log("key", e);
+  };
+
   useEffect(() => {
     fetchData(searchOption);
   }, [searchData]);
@@ -125,12 +129,16 @@ export default function ConfirmTable({
       <div>
         <CommonTable
           tablekey="approvalId"
+          uniqueKey="approvalId"
           columns={approvalColumns}
           rows={data?.length > 0 ? data : []}
           emptyContent={"조회된 데이터가 없습니다."}
           page={currentPage}
           total={totalPage}
           onChange={handleChangePage}
+          onRowAction={(item) => {
+            console.log(item);
+          }}
         />
       </div>
     </div>
