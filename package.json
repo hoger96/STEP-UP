@@ -17,6 +17,7 @@
     "@types/isomorphic-fetch": "^0.0.39",
     "@types/react-datepicker": "^4.19.2",
     "@types/styled-components": "^5.1.30",
+    "axios": "^1.6.1",
     "date-fns": "^2.30.0",
     "framer-motion": "^10.16.4",
     "isomorphic-unfetch": "^4.0.2",
