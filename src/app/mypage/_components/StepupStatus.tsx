@@ -1,23 +1,43 @@
 "use client"
 
 import { Card, CardBody } from '@nextui-org/react'
-import React, { useEffect } from 'react'
+import axios from 'axios'
+import { useEffect } from 'react'
 
 export default function StepupStatus(props) {
-    const fetchData = async() => {
-        try {
-            const res = await (await fetch('/stepup/api/management/approval')).json()
-            console.log('res', res?.body)
-        } catch (e) {
-            console.error(e)
-        }
+
+    
+const getTotalStepupData = async(approvalId="APV_0000000008") => {
+    try {
+      const result = await axios.get(`/stepup/api/management/approval/${approvalId}`)
+      console.log('result', result.data)
+  
+    } catch (e) {
+      console.error(e)
     }
+  }
 
-      useEffect(() => {
-          fetchData();
-      }, [])
+const getCommonCode = async(cdGrp: string) => {
+    try {
+        const result = await axios.get('/stepup/api/management/common/code', {
+            params: {
+                cdGrp: cdGrp 
+            }
+        })
 
+        console.log('result', result.data)
+    } catch (e) {
+        console.error(e)
+    }
+}
+
+  useEffect(()=> {
+    getTotalStepupData()
+    getCommonCode('APPROVAL_STATUS')
+  })
+  
   return (
+    
     <div>
         <div className='flex max-w-[1500px] m-auto my-4'>
             <p>임규리</p>
@@ -25,7 +45,6 @@ export default function StepupStatus(props) {
         </div>
     <Card className="max-w-[1500px] min-h-[150px] m-auto">
         <CardBody>
-            {/* <p>Make beautiful websites regardless of your design experience.</p> */}
             <div>
                 <span>STEP-UP</span>
             </div>
