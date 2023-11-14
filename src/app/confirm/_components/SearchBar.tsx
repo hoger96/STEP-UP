@@ -5,6 +5,16 @@ import { CommonSelect } from "@/app/components/Select";
 import CommonInput from "@/app/components/Input";
 import CommonButton from "@/app/components/Buttons";
 
+interface ISearchParams {
+  searchType: string;
+  keyword: string;
+  approvalStatus: string;
+  startDate: string;
+  endDate: string;
+  currentPage: number;
+  limit: number;
+}
+
 export function SearchBar({ onSearch }) {
   const now = new Date();
   const oneMonthAgo = new Date(now.setMonth(now.getMonth() - 1));

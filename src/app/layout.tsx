@@ -27,9 +27,12 @@ export default function RootLayout({
             defaultTheme: "light",
             enableSystem: true,
           }}
-        ><div>
-          <div className="min-h-full h-screen bg-scroll bg-gray-30">{children}</div>
-        </div>
+        >
+          <div>
+            <div className="min-h-full h-screen bg-scroll bg-gray-30 p-10">
+              {children}
+            </div>
+          </div>
         </Providers>
       </body>
     </html>

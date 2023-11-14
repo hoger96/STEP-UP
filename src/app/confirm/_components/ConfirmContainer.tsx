@@ -9,6 +9,8 @@ interface ISearchParams {
   approvalStatus: string;
   startDate: string;
   endDate: string;
+  currentPage: number;
+  limit: number;
 }
 
 export default function ConfirmContainer() {
