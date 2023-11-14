@@ -11,6 +11,7 @@ import {
 } from "@nextui-org/react";
 
 interface CommonTableProps<T> {
+  uniqueKey: string;
   total: number;
   page: number;
   renderCell?: any;
@@ -21,6 +22,7 @@ interface CommonTableProps<T> {
   tablekey: string;
   columns: Array<{ key: string; label: string }>;
   rows: Array<T>;
+  onRowAction: (key: React.Key) => void;
 }
 
 export default function CommonTable(props: CommonTableProps<any>) {
@@ -44,6 +46,7 @@ export default function CommonTable(props: CommonTableProps<any>) {
           ) : null
         }
         bottomContentPlacement="outside"
+        onRowAction={props.onRowAction}
       >
         <TableHeader columns={props.columns}>
           {(column) => (
@@ -52,7 +55,7 @@ export default function CommonTable(props: CommonTableProps<any>) {
         </TableHeader>
         <TableBody emptyContent={props.emptyContent} items={props.rows}>
           {(item: any) => (
-            <TableRow key={item.rowNum}>
+            <TableRow key={item[props.uniqueKey]}>
               {(columnKey) => {
                 if (props.useRenderCell ? props.useRenderCell : false) {
                   return (
