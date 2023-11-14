@@ -15,7 +15,7 @@ export function SearchBar({ onSearch }) {
     { label: "전체", value: "ALL" },
     { label: "대기", value: "WAIT" },
     { label: "반려", value: "REJECT" },
-    { label: "완료", value: "APPROVAL" },
+    { label: "승인", value: "APPROVAL" },
   ];
   const [approvalStatus, setApprovalStatus] = useState<string[]>();
   function handleSelectStatus(e: any) {
