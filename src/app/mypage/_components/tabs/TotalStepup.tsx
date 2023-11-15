@@ -1,12 +1,20 @@
 "use client"
 
 import CommonTable from '@/app/components/Table'
-import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 
 export default function TotalStepup(){
 
-const [columns , setColumns] = useState([])
+const columns = [
+  {
+    key: 'rowNum',
+    label: '회차'
+  },
+  {
+    key: 'successDate',
+    label: '스텝업 달성일'
+  }
+]
 const [rows , setRows] = useState([])
 
 // const getTotalStepupData = async() => {
@@ -18,6 +26,10 @@ const [rows , setRows] = useState([])
 //     console.error(e)
 //   }
 // }
+
+// useEffect(() => {
+
+// })
 
   return (
     <div>

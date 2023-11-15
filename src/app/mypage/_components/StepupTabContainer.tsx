@@ -6,6 +6,7 @@ import TodayStepup from './tabs/TodayStepup';
 import TotalStepup from './tabs/TotalStepup';
 import MileageStatus from './tabs/MileageStatus';
 import NotCountStatus from './tabs/NotCountStatus';
+import CommonButton from '@/app/components/Buttons';
 
 export default function StepupTab(){
 
@@ -47,7 +48,7 @@ export default function StepupTab(){
           )}
         </Tabs>
       </div>  
-    </div>
+      </div>  
   )
 }
 

@@ -2,14 +2,14 @@
 
 import { Card, CardBody } from '@nextui-org/react'
 import axios from 'axios'
-import { useEffect } from 'react'
 
-export default function StepupStatus(props) {
+export default function StepupStatus() {
 
-    
-const getTotalStepupData = async(approvalId="APV_0000000008") => {
+const getTotalStepupData = async(params) => {
     try {
-      const result = await axios.get(`/stepup/api/management/approval/${approvalId}`)
+      const result = await axios.get(`/stepup/api/management/approval`, {
+        params
+      })
       console.log('result', result.data)
   
     } catch (e) {
@@ -17,25 +17,6 @@ const getTotalStepupData = async(approvalId="APV_0000000008") => {
     }
   }
 
-const getCommonCode = async(cdGrp: string) => {
-    try {
-        const result = await axios.get('/stepup/api/management/common/code', {
-            params: {
-                cdGrp: cdGrp 
-            }
-        })
-
-        console.log('result', result.data)
-    } catch (e) {
-        console.error(e)
-    }
-}
-
-  useEffect(()=> {
-    getTotalStepupData()
-    getCommonCode('APPROVAL_STATUS')
-  })
-  
   return (
     
     <div>
