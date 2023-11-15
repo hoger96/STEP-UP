@@ -163,7 +163,14 @@ export default function Home() {
   }, []);
 
   // ------------------------ confrim -------------------------------------
-  // const {isOpen, onOpen, onClose, onOpenChange} = useDisclosure();
+  const [isOpen, setIsOpen] = useState(false)
+
+  function openPopup() {
+    setIsOpen(true)
+  }
+  function closePopup() {
+    setIsOpen(false)
+  }
 
   return (
     <div>
@@ -364,7 +371,7 @@ export default function Home() {
           />
         </div>
       </div>
-      {/* <div className="m-5">
+      <div className="m-5">
         <div>Modal Popup</div>
         <CommonButton 
           label={"모달 오픈"} 
@@ -372,18 +379,19 @@ export default function Home() {
           radius={"sm"} 
           color={"default"} 
           variant={"flat"} 
-          onClick={isOpen} 
+          onClick={openPopup} // 팝업 열림 처리
         />
         <CommonModal 
-            confirmBtn={"확인"}
             contents={<ModalExample />}
             title={"컨펌 모달"}
             isOpen={isOpen}
-            size={'2xl'}
-            onConfirmBtn={() => { console.log('confirm btn click'); } } 
-            onClose={onClose}        
+            size={'lg'}
+            onConfirmBtn={() => {
+              closePopup(); // 팝업 닫힘 처리
+            }} 
+            onClose={closePopup} // 팝업 상단 x 버튼 닫힘 처리
           />
-      </div> */}
+      </div>
     </div>
   </div>
   );
