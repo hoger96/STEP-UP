@@ -10,6 +10,7 @@ import { Chip, ChipProps, Tooltip, useDisclosure } from "@nextui-org/react";
 import CommonInput from "../components/Input";
 import CommonModal from "../components/Confirm";
 import ModalExample from "../mypage/_components/ModalExample";
+import { ToastContainer, toast } from "react-toastify";
 
 export default function Home() {
   // ----------------------------- input -----------------------------------
@@ -44,7 +45,7 @@ export default function Home() {
   // -------------------------- button ------------------------------------
 
   const clickButton = () => {
-    alert("버튼을 클릭하였습니다!");
+    toast("토스트 알람");
   };
 
   // -------------------------- datepicker --------------------------------
@@ -163,13 +164,13 @@ export default function Home() {
   }, []);
 
   // ------------------------ confrim -------------------------------------
-  const [isOpen, setIsOpen] = useState(false)
+  const [isOpen, setIsOpen] = useState(false);
 
   function openPopup() {
-    setIsOpen(true)
+    setIsOpen(true);
   }
   function closePopup() {
-    setIsOpen(false)
+    setIsOpen(false);
   }
 
   return (
@@ -188,6 +189,7 @@ export default function Home() {
               variant="solid"
               onClick={() => clickButton()}
             />
+            <ToastContainer position="top-right" autoClose={3000} />
           </div>
           <div>
             <span>disabled button ::: </span>
@@ -240,159 +242,159 @@ export default function Home() {
             />
           </div>
         </div>
-      <div className="m-5">
-        <h2>SELECT</h2>
-        <div>
-          <CommonSelect
-            data={exampleData}
-            selectValue={selectValue}
-            label="select"
-            labelType="outside-left"
-            placeholer="값을 선택해주세요."
-            onChange={acSelectChange}
-          />
-          <CommonSelect
-            data={exampleData}
-            selectValue={selectDefaultValue}
-            label="default"
-            labelType="outside-left"
-            onChange={(e: any) => {
-              setSelectDefaultValue([e.target.value]);
-            }}
-          />
-          <CommonSelect
-            data={exampleData}
-            value={selectValue}
-            label="disabled"
-            labelType="outside-left"
-            placeholer="값을 선택해주세요."
-            isDisabled={true}
-          />
-          <CommonSelect
-            data={exampleData}
-            value={selectValue}
-            label="required"
-            labelType="outside-left"
-            placeholer="값을 선택해주세요."
-            isRequired={true}
-            onChange={(e: any) => {
-              setSelectValue([e.target.value]);
-            }}
-          />
-          <CommonSelect
-            data={exampleData}
-            value={selectValue}
-            label="validation"
-            labelType="outside-left"
-            placeholer="값을 선택해주세요."
-            isRequired={true}
-            isInvalid={!selectValue?.length}
-            errorMessage={!selectValue?.length ? "필수 선택 값입니다." : ""}
-            onChange={(e: any) => {
-              setSelectValue([e.target.value]);
-            }}
-          />
+        <div className="m-5">
+          <h2>SELECT</h2>
+          <div>
+            <CommonSelect
+              data={exampleData}
+              selectValue={selectValue}
+              label="select"
+              labelType="outside-left"
+              placeholer="값을 선택해주세요."
+              onChange={acSelectChange}
+            />
+            <CommonSelect
+              data={exampleData}
+              selectValue={selectDefaultValue}
+              label="default"
+              labelType="outside-left"
+              onChange={(e: any) => {
+                setSelectDefaultValue([e.target.value]);
+              }}
+            />
+            <CommonSelect
+              data={exampleData}
+              value={selectValue}
+              label="disabled"
+              labelType="outside-left"
+              placeholer="값을 선택해주세요."
+              isDisabled={true}
+            />
+            <CommonSelect
+              data={exampleData}
+              value={selectValue}
+              label="required"
+              labelType="outside-left"
+              placeholer="값을 선택해주세요."
+              isRequired={true}
+              onChange={(e: any) => {
+                setSelectValue([e.target.value]);
+              }}
+            />
+            <CommonSelect
+              data={exampleData}
+              value={selectValue}
+              label="validation"
+              labelType="outside-left"
+              placeholer="값을 선택해주세요."
+              isRequired={true}
+              isInvalid={!selectValue?.length}
+              errorMessage={!selectValue?.length ? "필수 선택 값입니다." : ""}
+              onChange={(e: any) => {
+                setSelectValue([e.target.value]);
+              }}
+            />
+          </div>
         </div>
-      </div>
-      <div className="m-5">
-        <h2>INPUT</h2>
-        <div>
-          <CommonInput
-            value={inputValue}
-            label="input"
-            placeholder="값을 입력해주세요."
-            onValueChange={setInputValue}
-          />
-          <CommonInput
-            value={inputValue}
-            label="disabled"
-            isDisabled={true}
-            placeholder="값을 입력해주세요."
-            onValueChange={setInputValue}
-          />
-          <CommonInput
-            value={inputValue}
-            label="readonly"
-            isReadOnly={true}
-            placeholder="값을 입력해주세요."
-            onValueChange={setInputValue}
-          />
-          <CommonInput
-            value={inputValue}
-            label="required"
-            isRequired={true}
-            placeholder="값을 입력해주세요."
-            onValueChange={setInputValue}
-          />
-          <CommonInput
-            value={inputValue}
-            label="validation"
-            onValueChange={setInputValue}
-            isInvalid={!inputValue?.length}
-            isRequired={true}
-            placeholder="값을 입력해주세요."
-            errorMessage={!inputValue?.length ? "필수 입력 값입니다." : ""}
-          />
+        <div className="m-5">
+          <h2>INPUT</h2>
+          <div>
+            <CommonInput
+              value={inputValue}
+              label="input"
+              placeholder="값을 입력해주세요."
+              onValueChange={setInputValue}
+            />
+            <CommonInput
+              value={inputValue}
+              label="disabled"
+              isDisabled={true}
+              placeholder="값을 입력해주세요."
+              onValueChange={setInputValue}
+            />
+            <CommonInput
+              value={inputValue}
+              label="readonly"
+              isReadOnly={true}
+              placeholder="값을 입력해주세요."
+              onValueChange={setInputValue}
+            />
+            <CommonInput
+              value={inputValue}
+              label="required"
+              isRequired={true}
+              placeholder="값을 입력해주세요."
+              onValueChange={setInputValue}
+            />
+            <CommonInput
+              value={inputValue}
+              label="validation"
+              onValueChange={setInputValue}
+              isInvalid={!inputValue?.length}
+              isRequired={true}
+              placeholder="값을 입력해주세요."
+              errorMessage={!inputValue?.length ? "필수 입력 값입니다." : ""}
+            />
+          </div>
         </div>
-      </div>
-      <div className="m-5">
-        <h2>TABLE</h2>
-        <div>
-          <CommonTable
-            tablekey="example table"
-            columns={columns}
-            rows={rows}
-            useRenderCell={true}
-            renderCell={renderCell}
-            emptyContent={"조회된 데이터가 없습니다."}
-            onChange={setCurrnetPage}
-            currentPage={currentPage}
-            pages={5}
-          />
-        </div>
-        <div>
-          <CommonTable
+        <div className="m-5">
+          <h2>TABLE</h2>
+          <div>
+            <CommonTable
+              tablekey="example table"
+              columns={columns}
+              rows={rows}
+              useRenderCell={true}
+              renderCell={renderCell}
+              emptyContent={"조회된 데이터가 없습니다."}
+              onChange={setCurrnetPage}
+              currentPage={currentPage}
+              pages={5}
+            />
+          </div>
+          <div>
+            <CommonTable
               tablekey="example table 1"
               columns={columns}
               rows={rows}
               emptyContent={"조회된 데이터가 없습니다."}
               onChange={setCurrnetPage}
               currentPage={currentPage}
-              pages={5}    
-              />
+              pages={5}
+            />
+          </div>
+          <div>
+            <div>no data</div>
+            <CommonTable
+              tablekey="example table"
+              columns={columns}
+              rows={[]}
+              emptyContent={"조회된 데이터가 없습니다."}
+            />
+          </div>
         </div>
-        <div>
-          <div>no data</div>
-          <CommonTable
-            tablekey="example table"
-            columns={columns}
-            rows={[]}
-            emptyContent={"조회된 데이터가 없습니다."}
+        <div className="m-5">
+          <div>Modal Popup</div>
+          <CommonButton
+            label={"모달 오픈"}
+            size={"sm"}
+            radius={"sm"}
+            color={"default"}
+            variant={"flat"}
+            onClick={openPopup} // 팝업 열림 처리
           />
-        </div>
-      </div>
-      <div className="m-5">
-        <div>Modal Popup</div>
-        <CommonButton 
-          label={"모달 오픈"} 
-          size={"sm"} 
-          radius={"sm"} 
-          color={"default"} 
-          variant={"flat"} 
-          onClick={openPopup} // 팝업 열림 처리
-        />
-        <CommonModal 
+          <CommonModal
             contents={<ModalExample />}
             title={"컨펌 모달"}
             isOpen={isOpen}
-            size={'lg'}
+            size={"lg"}
             onConfirmBtn={() => {
               closePopup(); // 팝업 닫힘 처리
-            }} 
+            }}
             onClose={closePopup} // 팝업 상단 x 버튼 닫힘 처리
           />
+        </div>
       </div>
     </div>
-  </div>
   );
 }

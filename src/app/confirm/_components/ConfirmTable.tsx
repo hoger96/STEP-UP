@@ -4,6 +4,8 @@ import CommonTable from "@/app/components/Table";
 import { Key, useEffect, useState } from "react";
 import ConfirmPopup from "./ConfirmPopup";
 import ApprovalButton from "./ApprovalButton";
+import CommonButton from "@/app/components/Buttons";
+import { ToastContainer, toast } from "react-toastify";
 
 interface IManagementApproval {
   rowNum: number;
@@ -32,9 +34,11 @@ interface IUserInfo {
 export default function ConfirmTable({
   onChange,
   approvalDataList,
+  onDateUpdate,
 }: {
   onChange: (page: number) => void;
   approvalDataList: IWrap<IManagementApproval> | undefined;
+  onDateUpdate: () => void;
 }) {
   const approvalColumns = [
     {
@@ -89,13 +93,19 @@ export default function ConfirmTable({
     setPopupId(id);
   };
 
-  const handleClosePopup = () => {
+  const handleClosePopup = (title: string) => {
     setOpenSignal(false);
+    onDateUpdate();
+    toast.success(`${title}되었습니다.`);
   };
 
   const handleUserDetail = (info: IUserInfo) => {
     setApprovalStatus(info.approvalStatus);
     setUserId(info.userId);
+  };
+
+  const handleDownload = () => {
+    alert("다운로드");
   };
 
   useEffect(() => {
@@ -105,7 +115,15 @@ export default function ConfirmTable({
   }, [approvalDataList]);
   return (
     <div>
-      <span>총 {totalCount} 개</span>
+      <div className="justify-between">
+        <span>총 {totalCount} 개</span>
+        <CommonButton
+          label="엑셀 다운로드"
+          color="default"
+          variant="solid"
+          onClick={handleDownload}
+        />
+      </div>
       <div>
         <CommonTable
           tablekey="approvalId"
@@ -118,6 +136,7 @@ export default function ConfirmTable({
           onChange={handleChangePage}
           onRowAction={handleOpenPopup}
         />
+        <ToastContainer autoClose={2000} hideProgressBar={true} />
       </div>
       <CommonModal
         title={"결재"}
@@ -138,7 +157,7 @@ export default function ConfirmTable({
             approvalId={popupId}
             approvalStatus={approvalStatus}
             userId={userId}
-            onClosePopup={handleClosePopup}
+            onClosePopup={(title: string) => handleClosePopup(title)}
           />
         }
       />

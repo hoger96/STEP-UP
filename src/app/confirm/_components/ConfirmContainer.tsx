@@ -75,13 +75,13 @@ export default function ConfirmContainer() {
     }
   };
   const setApprovalListData = async () => {
-    const result = await getApprovalListData(searchOption);
-    setFetchDataResult(result);
+    try {
+      const result = await getApprovalListData(searchOption);
+      setFetchDataResult(result);
+    } catch (error) {
+      console.error("Error setting data:", error);
+    }
   };
-
-  useEffect(() => {
-    setApprovalListData();
-  }, []);
 
   useEffect(() => {
     setApprovalListData();
@@ -93,6 +93,7 @@ export default function ConfirmContainer() {
       <ConfirmTable
         onChange={handleChange}
         approvalDataList={fetchDataResult}
+        onDateUpdate={setApprovalListData}
       />
     </div>
   );
