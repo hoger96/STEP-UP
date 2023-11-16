@@ -1,22 +1,9 @@
 "use client";
+import CommonModal from "@/app/components/Confirm";
 import CommonTable from "@/app/components/Table";
-import axios from "axios";
-import { useEffect, useState } from "react";
-
-interface ISearchParams {
-  searchType: string;
-  keyword: string;
-  approvalStatus: string;
-  startDate: string;
-  endDate: string;
-  currentPage: number;
-  limit: number;
-}
-
-interface IWrap<T> {
-  totalCount: number;
-  data: T[];
-}
+import { Key, useEffect, useState } from "react";
+import ConfirmPopup from "./ConfirmPopup";
+import ApprovalButton from "./ApprovalButton";
 
 interface IManagementApproval {
   rowNum: number;
@@ -30,34 +17,25 @@ interface IManagementApproval {
   approvalStusNm: string;
 }
 
+interface IWrap<T> {
+  data: T[];
+  totalCount: number;
+  totalPage: number;
+  currentPage: number;
+}
+
+interface IUserInfo {
+  approvalStatus: string;
+  userId: string;
+}
+
 export default function ConfirmTable({
-  searchData,
+  onChange,
+  approvalDataList,
 }: {
-  searchData: ISearchParams | null;
+  onChange: (page: number) => void;
+  approvalDataList: IWrap<IManagementApproval> | undefined;
 }) {
-  const now = new Date();
-  const oneMonthAgo = new Date(now);
-  oneMonthAgo.setMonth(now.getMonth() - 1);
-  const searchOption = {
-    searchType: "ALL",
-    keyword: "",
-    approvalStatus: "ALL",
-    startDate: oneMonthAgo.toISOString().split("T")[0],
-    endDate: now.toISOString().split("T")[0],
-    currentPage: 1,
-    limit: 10,
-  };
-  if (searchData) {
-    (searchOption.searchType = searchData.searchType),
-      (searchOption.keyword = searchData.keyword),
-      (searchOption.approvalStatus = searchData.approvalStatus),
-      (searchOption.startDate = searchData.startDate),
-      (searchOption.endDate = searchData.endDate);
-  }
-  const [data, setData] = useState<IManagementApproval[]>([]);
-  const [totalCount, setTotalCount] = useState<number>(0);
-  const [totalPage, setTotalPage] = useState<number>(0);
-  const [currentPage, setCurrentPage] = useState<number>(0);
   const approvalColumns = [
     {
       key: "rowNum",
@@ -69,7 +47,7 @@ export default function ConfirmTable({
     },
     {
       key: "draftDt",
-      label: "결재 신청 일자",
+      label: "결재 요청 일자",
     },
     {
       key: "approvalReqDt",
@@ -84,45 +62,47 @@ export default function ConfirmTable({
       label: "결재 상태",
     },
   ];
-
-  const fetchData = async (searchOption: ISearchParams) => {
-    try {
-      const result = await axios.get("/stepup/api/management/approval", {
-        params: {
-          searchType: searchOption.searchType,
-          keyword: searchOption.keyword,
-          approvalStatus: searchOption.approvalStatus,
-          startDate: searchOption.startDate,
-          endDate: searchOption.endDate,
-          currentPage: searchOption.currentPage,
-          limit: searchOption.limit,
-        },
-      });
-      setData(result.data.body.data);
-      setTotalCount(result.data.body.totalCount);
-      setTotalPage(result.data.body.totalPage);
-      setCurrentPage(result.data.body.currentPage);
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    }
+  const [data, setData] = useState<IManagementApproval[]>([]);
+  const [totalCount, setTotalCount] = useState<number>(0); // 결재 현황 목록 총 갯수
+  const [totalPage, setTotalPage] = useState<number>(0); // 결재 현황 목록 총 페이지 수
+  const [currentPage, setCurrentPage] = useState<number>(0); // 결재 현황 목록 현재 페이지
+  // 핍업
+  const [openSignal, setOpenSignal] = useState(false);
+  const [popupId, setPopupId] = useState("");
+  const [approvalStatus, setApprovalStatus] = useState("");
+  const [userId, setUserId] = useState("");
+  const setApprovalListData = (result: IWrap<IManagementApproval>) => {
+    setData(result.data);
+    setTotalCount(result.totalCount);
+    setTotalPage(result.totalPage);
+    setCurrentPage(result.currentPage);
   };
 
   const handleChangePage = (page: number) => {
     setCurrentPage(page);
-    fetchData({
-      ...searchOption,
-      currentPage: page,
-    });
+    onChange(page);
   };
 
-  const handleOpenPopup = (e: Event) => {
-    console.log("key", e);
+  const handleOpenPopup = (key: Key) => {
+    setOpenSignal(true);
+    const id = key.toString();
+    setPopupId(id);
+  };
+
+  const handleClosePopup = () => {
+    setOpenSignal(false);
+  };
+
+  const handleUserDetail = (info: IUserInfo) => {
+    setApprovalStatus(info.approvalStatus);
+    setUserId(info.userId);
   };
 
   useEffect(() => {
-    fetchData(searchOption);
-  }, [searchData]);
-
+    if (approvalDataList) {
+      setApprovalListData(approvalDataList);
+    }
+  }, [approvalDataList]);
   return (
     <div>
       <span>총 {totalCount} 개</span>
@@ -136,11 +116,32 @@ export default function ConfirmTable({
           page={currentPage}
           total={totalPage}
           onChange={handleChangePage}
-          onRowAction={(item) => {
-            console.log(item);
-          }}
+          onRowAction={handleOpenPopup}
         />
       </div>
+      <CommonModal
+        title={"결재"}
+        contents={
+          <ConfirmPopup approvalId={popupId} onFetchStatus={handleUserDetail} />
+        }
+        isOpen={openSignal}
+        size={"lg"}
+        onConfirmBtn={() => {
+          alert("dd");
+        }}
+        onClose={() => {
+          setOpenSignal(false);
+        }}
+        useCustomBtn={true}
+        customButton={
+          <ApprovalButton
+            approvalId={popupId}
+            approvalStatus={approvalStatus}
+            userId={userId}
+            onClosePopup={handleClosePopup}
+          />
+        }
+      />
     </div>
   );
 }

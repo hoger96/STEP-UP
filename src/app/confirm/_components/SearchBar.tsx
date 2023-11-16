@@ -6,16 +6,19 @@ import CommonInput from "@/app/components/Input";
 import CommonButton from "@/app/components/Buttons";
 
 interface ISearchParams {
-  searchType: string;
-  keyword: string;
-  approvalStatus: string;
-  startDate: string;
-  endDate: string;
-  currentPage: number;
-  limit: number;
+  searchType?: string;
+  keyword?: string;
+  approvalStatus?: string;
+  startDate?: string;
+  endDate?: string;
+  currentPage?: number;
 }
 
-export function SearchBar({ onSearch }) {
+export function SearchBar({
+  onSearch,
+}: {
+  onSearch: (searchParams: ISearchParams) => void;
+}) {
   const now = new Date();
   const oneMonthAgo = new Date(now.setMonth(now.getMonth() - 1));
   const [startDate, setStartDate] = useState(oneMonthAgo);
@@ -57,6 +60,7 @@ export function SearchBar({ onSearch }) {
       approvalStatus: approvalStatus?.toString(),
       startDate: formattedStartDate,
       endDate: formattedEndDate,
+      currentPate: 1,
     };
     onSearch(searchParams);
   };
