@@ -12,18 +12,19 @@ import {
 
 interface CommonTableProps<T> {
   uniqueKey: string;
+  tablekey: string;
   total: number;
   page: number;
   renderCell?: any;
   useRenderCell?: boolean;
-  onChange?: ((page: number) => void) | undefined;
   currentPage?: number | undefined;
   emptyContent: string;
-  tablekey: string;
   columns: Array<{ key: string; label: string }>;
   rows: Array<T>;
-  onRowAction: (key: React.Key) => void;
+  onChange?: ((page: number) => void) | undefined;
+  onRowAction?: (key: React.Key) => void;
 }
+
 
 export default function CommonTable(props: CommonTableProps<any>) {
   return (

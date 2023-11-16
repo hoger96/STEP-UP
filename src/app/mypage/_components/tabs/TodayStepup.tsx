@@ -1,8 +1,14 @@
 "use client"
 
-import CommonButton from '@/app/components/Buttons'
 import CommonTable from '@/app/components/Table'
-import React, { useState } from 'react'
+import axios from 'axios'
+import React, { useEffect, useState } from 'react'
+
+interface ITodayStepupData {
+  rowNum: number
+  startTm: string
+  endTm: string
+}
 
 export default function TodayStepup(){
   const columns = [
@@ -11,48 +17,50 @@ export default function TodayStepup(){
       label: '회차'
     },
     {
-      key: 'startTime',
+      key: 'startTm',
       label: '시작시간'
     },
     {
-      key: 'endTime',
+      key: 'endTm',
       label: '종료시간'
     },
   ]
-  const [rows , setRows] = useState([])
+  const [rows , setRows] = useState<ITodayStepupData[]>([])
   
-  // const getTotalStepupData = async() => {
-  //   try {
-  //     const result = await(await fetch('/stepup/api/management/approval')).json()
-  //     console.log('result', result.data)
+  const getTodayStepupData = async(userId: string) => {
+    try {
+      const result = await axios.get('/stepup/api/user/list/today-exercise', {
+        params: {
+          userId
+        }
+      })
+      return result.data.body
+    } catch (e) {
+      console.error(e)
+    }
+  }
   
-  //   } catch (e) {
-  //     console.error(e)
-  //   }
-  // }
-  
-  // useEffect(() => {
-  
-  // })
+  const InitTodayStepupTable = async() => {
+    const result = await getTodayStepupData('kyuleelim')
+    if(result){
+      setRows(result)
+    }
+  }
+
+  useEffect(() => {
+    InitTodayStepupTable()
+  }, [])
   
     return (
       <div>
-        {/* <div>
-          <CommonButton 
-            label={'오늘의 운동 기록하기'} 
-            size={'sm'} 
-            radius={'none'} 
-            color={'primary'} 
-            variant={'shadow'} 
-            onClick={undefined} 
-          />
-        </div> */}
          <CommonTable 
-          emptyContent={'조회된 데이터가 없습니다.'} 
-          tablekey={'today-step-table'} 
-          columns={columns} 
+          emptyContent={'조회된 데이터가 없습니다.'}
+          tablekey={'today-step-table'}
+          columns={columns}
           rows={rows} 
-          />
+          uniqueKey={'rowNum'} 
+          total={0} 
+          page={0}          />
       </div>
     )
 }

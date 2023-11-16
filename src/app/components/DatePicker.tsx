@@ -11,7 +11,6 @@ export function CommonDatePicker({ ...props }: ReactDatePickerProps) {
       <ReactDatePicker
         {...props}
         locale={ko}
-        showIcon
         shouldCloseOnSelect
         disabledKeyboardNavigation
         dateFormat="yyyy-MM-dd"
