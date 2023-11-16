@@ -1,7 +1,5 @@
 import CommonButton from "@/app/components/Buttons";
-import { Button } from "@nextui-org/react";
 import axios from "axios";
-import { useEffect } from "react";
 
 export default function ApprovalButton(props: {
   approvalId: string;
@@ -34,7 +32,7 @@ export default function ApprovalButton(props: {
     }
   };
   const handleGotoUserPage = () => {
-    alert(`결재자 상세보기, ${props.userId}`);
+    window.location.href = `/mypage/${props.userId}`;
   };
 
   return (
