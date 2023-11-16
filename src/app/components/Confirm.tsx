@@ -28,8 +28,8 @@ export default function CommonModal(props: {
   useCustomBtn?: boolean; // 기본 버튼 형태를 사용하지 않을 때 true
   customButton?: ReactNode; // 설정하고 싶은 버튼의 형태를 받음
   confirmBtn?: string; // 확인 버튼 위치의 버튼 명 기본값 : 확인
-  onConfirmBtn: (() => void) | undefined; // 확인 버튼의 동작을 설정
-  onClose: (() => void) | undefined;
+  onConfirmBtn?: (() => void) | undefined; // 확인 버튼의 동작을 설정
+  onClose?: (() => void) | undefined;
 }) {
   return (
     <div>
@@ -56,11 +56,8 @@ export default function CommonModal(props: {
                         <Button variant="light" onPress={onClose}>
                           취소
                         </Button>
-                        <Button
-                          className="bg-[#6f4ef2] shadow-lg shadow-indigo-500/20"
-                          onPress={props.onConfirmBtn}
-                        >
-                          {props.confirmBtn ? props.confirmBtn : "확인"}
+                        <Button onPress={props.onConfirmBtn}>
+                          {props.confirmBtn ? props.confirmBtn : '확인'}
                         </Button>
                       </div>
                     );
