@@ -1,11 +1,13 @@
 import CommonButton from "@/app/components/Buttons";
 import axios from "axios";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function ApprovalButton(props: {
   approvalId: string;
   approvalStatus: string;
   userId: string;
-  onClosePopup: () => void;
+  onClosePopup: (title: string) => void;
 }) {
   const handleReject = async (approvalId: string) => {
     try {
@@ -13,8 +15,7 @@ export default function ApprovalButton(props: {
         approvalStus: "REJECT",
       };
       await axios.put(`stepup/api/management/approval/${approvalId}`, params);
-      alert("반려되었습니다");
-      props.onClosePopup();
+      props.onClosePopup("반려");
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -25,8 +26,7 @@ export default function ApprovalButton(props: {
         approvalStus: "APPROVAL",
       };
       await axios.put(`stepup/api/management/approval/${approvalId}`, params);
-      alert("승인되었습니다");
-      props.onClosePopup();
+      props.onClosePopup("승인");
     } catch (error) {
       console.error("Error fetching data:", error);
     }

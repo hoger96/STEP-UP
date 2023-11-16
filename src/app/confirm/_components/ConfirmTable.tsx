@@ -5,6 +5,7 @@ import { Key, useEffect, useState } from "react";
 import ConfirmPopup from "./ConfirmPopup";
 import ApprovalButton from "./ApprovalButton";
 import CommonButton from "@/app/components/Buttons";
+import { ToastContainer, toast } from "react-toastify";
 
 interface IManagementApproval {
   rowNum: number;
@@ -92,9 +93,10 @@ export default function ConfirmTable({
     setPopupId(id);
   };
 
-  const handleClosePopup = () => {
+  const handleClosePopup = (title: string) => {
     setOpenSignal(false);
     onDateUpdate();
+    toast.success(`${title}되었습니다.`);
   };
 
   const handleUserDetail = (info: IUserInfo) => {
@@ -134,6 +136,7 @@ export default function ConfirmTable({
           onChange={handleChangePage}
           onRowAction={handleOpenPopup}
         />
+        <ToastContainer autoClose={2000} hideProgressBar={true} />
       </div>
       <CommonModal
         title={"결재"}
@@ -154,7 +157,7 @@ export default function ConfirmTable({
             approvalId={popupId}
             approvalStatus={approvalStatus}
             userId={userId}
-            onClosePopup={handleClosePopup}
+            onClosePopup={(title: string) => handleClosePopup(title)}
           />
         }
       />
