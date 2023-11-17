@@ -7,40 +7,42 @@ import CreateTodayStepupP from '../popup/CreateTodayStepupP'
 import axios from 'axios'
 
 interface ICreateTodayStepupParams {
-  stepUpCreateDto: {
-    startTm: string
-    endTm: string
-    userId: string
-  }
-  file: string[]
+  startTm: string
+  endTm: string
+  userId: string
+  file: any[]
 }
 
 export default function TodayStepupBtn(){
 
   const [isOpen , setIsOpen] = useState(false)
   const [todayDate, setTodayDate] = useState(new Date().toISOString().split('T')[0]);
-  const [startTm, setStartTm] = useState<string>('');
-  const [endTm, setEndTm] = useState<string>('');
+  const [startTm, setStartTm] = useState<Date>(new Date());
+  const [endTm, setEndTm] = useState<Date>(new Date());
   const [file, setFile] = useState<any>('');
 
     const handelOpenCreateTodayStepupPopup = () => {
-        console.log('handelOpenCreateTodayStepupPopup')
         setIsOpen(true)
     }
     
-    const setParams = (startTm: string, endTm: string, userId: string, file: any) => {
+    const setParams = (startTm: Date, endTm: Date, userId: string, file: any) => {
         const formData = new FormData()
 
-        formData.append('startTm',startTm)
-        formData.append('endTm', endTm)
+        const options = { hour: "numeric", minute: "numeric", hour12: false }
+
+        const startTime = new Date(startTm).toLocaleTimeString("ko-KR", options)
+        const endTime = new Date(endTm).toLocaleTimeString("ko-KR", options)
+
+        formData.append('startTm', startTime)
+        formData.append('endTm', endTime)
         formData.append('userId', userId)
-        formData.append('file', new Blob(file))
+        formData.append('file',new Blob(file))
       
         
         return formData
     }
 
-    const createTodayStepup = async(formData: any) => {
+    const createTodayStepup = async(formData: ICreateTodayStepupParams) => {
       try {
         await axios.post('/stepup/api/user/today-exercise', formData,  {
           headers: {
@@ -60,8 +62,8 @@ export default function TodayStepupBtn(){
     };
 
     const onClose = () => {
-      setStartTm('')
-      setEndTm('')
+      setStartTm(new Date())
+      setEndTm(new Date())
       setIsOpen(false) 
     }
 

@@ -7,8 +7,8 @@ import { useDropzone } from 'react-dropzone';
 
 interface ICreateTodayStepupProps {
     todayDate: string;
-    startTm: string | undefined;
-    endTm: string | undefined;
+    startTm: string | Date | undefined;
+    endTm: string | Date | undefined;
     file: any; // Adjust the type based on your requirements
     setTodayDate: React.Dispatch<React.SetStateAction<string>>;
     setStartTm: React.Dispatch<React.SetStateAction<string | undefined>>;
@@ -58,7 +58,6 @@ const CreateTodayStepupP: React.FC<ICreateTodayStepupProps> = ({
               selected={startTm}
               onChange={(selectedTime: any) => setStartTm(selectedTime)}
             />
-            {startTm}
         </div>
         <div>
             <CommonTimePicker
@@ -66,7 +65,6 @@ const CreateTodayStepupP: React.FC<ICreateTodayStepupProps> = ({
               selected={endTm}
               onChange={(selectedTime: any) => setEndTm(selectedTime)}
             />
-            {endTm}
         </div>
         <div>
             <div {...getRootProps({className: 'dropzone'})}>

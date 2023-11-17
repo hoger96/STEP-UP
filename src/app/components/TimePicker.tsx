@@ -17,7 +17,7 @@ export function CommonTimePicker({ name, ...props }: CommonTimePickerProps) {
         locale={ko}
         showTimeSelect
         showTimeSelectOnly
-        timeIntervals={30}
+        timeIntervals={1}
         dateFormat="HH:mm"
         timeFormat="HH:mm"
         className="border rounded"
