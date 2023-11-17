@@ -3,7 +3,7 @@ import CommonButton from "@/app/components/Buttons";
 import CommonInput from "@/app/components/Input";
 import { Checkbox } from "@nextui-org/react";
 import axios from "axios";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ToastContainer, TypeOptions, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -12,7 +12,7 @@ export default function LoginForm() {
   const [userPw, setUserPw] = useState<string>("");
   const [userIdCheck, setUserIdCheck] = useState(false);
   const [userPwCheck, setUserPwCheck] = useState(false);
-  const [rememberId, setRememberId] = useState<string>("");
+  const [rememberId, setRememberId] = useState(false);
 
   const loginValidation = () => {
     let isValid = true;
@@ -29,7 +29,7 @@ export default function LoginForm() {
   };
 
   const handleRememberId = () => {
-    setRememberId("Y");
+    setRememberId(true);
   };
 
   const showToast = (title: string, type?: TypeOptions) => {
@@ -44,6 +44,11 @@ export default function LoginForm() {
           userId: userId,
           password: userPw,
         });
+
+        if (result.data.code === "20000000" && rememberId === true) {
+          sessionStorage.setItem("userId", userId);
+        }
+
         if (
           result.data.code === "20000000" &&
           result.data.body.masterYn === "Y"
@@ -62,6 +67,13 @@ export default function LoginForm() {
       }
     }
   };
+
+  useEffect(() => {
+    const savedUserId = sessionStorage.getItem("userId");
+    if (savedUserId) {
+      setUserId(savedUserId);
+    }
+  }, []);
 
   return (
     <div>
@@ -86,12 +98,7 @@ export default function LoginForm() {
           isInvalid={userPwCheck}
           errorMessage={userPwCheck ? "비밀번호를 입력해주세요." : ""}
         />
-        <Checkbox
-          value={rememberId}
-          isSelected
-          size="sm"
-          onChange={handleRememberId}
-        >
+        <Checkbox isSelected={rememberId} size="sm" onChange={handleRememberId}>
           아이디 저장
         </Checkbox>
       </div>
