@@ -104,10 +104,6 @@ export default function ConfirmTable({
     setUserId(info.userId);
   };
 
-  const handleDownload = () => {
-    alert("다운로드");
-  };
-
   useEffect(() => {
     if (approvalDataList) {
       setApprovalListData(approvalDataList);
@@ -115,15 +111,7 @@ export default function ConfirmTable({
   }, [approvalDataList]);
   return (
     <div>
-      <div className="justify-between">
-        <span>총 {totalCount} 개</span>
-        <CommonButton
-          label="엑셀 다운로드"
-          color="default"
-          variant="solid"
-          onClick={handleDownload}
-        />
-      </div>
+      <span>총 {totalCount} 개</span>
       <div>
         <CommonTable
           tablekey="approvalId"
