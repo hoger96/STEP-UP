@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import ConfirmTable from "./ConfirmTable";
 import { SearchBar } from "./SearchBar";
 import axios from "axios";
+import CommonButton from "@/app/components/Buttons";
 
 interface ISearchParams extends ICurrentPage {
   searchType?: string;
@@ -83,6 +84,38 @@ export default function ConfirmContainer() {
     }
   };
 
+  const handleDownload = async () => {
+    try {
+      const res = await axios.get(
+        "/stepup/api/management/approval-excel-download",
+        {
+          responseType: "blob",
+          params: {
+            searchType: searchOption.searchType,
+            keyword: searchOption.keyword,
+            approvalStatus: searchOption.approvalStatus,
+            startDate: searchOption.startDate,
+            endDate: searchOption.endDate,
+          },
+        }
+      );
+      const name = res.headers["content-disposition"]
+        .split("filename=")[1]
+        .replace(/"/g, "");
+      const url = URL.createObjectURL(new Blob([res.data]));
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", decodeURIComponent(name));
+      link.style.cssText = "display:none";
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error("Error setting data:", error);
+    }
+  };
+
   useEffect(() => {
     setApprovalListData();
   }, [searchOption]);
@@ -90,6 +123,12 @@ export default function ConfirmContainer() {
   return (
     <div>
       <SearchBar onSearch={handleSearch} />
+      <CommonButton
+        label="엑셀 다운로드"
+        color="default"
+        variant="solid"
+        onClick={() => handleDownload()}
+      />
       <ConfirmTable
         onChange={handleChange}
         approvalDataList={fetchDataResult}
