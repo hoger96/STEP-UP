@@ -1,5 +1,6 @@
 import CommonButton from "@/app/components/Buttons";
 import axios from "axios";
+import { useRouter } from "next/navigation";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -9,6 +10,7 @@ export default function ApprovalButton(props: {
   userId: string;
   onClosePopup: (title: string) => void;
 }) {
+  const router = useRouter();
   const handleReject = async (approvalId: string) => {
     try {
       const params = {
@@ -32,7 +34,7 @@ export default function ApprovalButton(props: {
     }
   };
   const handleGotoUserPage = () => {
-    window.location.href = `/mypage/${props.userId}`;
+    router.push(`/mypage/${props.userId}`);
   };
 
   return (
