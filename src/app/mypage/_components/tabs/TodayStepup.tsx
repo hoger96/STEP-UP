@@ -10,7 +10,7 @@ interface ITodayStepupData {
   endTm: string
 }
 
-export default function TodayStepup(){
+export default function TodayStepup({ shouldRefreshTable }) {
   const columns = [
     {
       key: 'rowNum',
@@ -25,9 +25,9 @@ export default function TodayStepup(){
       label: '종료시간'
     },
   ]
-  const [rows , setRows] = useState<ITodayStepupData[]>([])
-  
-  const getTodayStepupData = async(userId: string) => {
+  const [rows, setRows] = useState<ITodayStepupData[]>([])
+
+  const getTodayStepupData = async (userId: string) => {
     try {
       const result = await axios.get('/stepup/api/user/list/today-exercise', {
         params: {
@@ -39,29 +39,35 @@ export default function TodayStepup(){
       console.error(e)
     }
   }
-  
-  const InitTodayStepupTable = async() => {
+
+  const InitTodayStepupTable = async () => {
     const result = await getTodayStepupData('kyuleelim')
-    if(result){
+    if (result) {
       setRows(result)
     }
   }
 
   useEffect(() => {
+    if (shouldRefreshTable) {
+      InitTodayStepupTable()
+    }
+  }, [shouldRefreshTable])
+
+  useEffect(() => {
     InitTodayStepupTable()
   }, [])
-  
-    return (
-      <div>
-         <CommonTable 
-          emptyContent={'조회된 데이터가 없습니다.'}
-          tablekey={'today-step-table'}
-          columns={columns}
-          rows={rows} 
-          uniqueKey={'rowNum'} 
-          total={0} 
-          page={0}          />
-      </div>
-    )
+
+  return (
+    <div>
+      <CommonTable
+        emptyContent={'조회된 데이터가 없습니다.'}
+        tablekey={'today-step-table'}
+        columns={columns}
+        rows={rows}
+        uniqueKey={'rowNum'}
+        total={0}
+      />
+    </div>
+  )
 }
 
