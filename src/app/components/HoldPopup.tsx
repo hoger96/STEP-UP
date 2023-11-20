@@ -20,6 +20,10 @@ const HoldPopup: React.FC<IHoldupProps> = ({
   setEndDate,
   setReason,
 }) => {
+  const filterEndDate = (date: Date) => {
+    return date >= startDate!;
+  };
+
   return (
     <div>
       <div className="m-3">
@@ -35,6 +39,7 @@ const HoldPopup: React.FC<IHoldupProps> = ({
           name="보류 종료일"
           placeholderText="보류 종료일을 선택하세요."
           selected={endDate}
+          filterDate={filterEndDate}
           onChange={(date: Date) => setEndDate(date)}
         />
       </div>
