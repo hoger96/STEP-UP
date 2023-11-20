@@ -6,6 +6,7 @@ import axios from "axios";
 import CommonModal from "./Confirm";
 import HoldPopup from "./HoldPopup";
 import { ToastContainer, toast } from "react-toastify";
+import Image from "next/image";
 
 export default function Header() {
   const [openSignal, setOpenSignal] = useState(false);
@@ -104,59 +105,70 @@ export default function Header() {
     <div>
       <ToastContainer position="top-right" autoClose={2000} />
       {loginUserId && (
-        <div className="p-5 bg-black flex">
-          <p className="mr-3 text-white">STEP-UP</p>
-          <p className="text-white">|</p>
-          <p className="mx-3 text-white">{loginUserName}</p>
-          {/* <p>|</p> */}
-          <p className="mx-3 cursor-pointer text-white">
-            <Link href={`/mypage/${loginUserId}`}>나의 현황</Link>
-          </p>
-          {/* <p>|</p> */}
-          {loginUserMaster === "Y" && (
-            <p className="mx-3 cursor-pointer text-white">
-              <Link href="/confirm">결재 현황</Link>
+        <div className="py-3 px-5 flex justify-between items-center border-b">
+          <h1>
+            <Image
+              src="/icons/logo.svg"
+              width="130"
+              height="25"
+              alt="step-up logo"
+            />
+          </h1>
+
+          <div className="flex">
+            {/* <p>|</p> */}
+            <p className="px-3 py-1 mx-3 cursor-pointer text-black-2 font-semibold hover:text-primary-4">
+              <Link href={`/mypage/${loginUserId}`}>나의 현황</Link>
             </p>
-          )}
-          {/* <p>|</p> */}
-          <p className="mx-3 cursor-pointer text-white">
-            <Link href="/example">공통 컴포넌트 보러가기</Link>
-          </p>
-          <CommonButton
-            label="스텝업 보류하기"
-            size="sm"
-            color="default"
-            variant="solid"
-            onClick={handleOpenHoldPopup}
-          />
-          <CommonButton
-            label="로그아웃"
-            size="sm"
-            color="default"
-            variant="solid"
-            onClick={handleLogout}
-          />
-          <CommonModal
-            title={"스텝업 보류하기"}
-            contents={
-              <HoldPopup
-                startDate={startDate}
-                endDate={endDate}
-                reason={reason}
-                setStartDate={setStartDate}
-                setEndDate={setEndDate}
-                setReason={setReason}
-              />
-            }
-            isOpen={openSignal}
-            size={"lg"}
-            onClose={() => {
-              setOpenSignal(false);
-            }}
-            onConfirmBtn={() => {
-              handleConfirm();
-            }}
-          />
+            {/* <p>|</p> */}
+            {loginUserMaster === "Y" && (
+              <p className="px-3 py-1 mx-3 cursor-pointer text-black-2 font-semibold hover:text-primary-4">
+                <Link href="/confirm">결재 현황</Link>
+              </p>
+            )}
+            {/* <p>|</p> */}
+            <p className="px-3 py-1 mx-3 cursor-pointer text-black-2 font-semibold hover:text-primary-4">
+              <Link href="/example">공통 컴포넌트 보러가기</Link>
+            </p>
+          </div>
+          <div className="flex items-center">
+            <p className=" text-black-2 font-medium">{loginUserName}</p>
+            <CommonButton
+              label="스텝업 보류하기"
+              size="sm"
+              color="default"
+              variant="solid"
+              onClick={handleOpenHoldPopup}
+            />
+            <CommonButton
+              label="로그아웃"
+              size="sm"
+              color="default"
+              variant="solid"
+              onClick={handleLogout}
+            />
+            <CommonModal
+              title={"스텝업 보류하기"}
+              contents={
+                <HoldPopup
+                  startDate={startDate}
+                  endDate={endDate}
+                  reason={reason}
+                  setStartDate={setStartDate}
+                  setEndDate={setEndDate}
+                  setReason={setReason}
+                />
+              }
+              isOpen={openSignal}
+              size={"lg"}
+              onClose={() => {
+                setOpenSignal(false);
+              }}
+              onConfirmBtn={() => {
+                handleConfirm();
+              }}
+            />
+          </div>
         </div>
       )}
     </div>
