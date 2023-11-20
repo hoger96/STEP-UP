@@ -3,7 +3,6 @@
 import { NextUIProvider } from '@nextui-org/react'
 import { ThemeProvider as NextThemesProvider, useTheme } from "next-themes";
 import { ThemeProviderProps } from "next-themes/dist/types"
-import { useEffect } from "react";
 
 export interface ProvidersProps {
   children: React.ReactNode;
@@ -11,7 +10,6 @@ export interface ProvidersProps {
 }
 
 export function Providers({ children, themeProps }: ProvidersProps) {
-  const { theme } = useTheme();
 
   return (
     <NextUIProvider>

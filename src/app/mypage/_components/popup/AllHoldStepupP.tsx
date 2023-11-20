@@ -28,6 +28,7 @@ export default function AllHoldStepupP() {
     },
   ]
 
+  const userId = sessionStorage.getItem('userId')
   const [currentPage, setCurrentPage] = useState(1)
   const [totalPage, setTotalPage] = useState(1)
   const [rows, setRows] = useState<ITotalStepupData[]>([])
@@ -50,7 +51,11 @@ export default function AllHoldStepupP() {
   }
 
   const initTotalSetupTable = async () => {
-    const result = await getAllHoldStepupData('kyuleelim', currentPage)
+    if (!userId) {
+      return
+    }
+
+    const result = await getAllHoldStepupData(userId, currentPage)
     if (result) {
       setRows(result.data)
       setCurrentPage(result.currentPage)

@@ -16,6 +16,8 @@ import { ToastContainer, toast } from 'react-toastify'
 
 export default function TodayStepupBtn({ onRefreshTable }) {
 
+  const userId = sessionStorage.getItem('userId')
+
   const [isOpen, setIsOpen] = useState(false)
   const [todayDate, setTodayDate] = useState(new Date().toISOString().split('T')[0]);
   const [startTm, setStartTm] = useState<Date>(new Date());
@@ -60,7 +62,10 @@ export default function TodayStepupBtn({ onRefreshTable }) {
   }
 
   const onConfirmBtn = async () => {
-    const params = await setParams(startTm, endTm, 'kyuleelim', file)
+    if (!userId) {
+      return
+    }
+    const params = await setParams(startTm, endTm, userId, file)
     if (params) {
       const isSuccess = await createTodayStepup(params)
       if (isSuccess) {

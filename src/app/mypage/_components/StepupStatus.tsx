@@ -16,6 +16,7 @@ interface IStepupStatusData {
 
 export default function StepupStatus() {
 
+    const [userId, setUserId] = useState<string>()
     const [statusData, setStatusData] = useState<IStepupStatusData>()
 
     const getStepupStatusData = async (userId: string) => {
@@ -33,15 +34,26 @@ export default function StepupStatus() {
     }
 
     const initStepupStatus = async () => {
-        const result = await getStepupStatusData('kyuleelim')
-        if (result) {
-            setStatusData(result)
+        if (userId) {
+            const result = await getStepupStatusData(userId)
+            if (result) {
+                setStatusData(result)
+            }
         }
     }
 
     useEffect(() => {
         initStepupStatus()
     }, [])
+
+    useEffect(() => {
+        const loginUserId = sessionStorage.getItem("userId");
+
+        if (loginUserId) {
+            setUserId(loginUserId)
+        }
+    }, []);
+
 
     return (
 

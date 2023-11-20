@@ -2,7 +2,7 @@
 
 import CommonButton from '@/app/components/Buttons'
 import CommonModal from '@/app/components/Confirm'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import UseMileageP from '../popup/UseMileageP'
 import AllUsedMileageP from '../popup/AllUsedMileageP'
 import axios from 'axios'
@@ -16,6 +16,9 @@ interface IApplyUseMileageParams {
 }
 
 export default function MileageStatusBtn({ onRefreshTable }) {
+
+    const [userId, setUserId] = useState<string>()
+
     // 마일리지 사용 신청 팝업 데이터
     const [approvalReqDt, setApprovalReqDt] = useState(new Date()) // 신청일자
     const [approvalReqType, setApprovalReqType] = useState<string>('EARLY_OFF') // 신청타입
@@ -55,7 +58,11 @@ export default function MileageStatusBtn({ onRefreshTable }) {
     }
 
     const onConfirmUseMileageP = async () => {
-        const params = setParams(approvalReqDt, approvalReqType, 'kyuleelim')
+        if (!userId) {
+            return
+        }
+
+        const params = setParams(approvalReqDt, approvalReqType, userId)
         const isSuccess = await applyUseMileage(params)
         if (isSuccess) {
             setIsUseMileagePOpen(false)
@@ -75,6 +82,14 @@ export default function MileageStatusBtn({ onRefreshTable }) {
     const onCloseAllUseMileageP = () => {
         setIsAllUseMileagePOpen(false)
     }
+
+    useEffect(() => {
+        const savedUserId = sessionStorage.getItem("userId");
+        if (savedUserId) {
+            setUserId(savedUserId);
+        }
+    }, []);
+
 
     return (
         <>
