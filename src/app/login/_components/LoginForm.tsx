@@ -1,9 +1,10 @@
 "use client";
 import CommonButton from "@/app/components/Buttons";
 import CommonInput from "@/app/components/Input";
-import { Checkbox } from "@nextui-org/react";
+import { Checkbox } from "@nextui-org/checkbox";
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import React from "react";
 import { useEffect, useState } from "react";
 import { ToastContainer, TypeOptions, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -31,11 +32,17 @@ export default function LoginForm() {
   };
 
   const handleRememberId = () => {
-    setRememberId(!rememberId); // 토글 기능을 위해 현재 상태의 반대값으로 설정
-    if (!rememberId) {
-      sessionStorage.setItem("userId", userId);
-    } else {
+    const userLoginId = sessionStorage.getItem("userId");
+    console.log(userLoginId);
+    setRememberId(!rememberId);
+    if (rememberId === true) {
       sessionStorage.removeItem("userId");
+
+      console.log("1", rememberId, userLoginId);
+    } else {
+      sessionStorage.setItem("userId", userId);
+      sessionStorage.removeItem("userId");
+      console.log("2", rememberId, userLoginId);
     }
   };
 
@@ -104,7 +111,8 @@ export default function LoginForm() {
           isInvalid={userPwCheck}
           errorMessage={userPwCheck ? "비밀번호를 입력해주세요." : ""}
         />
-        <Checkbox isSelected={rememberId} size="sm" onChange={handleRememberId}>
+
+        <Checkbox isSelected={rememberId} onValueChange={handleRememberId}>
           아이디 저장
         </Checkbox>
       </div>
