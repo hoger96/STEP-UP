@@ -5,12 +5,12 @@ import CommonModal from '@/app/components/Confirm'
 import React, { useState } from 'react'
 import AllTotalStepupP from '../popup/AllTotalStepupP'
 
-export default function TotalStepupBtn(){
+export default function TotalStepupBtn({ onRefreshTable }) {
 
     const [isOpen, setIsOpen] = useState(false)
 
     const handleChangeMileage = () => {
-        console.log('handleChangeMileage')
+        onRefreshTable()
     }
 
     const handleShowAllTotalStepup = () => {
@@ -21,49 +21,49 @@ export default function TotalStepupBtn(){
         setIsOpen(false)
     }
 
-  return (
-    <div>
-    <CommonButton 
-        label={'마일리지로 변환하기'} 
-        size={'sm'} 
-        radius={'sm'} 
-        color={'default'} 
-        variant={'flat'} 
-        onClick={handleChangeMileage} 
-    />
-    <CommonButton 
-        label={'전체보기'} 
-        size={'sm'} 
-        radius={'sm'} 
-        color={'default'} 
-        variant={'flat'} 
-        onClick={handleShowAllTotalStepup} 
-    />
-    <div>
-    <div>
-      <CommonModal 
-        title={'전체 스텝업'} 
-        contents={<AllTotalStepupP />} 
-        size={'2xl'} 
-        isOpen={isOpen} 
-        onClose={onClose}
-        useCustomBtn={true}
-        customButton={
-            <>
+    return (
+        <div>
+            <CommonButton
+                label={'마일리지로 변환하기'}
+                size={'sm'}
+                radius={'sm'}
+                color={'default'}
+                variant={'flat'}
+                onClick={handleChangeMileage}
+            />
+            <CommonButton
+                label={'전체보기'}
+                size={'sm'}
+                radius={'sm'}
+                color={'default'}
+                variant={'flat'}
+                onClick={handleShowAllTotalStepup}
+            />
+            <div>
                 <div>
-                    <CommonButton 
-                        label={'확인'} 
-                        color={'default'} 
-                        variant={'flat'} 
-                        onClick={onClose}                    
+                    <CommonModal
+                        title={'전체 스텝업'}
+                        contents={<AllTotalStepupP />}
+                        size={'2xl'}
+                        isOpen={isOpen}
+                        onClose={onClose}
+                        useCustomBtn={true}
+                        customButton={
+                            <>
+                                <div>
+                                    <CommonButton
+                                        label={'확인'}
+                                        color={'default'}
+                                        variant={'flat'}
+                                        onClick={onClose}
+                                    />
+                                </div>
+                            </>
+                        }
                     />
                 </div>
-            </>
-        }
-      />
-    </div>
-    </div>
-    </div>
-  )
+            </div>
+        </div>
+    )
 }
 

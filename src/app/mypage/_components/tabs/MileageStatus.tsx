@@ -3,9 +3,9 @@
 import CommonButton from '@/app/components/Buttons'
 import CommonTable from '@/app/components/Table'
 import { Chip, ChipProps, Tooltip } from '@nextui-org/react'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
-export default function MileageStatus(){
+export default function MileageStatus({ shouldRefreshTable }) {
   const columns = [
     {
       key: 'rowNum',
@@ -28,14 +28,14 @@ export default function MileageStatus(){
       label: ''
     },
   ]
-  const [rows , setRows] = useState([])
+  const [rows, setRows] = useState([])
   type Item = (typeof rows)[0];
   const statusColorMap: Record<string, ChipProps["color"]> = {
     Active: "success",
     Paused: "danger",
     Vacation: "warning",
   };
-  
+
   const renderCell = React.useCallback((items: Item, columnKey: string) => {
     const cellValue = items[columnKey as keyof Item];
 
@@ -81,27 +81,36 @@ export default function MileageStatus(){
   //   try {
   //     const result = await(await fetch('/stepup/api/management/approval')).json()
   //     console.log('result', result.data)
-  
+
   //   } catch (e) {
   //     console.error(e)
   //   }
   // }
-  
+
   // useEffect(() => {
-  
+
   // })
-  
-    return (
-      <div>
-         <CommonTable 
-          emptyContent={'조회된 데이터가 없습니다.'} 
-          tablekey={'mileage-status-table'} 
-          useRenderCell={true}
-          renderCell={renderCell}
-          columns={columns} 
-          rows={rows} 
-          />
-      </div>
-    )
+
+  useEffect(() => {
+    if (shouldRefreshTable) {
+      // InitMileageStatusTable()
+      console.log('init mileageStatusTable')
+    }
+  }, [shouldRefreshTable])
+
+  return (
+    <div>
+      <CommonTable
+        emptyContent={'조회된 데이터가 없습니다.'}
+        tablekey={'mileage-status-table'}
+        useRenderCell={true}
+        renderCell={renderCell}
+        columns={columns}
+        rows={rows}
+        uniqueKey={'rowNum'}
+        total={0}
+      />
+    </div>
+  )
 }
 
