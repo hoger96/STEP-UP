@@ -80,7 +80,7 @@ export default function LoginForm() {
   }, []);
 
   return (
-    <div>
+    <>
       <ToastContainer autoClose={2000} hideProgressBar={true} />
       <div>
         <CommonInput
@@ -116,6 +116,6 @@ export default function LoginForm() {
           onClick={() => handleLogin()}
         />
       </div>
-    </div>
+    </>
   );
 }

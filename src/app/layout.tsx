@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Providers } from "./_providers";
-import "./globals.css";
-import Header from "./components/Header";
+import "../app/globals.css";
+// import Header from "./components/Header";
 
 export const metadata: Metadata = {
   title: "Step-Up",
@@ -16,10 +16,6 @@ export default function RootLayout({
   return (
     <html>
       <body>
-        {/* TODO: Header 공통 컴포넌트로 빼기 */}
-        <div>
-          <Header />
-        </div>
         <Providers
           themeProps={{
             attribute: "class",
@@ -28,11 +24,7 @@ export default function RootLayout({
             enableSystem: true,
           }}
         >
-          <div>
-            <div className="min-h-full h-screen bg-scroll bg-gray-30 p-10">
-              {children}
-            </div>
-          </div>
+          {children}
         </Providers>
       </body>
     </html>
