@@ -29,7 +29,12 @@ export default function LoginForm() {
   };
 
   const handleRememberId = () => {
-    setRememberId(true);
+    setRememberId(!rememberId); // 토글 기능을 위해 현재 상태의 반대값으로 설정
+    if (!rememberId) {
+      sessionStorage.setItem("userId", userId);
+    } else {
+      sessionStorage.removeItem("userId");
+    }
   };
 
   const showToast = (title: string, type?: TypeOptions) => {
@@ -39,16 +44,15 @@ export default function LoginForm() {
   const handleLogin = async () => {
     try {
       const isValid = loginValidation();
+      sessionStorage.setItem("userId", userId);
       if (isValid) {
         const result = await axios.post("/stepup/api/login", {
           userId: userId,
           password: userPw,
         });
-
-        if (result.data.code === "20000000" && rememberId === true) {
-          sessionStorage.setItem("userId", userId);
-        }
-
+        sessionStorage.setItem("loginUserId", result.data.body.userId);
+        sessionStorage.setItem("loginUserName", result.data.body.userNm);
+        sessionStorage.setItem("loginUserMaster", result.data.body.masterYn);
         if (
           result.data.code === "20000000" &&
           result.data.body.masterYn === "Y"
@@ -80,7 +84,7 @@ export default function LoginForm() {
       <ToastContainer autoClose={2000} hideProgressBar={true} />
       <div>
         <CommonInput
-          value={userId}
+          value={userId || ""}
           label="아이디"
           placeholder="아이디를 입력해주세요."
           onValueChange={setUserId}
