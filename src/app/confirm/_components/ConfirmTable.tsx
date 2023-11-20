@@ -133,9 +133,6 @@ export default function ConfirmTable({
         }
         isOpen={openSignal}
         size={"lg"}
-        onConfirmBtn={() => {
-          alert("dd");
-        }}
         onClose={() => {
           setOpenSignal(false);
         }}
