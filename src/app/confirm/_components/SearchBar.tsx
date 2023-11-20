@@ -65,6 +65,10 @@ export function SearchBar({
     onSearch(searchParams);
   };
 
+  const filterEndDate = (date: Date) => {
+    return date >= startDate!;
+  };
+
   return (
     <div className="flex bg-gray-100 rounded-2xl p-2 justify-between">
       <div className="flex">
@@ -77,6 +81,7 @@ export function SearchBar({
           name="~"
           selected={endDate}
           onChange={(date: Date) => setEndDate(date)}
+          filterDate={filterEndDate}
         />
       </div>
       <div>

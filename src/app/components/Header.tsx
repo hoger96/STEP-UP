@@ -7,6 +7,7 @@ import CommonModal from "./Confirm";
 import HoldPopup from "./HoldPopup";
 import { ToastContainer, toast } from "react-toastify";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 export default function Header() {
   const [openSignal, setOpenSignal] = useState(false);
@@ -16,6 +17,7 @@ export default function Header() {
   const [startDate, setStartDate] = useState<Date>();
   const [endDate, setEndDate] = useState<Date>();
   const [reason, setReason] = useState<string>("");
+  const router = useRouter();
 
   const handleLogout = async () => {
     try {
@@ -26,7 +28,7 @@ export default function Header() {
       setLoginUserId(null);
       setLoginUserName(null);
       setLoginUserMaster(null);
-      window.location.href = "/login";
+      router.push("/login");
     } catch (error) {
       console.error("Error fetching data:", error);
     }

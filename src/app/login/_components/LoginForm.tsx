@@ -3,6 +3,7 @@ import CommonButton from "@/app/components/Buttons";
 import CommonInput from "@/app/components/Input";
 import { Checkbox } from "@nextui-org/react";
 import axios from "axios";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { ToastContainer, TypeOptions, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -13,6 +14,7 @@ export default function LoginForm() {
   const [userIdCheck, setUserIdCheck] = useState(false);
   const [userPwCheck, setUserPwCheck] = useState(false);
   const [rememberId, setRememberId] = useState(false);
+  const router = useRouter();
 
   const loginValidation = () => {
     let isValid = true;
@@ -57,12 +59,12 @@ export default function LoginForm() {
           result.data.code === "20000000" &&
           result.data.body.masterYn === "Y"
         ) {
-          window.location.href = "/confirm";
+          router.push("/confirm");
         } else if (
           result.data.code === "20000000" &&
           result.data.body.masterYn === "Y"
         ) {
-          window.location.href = `/mypage/${result.data.body.userId}`;
+          router.push(`/mypage/${result.data.body.userId}`);
         }
       }
     } catch (error: any) {
