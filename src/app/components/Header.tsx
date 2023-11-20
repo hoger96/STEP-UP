@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import CommonButton from "./Buttons";
 import axios from "axios";
 import CommonModal from "./Confirm";
@@ -8,9 +8,9 @@ import HoldPopup from "./HoldPopup";
 
 export default function Header() {
   const [openSignal, setOpenSignal] = useState(false);
-  const loginUserId = sessionStorage.getItem("loginUserId");
-  const loginUserName = sessionStorage.getItem("loginUserName");
-  const loginUserMaster = sessionStorage.getItem("loginUserMaster");
+  const [loginUserId, setLoginUserId] = useState<string | null>(null);
+  const [loginUserName, setLoginUserName] = useState<string | null>(null);
+  const [loginUserMaster, setLoginUserMaster] = useState<string | null>(null);
   const [startDate, setStartDate] = useState<Date>();
   const [endDate, setEndDate] = useState<Date>();
   const [reason, setReason] = useState<string>("");
@@ -21,6 +21,9 @@ export default function Header() {
       sessionStorage.removeItem("loginUserId");
       sessionStorage.removeItem("loginUserName");
       sessionStorage.removeItem("loginUserMaster");
+      setLoginUserId(null);
+      setLoginUserName(null);
+      setLoginUserMaster(null);
       window.location.href = "/login";
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -41,6 +44,18 @@ export default function Header() {
       };
     }
   };
+
+  useEffect(() => {
+    const savedLoginUserId = sessionStorage.getItem("loginUserId");
+    const savedLoginUserName = sessionStorage.getItem("loginUserName");
+    const savedLoginUserMaster = sessionStorage.getItem("loginUserMaster");
+
+    if (savedLoginUserId && savedLoginUserName && savedLoginUserMaster) {
+      setLoginUserId(savedLoginUserId);
+      setLoginUserName(savedLoginUserName);
+      setLoginUserMaster(savedLoginUserMaster);
+    }
+  }, []);
 
   return (
     <div>

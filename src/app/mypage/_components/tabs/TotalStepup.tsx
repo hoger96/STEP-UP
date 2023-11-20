@@ -21,6 +21,8 @@ export default function TotalStepup({ shouldRefreshTable }) {
       label: '스텝업 달성일'
     }
   ]
+
+  const userId = sessionStorage.getItem('userId')
   const [rows, setRows] = useState<ITotalStepupData[]>([])
 
   const getTotalStepupData = async (userId: string) => {
@@ -38,7 +40,11 @@ export default function TotalStepup({ shouldRefreshTable }) {
   }
 
   const initTotalSetupTable = async () => {
-    const result = await getTotalStepupData('kyuleelim')
+    if (!userId) {
+      return
+    }
+
+    const result = await getTotalStepupData(userId)
     if (result) {
       setRows(result)
     }

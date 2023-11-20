@@ -30,6 +30,9 @@ export default function NotCountStatus() {
       label: '보류 사유'
     },
   ]
+
+  const userId = sessionStorage.getItem('userId')
+
   const [rows, setRows] = useState<IHoldStepupData[]>([])
 
   const getHoldStepupData = async (userId: string) => {
@@ -46,7 +49,11 @@ export default function NotCountStatus() {
   }
 
   const InitHoldStepupTable = async () => {
-    const result = await getHoldStepupData('kyuleelim')
+    if (!userId) {
+      return
+    }
+
+    const result = await getHoldStepupData(userId)
     if (result) {
       setRows(result)
     }

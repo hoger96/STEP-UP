@@ -23,6 +23,8 @@ export default function AllUsedMileageP() {
       label: '신청 타입'
     }
   ]
+
+  const userId = sessionStorage.getItem('userId')
   const [rows, setRows] = useState<ITotalStepupData[]>([])
 
   // const [currentPage , setCurrentPage] = useState(1)
@@ -45,7 +47,7 @@ export default function AllUsedMileageP() {
   // }
 
   // const initTotalSetupTable = async() => {
-  //   const result = await getAllUsedMileageData('kyuleelim', currentPage)
+  //   const result = await getAllUsedMileageData(userId, currentPage)
   //   if(result){
   //     setRows(result.data)
   //   }

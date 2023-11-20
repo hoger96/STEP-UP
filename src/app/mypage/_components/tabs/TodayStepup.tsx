@@ -25,6 +25,8 @@ export default function TodayStepup({ shouldRefreshTable }) {
       label: '종료시간'
     },
   ]
+
+  const [userId, setUserId] = useState<string>()
   const [rows, setRows] = useState<ITodayStepupData[]>([])
 
   const getTodayStepupData = async (userId: string) => {
@@ -41,7 +43,11 @@ export default function TodayStepup({ shouldRefreshTable }) {
   }
 
   const InitTodayStepupTable = async () => {
-    const result = await getTodayStepupData('kyuleelim')
+    if (!userId) {
+      return
+    }
+
+    const result = await getTodayStepupData(userId)
     if (result) {
       setRows(result)
     }
@@ -56,6 +62,15 @@ export default function TodayStepup({ shouldRefreshTable }) {
   useEffect(() => {
     InitTodayStepupTable()
   }, [])
+
+
+  useEffect(() => {
+    const loginUserId = sessionStorage.getItem("userId");
+
+    if (loginUserId) {
+      setUserId(loginUserId)
+    }
+  }, []);
 
   return (
     <div>
