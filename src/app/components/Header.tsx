@@ -5,6 +5,7 @@ import CommonButton from "./Buttons";
 import axios from "axios";
 import CommonModal from "./Confirm";
 import HoldPopup from "./HoldPopup";
+import { ToastContainer, toast } from "react-toastify";
 
 export default function Header() {
   const [openSignal, setOpenSignal] = useState(false);
@@ -31,17 +32,59 @@ export default function Header() {
   };
 
   const handleOpenHoldPopup = () => {
+    setStartDate(undefined);
+    setEndDate(undefined);
+    setReason("");
     setOpenSignal(true);
   };
 
-  const handleConfirm = () => {
-    if (startDate && endDate) {
-      const params = {
-        holdStartDt: startDate.toISOString().split("T")[0],
-        holdEndDt: endDate.toISOString().split("T")[0],
-        holdCntn: reason,
-        userId: loginUserId,
-      };
+  const holdValidation = () => {
+    let isValid = true;
+    if (!startDate) {
+      toast.error("보류 시작일을 선택해주세요.");
+      isValid = false;
+      return;
+    }
+    if (!endDate) {
+      toast.error("보류 종료일을 선택해주세요.");
+      isValid = false;
+      return;
+    }
+    if (!reason) {
+      toast.error("보류 사유를 입력해주세요.");
+      isValid = false;
+      return;
+    }
+    return isValid;
+  };
+
+  const formatDate = (date: Date) => {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
+  };
+
+  const handleConfirm = async () => {
+    try {
+      const isValid = holdValidation();
+      if (isValid) {
+        if (startDate && endDate) {
+          const params = {
+            holdStartDt: formatDate(startDate),
+            holdEndDt: formatDate(endDate),
+            holdCntn: reason,
+            userId: loginUserId,
+          };
+          console.log("params", params);
+          await axios.post("/stepup/api/user/hold/exercise", params);
+          setOpenSignal(false);
+          toast.success("보류 등록을 완료했습니다.");
+        }
+      }
+    } catch (e) {
+      console.error(e);
+      toast.error("보류 등록을 실패했습니다.");
     }
   };
 
@@ -59,6 +102,7 @@ export default function Header() {
 
   return (
     <div>
+      <ToastContainer position="top-right" autoClose={2000} />
       {loginUserId && (
         <div className="p-5 bg-black flex">
           <p className="mr-3 text-white">STEP-UP</p>
