@@ -134,6 +134,7 @@ export default function LoginForm() {
           radius="md"
           color="primary"
           variant="solid"
+          fullWidth
           onClick={() => handleLogin()}
         />
       </div>

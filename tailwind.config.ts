@@ -13,40 +13,6 @@ const config: Config = {
   ],
   theme: {
     extend: {
-      backgroundColor: {
-        primary: {
-          1: "#3C6C3B",
-          2: "#609E43",
-          3: "#84BE4A",
-          4: "#A3C844",
-          5: "#C8D53E",
-        },
-      },
-      textColor: {
-        primary: {
-          1: "#3C6C3B",
-          2: "#609E43",
-          3: "#84BE4A",
-          4: "#A3C844",
-          5: "#C8D53E",
-        },
-        black: {
-          1: "#121212",
-          2: "#333333",
-          3: "#555555",
-          4: "#bebebe",
-          5: "#e3e3e3",
-        },
-      },
-      borderColor: {
-        black: {
-          1: "#121212",
-          2: "#333333",
-          3: "#555555",
-          4: "#bebebe",
-          5: "#e3e3e3",
-        },
-      },
       fontFamily: {
         pre: ["Pretendard", "Malgun Gothic"],
       },
@@ -54,7 +20,32 @@ const config: Config = {
   },
   darkMode: "class",
   plugins: [
-    nextui(),
+    nextui({
+      themes: {
+        light: {
+          colors: {
+            primary: {
+              DEFAULT: "#3C6C3B",
+              50: "#C8D53E",
+              100: "#A3C844",
+              200: "#84BE4A",
+              300: "#609E43",
+            },
+            default: {
+              DEFAULT: "#121212",
+              50: "#FAFBFD",
+              100: "#e3e3e3",
+              200: "#bebebe",
+              300: "#555555",
+              400: "#333333",
+            },
+            secondary: {
+              DEFAULT: "#f0a755",
+            },
+          },
+        },
+      },
+    }),
     plugin(function ({ addComponents }) {
       addComponents({
         // Flex Pattern
