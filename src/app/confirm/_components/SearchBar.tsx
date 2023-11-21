@@ -30,7 +30,7 @@ export function SearchBar({
     { label: "반려", value: "REJECT" },
     { label: "승인", value: "APPROVAL" },
   ];
-  const [approvalStatus, setApprovalStatus] = useState<string[]>();
+  const [approvalStatus, setApprovalStatus] = useState<string[]>([]);
   function handleSelectStatus(e: any) {
     setApprovalStatus([e.target.value]);
   }
@@ -39,7 +39,7 @@ export function SearchBar({
     { label: "전체", value: "ALL" },
     { label: "사원 명", value: "USER_NM" },
   ];
-  const [searchType, setSearchType] = useState<string[]>();
+  const [searchType, setSearchType] = useState<string[]>([]);
   function handleSelectCondition(e: any) {
     setSearchType([e.target.value]);
   }
@@ -109,7 +109,7 @@ export function SearchBar({
       <div className="flex">
         <div className="mr-2" onKeyUp={handleKeyUp}>
           <CommonInput
-            value={keyword}
+            value={keyword || ""}
             placeholder="검색어를 입력해 주세요."
             onValueChange={setKeyword}
           />
