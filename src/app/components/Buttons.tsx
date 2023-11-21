@@ -1,9 +1,9 @@
 "use client";
 import { Button } from "@nextui-org/button";
-import { MouseEventHandler } from "react";
+import { MouseEventHandler, ReactNode } from "react";
 
 interface IButtonProps {
-  label: string;
+  label?: string;
   isDisabled?: boolean;
   fullWidth?: boolean;
   size?: "sm" | "md" | "lg";
@@ -18,7 +18,10 @@ interface IButtonProps {
     | "ghost"
     | "shadow";
   isIconOnly?: boolean;
+  // IConContents: ReactNode;
   onClick: MouseEventHandler<HTMLButtonElement> | Promise<void> | undefined;
+  children?: React.ReactNode;
+  className?: string;
 }
 
 export default function CommonButton(props: IButtonProps) {
@@ -32,8 +35,9 @@ export default function CommonButton(props: IButtonProps) {
       variant={props.variant}
       isIconOnly={props.isIconOnly}
       onClick={props.onClick}
+      className={props.className}
     >
-      {props.label}
+      {props.label ? props.label : props.children}
     </Button>
   );
 }
