@@ -15,6 +15,8 @@ export default function LoginForm() {
   const [userIdCheck, setUserIdCheck] = useState(false);
   const [userPwCheck, setUserPwCheck] = useState(false);
   const [rememberId, setRememberId] = useState(false);
+  const [isSelected, setIsSelected] = React.useState(false);
+
   const router = useRouter();
 
   const loginValidation = () => {
@@ -29,21 +31,6 @@ export default function LoginForm() {
     }
 
     return isValid;
-  };
-
-  const handleRememberId = () => {
-    const userLoginId = sessionStorage.getItem("userId");
-    console.log(userLoginId);
-    setRememberId(!rememberId);
-    if (rememberId === true) {
-      sessionStorage.removeItem("userId");
-
-      console.log("1", rememberId, userLoginId);
-    } else {
-      sessionStorage.setItem("userId", userId);
-      sessionStorage.removeItem("userId");
-      console.log("2", rememberId, userLoginId);
-    }
   };
 
   const showToast = (title: string, type?: TypeOptions) => {
@@ -88,6 +75,15 @@ export default function LoginForm() {
     }
   }, []);
 
+  useEffect(() => {
+    if (rememberId === true) {
+      sessionStorage.removeItem("userId");
+      sessionStorage.setItem("userId", userId);
+    } else {
+      sessionStorage.removeItem("userId");
+    }
+  }, [rememberId]);
+
   return (
     <>
       <ToastContainer autoClose={2000} hideProgressBar={true} />
@@ -111,8 +107,7 @@ export default function LoginForm() {
           isInvalid={userPwCheck}
           errorMessage={userPwCheck ? "비밀번호를 입력해주세요." : ""}
         />
-
-        <Checkbox isSelected={rememberId} onValueChange={handleRememberId}>
+        <Checkbox isSelected={rememberId} onValueChange={setRememberId}>
           아이디 저장
         </Checkbox>
       </div>
