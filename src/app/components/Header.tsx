@@ -116,38 +116,65 @@ export default function Header() {
             />
           </h1>
 
-          <div className="flex">
-            {/* <p>|</p> */}
-            <p className="px-3 py-1 mx-3 cursor-pointer text-black-2 font-semibold hover:text-primary-4">
-              <Link href={`/mypage/${loginUserId}`}>나의 현황</Link>
-            </p>
-            {/* <p>|</p> */}
+          <nav>
+            <Link
+              href={`/mypage/${loginUserId}`}
+              className="px-3 py-1 mx-3 cursor-pointer text-black-2 font-semibold hover:text-primary-4"
+            >
+              나의 현황
+            </Link>
             {loginUserMaster === "Y" && (
-              <p className="px-3 py-1 mx-3 cursor-pointer text-black-2 font-semibold hover:text-primary-4">
-                <Link href="/confirm">결재 현황</Link>
-              </p>
+              <Link
+                href="/confirm"
+                className="px-3 py-1 mx-3 cursor-pointer text-black-2 font-semibold hover:text-primary-4"
+              >
+                결재 현황
+              </Link>
             )}
-            {/* <p>|</p> */}
-            <p className="px-3 py-1 mx-3 cursor-pointer text-black-2 font-semibold hover:text-primary-4">
-              <Link href="/example">공통 컴포넌트 보러가기</Link>
-            </p>
-          </div>
+            <Link
+              href="/example"
+              className="px-3 py-1 mx-3 cursor-pointer text-black-2 font-semibold hover:text-primary-4"
+            >
+              공통 컴포넌트 보러가기
+            </Link>
+          </nav>
           <div className="flex items-center">
-            <p className=" text-black-2 font-medium">{loginUserName}</p>
+            <div className="flex-center border rounded-full px-3 py-1">
+              <span className="mr-1 text-default-300 text-sm font-medium">
+                {loginUserName}
+              </span>
+              <Image src="/icons/user.svg" width="10" height="10" alt="" />
+            </div>
             <CommonButton
-              label="스텝업 보류하기"
               size="sm"
-              color="default"
-              variant="solid"
+              color="secondary"
+              variant="light"
+              isIconOnly
+              className="ml-2 font-semibold"
               onClick={handleOpenHoldPopup}
-            />
+            >
+              <Image
+                src="/icons/setting.svg"
+                width="18"
+                height="18"
+                alt="logout"
+              />
+            </CommonButton>
             <CommonButton
-              label="로그아웃"
               size="sm"
-              color="default"
-              variant="solid"
+              color="primary"
+              variant="light"
+              isIconOnly
+              className="ml-1"
               onClick={handleLogout}
-            />
+            >
+              <Image
+                src="/icons/logout.svg"
+                width="18"
+                height="18"
+                alt="logout"
+              />
+            </CommonButton>
             <CommonModal
               title={"스텝업 보류하기"}
               contents={
