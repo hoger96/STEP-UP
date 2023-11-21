@@ -37,6 +37,10 @@ export default function LoginForm() {
     toast(title, { type });
   };
 
+  const handleKeyUp = (event: React.KeyboardEvent<HTMLDivElement>) => {
+    if (event.key === "Enter") handleLogin();
+  };
+
   const handleLogin = async () => {
     try {
       const isValid = loginValidation();
@@ -97,6 +101,8 @@ export default function LoginForm() {
           isInvalid={userIdCheck}
           errorMessage={userIdCheck ? "아이디를 입력해주세요." : ""}
         />
+      </div>
+      <div onKeyUp={handleKeyUp}>
         <CommonInput
           value={userPw}
           label="비밀번호"
@@ -107,6 +113,8 @@ export default function LoginForm() {
           isInvalid={userPwCheck}
           errorMessage={userPwCheck ? "비밀번호를 입력해주세요." : ""}
         />
+      </div>
+      <div>
         <Checkbox isSelected={rememberId} onValueChange={setRememberId}>
           아이디 저장
         </Checkbox>

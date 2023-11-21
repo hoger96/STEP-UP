@@ -50,6 +50,10 @@ export function SearchBar({
 
   const [keyword, setKeyword] = useState<string>("");
 
+  const handleKeyUp = (event: React.KeyboardEvent<HTMLDivElement>) => {
+    if (event.key === "Enter") handleSearch();
+  };
+
   const handleSearch = () => {
     const formattedStartDate = startDate.toISOString().split("T")[0];
     const formattedEndDate = endDate.toISOString().split("T")[0];
@@ -103,7 +107,7 @@ export function SearchBar({
         />
       </div>
       <div className="flex">
-        <div className="mr-2">
+        <div className="mr-2" onKeyUp={handleKeyUp}>
           <CommonInput
             value={keyword}
             placeholder="검색어를 입력해 주세요."
