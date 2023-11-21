@@ -41,38 +41,47 @@ const config: Config = {
             },
             secondary: {
               DEFAULT: "#f0a755",
+              50: "#faf6e2",
             },
           },
         },
       },
     }),
-    plugin(function ({ addComponents }) {
-      addComponents({
-        // Flex Pattern
-        ".flex-column": {
-          display: "flex",
-          flexDirection: "column",
-        },
-        ".flex-center": {
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-        },
-        ".flex-center-column": {
-          display: "flex",
-          alignItems: "center",
-          flexDirection: "column",
-          justifyContent: "center",
-        },
-        ".flex-center-ver": {
-          display: "flex",
-          alignItems: "center",
-        },
-        ".flex-center-hor": {
-          display: "flex",
-          justifyContent: "center",
-        },
-      });
+    plugin(function ({ addVariant, e, addComponents }) {
+      // TODO: pub 아래 코드 확인 필요
+      addVariant("cm-checkbox", ({ modifySelectors, separator }) => {
+        modifySelectors(({ className }) => {
+          return `.${e(
+            `cm-checkbox${separator}${className}`
+          )} > span[aria-hidden]`;
+        });
+      }),
+        addComponents({
+          // Flex Pattern
+          ".flex-column": {
+            display: "flex",
+            flexDirection: "column",
+          },
+          ".flex-center": {
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          },
+          ".flex-center-column": {
+            display: "flex",
+            alignItems: "center",
+            flexDirection: "column",
+            justifyContent: "center",
+          },
+          ".flex-center-ver": {
+            display: "flex",
+            alignItems: "center",
+          },
+          ".flex-center-hor": {
+            display: "flex",
+            justifyContent: "center",
+          },
+        });
     }),
   ],
 };

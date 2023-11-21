@@ -78,28 +78,26 @@ export default function LoginForm() {
   }, []);
 
   return (
-    <div className="border rounded-md p-5">
+    <div className="border border-default-100 rounded-xl px-6 py-8 bg-white shadow-xl">
       <ToastContainer autoClose={2000} hideProgressBar={true} />
-      <div>
-        <h1 className="flex-center-column mb-7">
-          <Image
-            src="/icons/logo.svg"
-            width="160"
-            height="25"
-            alt="step-up logo"
-          />
-        </h1>
-        <CommonInput
-          value={userId || ""}
-          label="아이디"
-          placeholder="아이디를 입력해주세요."
-          onValueChange={setUserId}
-          isRequired={true}
-          isInvalid={userIdCheck}
-          errorMessage={userIdCheck ? "아이디를 입력해주세요." : ""}
-          className="mb-3"
+      <h1 className="flex-center-column mb-7">
+        <Image
+          src="/icons/logo.svg"
+          width="160"
+          height="25"
+          alt="step-up logo"
         />
-      </div>
+      </h1>
+      <CommonInput
+        value={userId || ""}
+        label="아이디"
+        placeholder="아이디를 입력해주세요."
+        onValueChange={setUserId}
+        isRequired={true}
+        isInvalid={userIdCheck}
+        errorMessage={userIdCheck ? "아이디를 입력해주세요." : ""}
+        className="mb-3"
+      />
       <div onKeyUp={handleKeyUp}>
         <CommonInput
           value={password}
@@ -113,22 +111,27 @@ export default function LoginForm() {
           className="mb-5"
         />
       </div>
-      <div>
-        <Checkbox isSelected={isRememberId} onValueChange={setIsRememberId}>
-          아이디 저장
+      {/* TODO: pub 추가 커스텀 필요 */}
+      <div className="flex justify-end">
+        <Checkbox
+          isSelected={isRememberId}
+          onValueChange={setIsRememberId}
+          size="sm"
+          color="secondary"
+          className="mb-1 span:!border-primary-50 cm-checkbox:before:border-default-200 cm-checkbox:before:border cm-checkbox:before:hover:bg-white"
+        >
+          <span className="text-default-300 font-medium">아이디 저장</span>
         </Checkbox>
       </div>
-      <div>
-        <CommonButton
-          label="로그인"
-          size="md"
-          radius="md"
-          color="primary"
-          variant="solid"
-          fullWidth
-          onClick={() => handleLogin()}
-        />
-      </div>
+      <CommonButton
+        label="로그인"
+        size="md"
+        radius="sm"
+        color="primary"
+        variant="solid"
+        fullWidth
+        onClick={() => handleLogin()}
+      />
     </div>
   );
 }

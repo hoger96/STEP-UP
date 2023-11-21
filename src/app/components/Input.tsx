@@ -26,13 +26,19 @@ export default function CommonInput(props: {
   onValueChange?: (value: string) => void;
   onClear?: () => any;
   className?: string;
+  fullWidth?: boolean;
 }) {
   return (
     <div>
       <Input
         classNames={{
           label: "text-left font-semibold w-24",
-          input: ["min-w-full w-64", "placeholder:text-gray-400"],
+          input: ["w-64", "placeholder:text-default-200", "caret-primary-50"],
+          inputWrapper: [
+            "!bg-white",
+            "border",
+            "focus-within:!border-primary-50",
+          ],
         }}
         className={props.className}
         type={props.type ? props.type : "text"}
@@ -50,6 +56,7 @@ export default function CommonInput(props: {
         isDisabled={props.isDisabled}
         isInvalid={props.isInvalid}
         onValueChange={props.onValueChange}
+        fullWidth={props.fullWidth}
       />
     </div>
   );
