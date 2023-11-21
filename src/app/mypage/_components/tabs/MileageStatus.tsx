@@ -3,24 +3,26 @@
 import CommonButton from '@/app/components/Buttons'
 import CommonTable from '@/app/components/Table'
 import { Chip, ChipProps, Tooltip } from '@nextui-org/react'
+import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 
 export default function MileageStatus({ shouldRefreshTable }) {
+
   const columns = [
     {
       key: 'rowNum',
       label: '번호'
     },
     {
-      key: 'regDate',
+      key: 'approvalReqDt',
       label: '신청 일자'
     },
     {
-      key: 'regType',
+      key: 'approvalReqTypeNm',
       label: '신청 타입'
     },
     {
-      key: 'confirmType',
+      key: 'approvalStusNm',
       label: '결재 상태'
     },
     {
@@ -28,12 +30,15 @@ export default function MileageStatus({ shouldRefreshTable }) {
       label: ''
     },
   ]
+
+  const userId = sessionStorage.getItem('userId')
   const [rows, setRows] = useState([])
   type Item = (typeof rows)[0];
+
   const statusColorMap: Record<string, ChipProps["color"]> = {
-    Active: "success",
-    Paused: "danger",
-    Vacation: "warning",
+    APPROVAL: "success",
+    REJECT: "danger",
+    WAIT: "warning",
   };
 
   const renderCell = React.useCallback((items: Item, columnKey: string) => {
@@ -44,7 +49,7 @@ export default function MileageStatus({ shouldRefreshTable }) {
         return (
           <Chip
             className="capitalize"
-            color={statusColorMap[items.confirmType]}
+            color={statusColorMap[items.approvalStus]}
             size="sm"
             variant="flat"
           >
@@ -56,7 +61,7 @@ export default function MileageStatus({ shouldRefreshTable }) {
           <Tooltip
             color="danger"
             content={
-              items?.confirmType !== "Active" ? "대기 상태의 신청 건에 한하여 취소가 가능합니다" : "신청 취소하기"
+              items?.approvalStus !== "WAIT" ? "대기 상태의 신청 건에 한하여 취소가 가능합니다" : "신청 취소하기"
             }
           >
             <span className="text-lg text-danger cursor-pointer active:opacity-50">
@@ -66,7 +71,7 @@ export default function MileageStatus({ shouldRefreshTable }) {
                 radius={"sm"}
                 color={"default"}
                 variant={"flat"}
-                isDisabled={items?.confirmType !== "Active"}
+                isDisabled={items?.approvalStus !== "WAIT"}
                 onClick={() => console.log("신청 취소", items["id"])}
               />
             </span>
@@ -77,26 +82,44 @@ export default function MileageStatus({ shouldRefreshTable }) {
     }
   }, []);
 
-  // const getTotalStepupData = async() => {
-  //   try {
-  //     const result = await(await fetch('/stepup/api/management/approval')).json()
-  //     console.log('result', result.data)
+  const getMileageStatusData = async (userId: string) => {
+    try {
+      const result = await axios.get('/stepup/api/user/list/mileage', {
+        params: {
+          userId
+        }
+      })
 
-  //   } catch (e) {
-  //     console.error(e)
-  //   }
-  // }
+      return result.data.body
+    } catch (e) {
+      console.error(e)
+    }
+  }
 
-  // useEffect(() => {
+  const InitMileageStatusTable = async (userId: string) => {
+    if (!userId) {
+      return
+    }
 
-  // })
+    const result = await getMileageStatusData(userId)
+    setRows(result)
+  }
 
   useEffect(() => {
-    if (shouldRefreshTable) {
-      // InitMileageStatusTable()
-      console.log('init mileageStatusTable')
+    if (shouldRefreshTable && userId) {
+      InitMileageStatusTable(userId)
     }
   }, [shouldRefreshTable])
+
+
+  useEffect(() => {
+    if (!userId) {
+      return
+    }
+
+    InitMileageStatusTable(userId)
+  }, [])
+
 
   return (
     <div>

@@ -15,6 +15,7 @@ export default function UseMileageP(props:
       <div>
         <CommonDatePicker
           name="신청일자"
+          minDate={new Date()}
           selected={props.approvalReqDt}
           onChange={(selectedDate: Date) => props.setApprovalReqDt(selectedDate)}
         />

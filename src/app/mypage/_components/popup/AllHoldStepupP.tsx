@@ -28,8 +28,8 @@ export default function AllHoldStepupP() {
   ];
 
   const userId = sessionStorage.getItem("userId");
-  const [currentPage, setCurrentPage] = useState(1);
-  const [totalPage, setTotalPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState<number>();
+  const [totalPage, setTotalPage] = useState<number>();
   const [rows, setRows] = useState<ITotalStepupData[]>([]);
 
   const getAllHoldStepupData = async (userId: string, currentPage: number) => {
@@ -51,7 +51,7 @@ export default function AllHoldStepupP() {
     }
   };
 
-  const initTotalSetupTable = async () => {
+  const initTotalHoldupStepupTable = async (userId: string, currentPage: number) => {
     if (!userId) {
       return;
     }
@@ -64,8 +64,18 @@ export default function AllHoldStepupP() {
     }
   };
 
+  const onPageChange = (page: number) => {
+    if (!userId) {
+      return
+    }
+    initTotalHoldupStepupTable(userId, page)
+  }
+
   useEffect(() => {
-    initTotalSetupTable();
+    if (!userId) {
+      return
+    }
+    initTotalHoldupStepupTable(userId, 1);
   }, []);
 
   return (
@@ -76,8 +86,9 @@ export default function AllHoldStepupP() {
         columns={columns}
         rows={rows}
         uniqueKey={"rowNum"}
-        total={totalPage}
+        total={totalPage ?? 0}
         currentPage={currentPage}
+        onChange={(page) => onPageChange(page)}
       />
     </>
   );

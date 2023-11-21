@@ -1,15 +1,15 @@
-import { CommonDatePicker } from '@/app/components/DatePicker';
+'use client'
+
 import CommonInput from '@/app/components/Input'
 import { CommonTimePicker } from '@/app/components/TimePicker';
-import React, { useCallback, useState } from 'react'
-import { CalendarContainer } from 'react-datepicker';
-import { useDropzone } from 'react-dropzone';
+import React, { useCallback } from 'react'
+import { FileWithPath, useDropzone } from 'react-dropzone';
 
 interface ICreateTodayStepupProps {
   todayDate: string;
   startTm: string | Date | undefined;
   endTm: string | Date | undefined;
-  file: any;
+  file: FileWithPath[];
   setTodayDate: React.Dispatch<React.SetStateAction<string>>;
   setStartTm: React.Dispatch<React.SetStateAction<string | undefined>>;
   setEndTm: React.Dispatch<React.SetStateAction<string | undefined>>;
@@ -27,17 +27,24 @@ const CreateTodayStepupP: React.FC<ICreateTodayStepupProps> = ({
   setFile,
 }) => {
   const onDrop = useCallback(
-    (acceptedFiles: File[]) => {
+    (acceptedFiles: FileWithPath[]) => {
       setFile(acceptedFiles);
     },
     [setFile]
   );
-
-
   const { getRootProps, getInputProps, acceptedFiles } = useDropzone({ onDrop });
-  const files = acceptedFiles.map(file => (
-    <li key={file?.path}>
-      {`- ${file?.path}`}
+
+  // const removeFile = (fileToRemove: FileWithPath) => () => {
+  //   setFile((prevFiles: FileWithPath[]) =>
+  //     prevFiles.filter((prevFile) => {
+  //       console.log('fileToRemove', fileToRemove)
+  //     }));
+  // };
+
+  const files = acceptedFiles.map(item => (
+    <li key={item.path}>
+      {`- ${item.path}`}
+      {/* <button onClick={removeFile(item)}>삭제</button> */}
     </li>
   ));
 
@@ -78,4 +85,4 @@ const CreateTodayStepupP: React.FC<ICreateTodayStepupProps> = ({
   )
 }
 
-export default CreateTodayStepupP;
+export default CreateTodayStepupP

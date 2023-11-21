@@ -79,7 +79,6 @@ export default function Header() {
             holdCntn: reason,
             userId: loginUserId,
           };
-          console.log("params", params);
           await axios.post("/stepup/api/user/hold/exercise", params);
           setOpenSignal(false);
           toast.success("보류 등록을 완료했습니다.");

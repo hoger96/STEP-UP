@@ -22,8 +22,8 @@ export default function AllTotalStepupP() {
   ]
 
   const userId = sessionStorage.getItem('userId')
-  const [currentPage, setCurrentPage] = useState(1)
-  const [totalPage, setTotalPage] = useState(1)
+  const [currentPage, setCurrentPage] = useState<number>()
+  const [totalPage, setTotalPage] = useState<number>()
   const [rows, setRows] = useState<ITotalStepupData[]>([])
 
   const getAllTotalStepupData = async (userId: string, currentPage: number) => {
@@ -43,11 +43,10 @@ export default function AllTotalStepupP() {
     }
   }
 
-  const initTotalSetupTable = async () => {
+  const initTotalStepupTable = async (userId: string, currentPage: number) => {
     if (!userId) {
       return
     }
-
     const result = await getAllTotalStepupData(userId, currentPage)
     if (result) {
       setRows(result.data)
@@ -57,12 +56,17 @@ export default function AllTotalStepupP() {
   }
 
   const onPageChange = (page: number) => {
-    setCurrentPage(page)
-    initTotalSetupTable()
+    if (!userId) {
+      return
+    }
+    initTotalStepupTable(userId, page)
   }
 
   useEffect(() => {
-    initTotalSetupTable()
+    if (!userId) {
+      return
+    }
+    initTotalStepupTable(userId, 1)
   }, [])
 
   return (
@@ -73,7 +77,7 @@ export default function AllTotalStepupP() {
         columns={columns}
         rows={rows}
         uniqueKey={'rowNum'}
-        total={totalPage}
+        total={totalPage ?? 0}
         currentPage={currentPage}
         onChange={(page) => onPageChange(page)}
       />
