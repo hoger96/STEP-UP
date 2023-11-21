@@ -14,7 +14,6 @@ interface CommonTableProps<T> {
   uniqueKey: string;
   tablekey: string;
   total: number;
-  // page: number;
   renderCell?: any;
   useRenderCell?: boolean;
   currentPage?: number | undefined;

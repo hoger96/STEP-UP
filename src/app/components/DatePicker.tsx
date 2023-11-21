@@ -1,5 +1,4 @@
 "use client";
-import { Input } from "@nextui-org/react";
 import { ko } from "date-fns/locale";
 import ReactDatePicker, { ReactDatePickerProps } from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";

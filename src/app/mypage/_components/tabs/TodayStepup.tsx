@@ -42,7 +42,7 @@ export default function TodayStepup({ shouldRefreshTable }) {
     }
   }
 
-  const InitTodayStepupTable = async () => {
+  const InitTodayStepupTable = async (userId: string) => {
     if (!userId) {
       return
     }
@@ -54,15 +54,18 @@ export default function TodayStepup({ shouldRefreshTable }) {
   }
 
   useEffect(() => {
-    if (shouldRefreshTable) {
-      InitTodayStepupTable()
+    if (shouldRefreshTable && userId) {
+      InitTodayStepupTable(userId)
     }
   }, [shouldRefreshTable])
 
   useEffect(() => {
-    InitTodayStepupTable()
-  }, [])
+    if (!userId) {
+      return
+    }
 
+    InitTodayStepupTable(userId)
+  }, [userId])
 
   useEffect(() => {
     const loginUserId = sessionStorage.getItem("userId");

@@ -31,6 +31,7 @@ const HoldPopup: React.FC<IHoldupProps> = ({
           name="보류 시작일"
           placeholderText="보류 시작일을 선택하세요."
           selected={startDate}
+          minDate={new Date()}
           onChange={(date: Date) => setStartDate(date)}
         />
       </div>
@@ -40,6 +41,7 @@ const HoldPopup: React.FC<IHoldupProps> = ({
           placeholderText="보류 종료일을 선택하세요."
           selected={endDate}
           filterDate={filterEndDate}
+          minDate={startDate}
           onChange={(date: Date) => setEndDate(date)}
         />
       </div>
