@@ -5,6 +5,7 @@ import { MouseEventHandler } from "react";
 interface IButtonProps {
   label: string;
   isDisabled?: boolean;
+  fullWidth?: boolean;
   size?: "sm" | "md" | "lg";
   radius?: "full" | "lg" | "md" | "sm" | "none";
   color: "default" | "primary" | "secondary" | "success" | "warning" | "danger";
@@ -24,6 +25,7 @@ export default function CommonButton(props: IButtonProps) {
   return (
     <Button
       isDisabled={props.isDisabled}
+      fullWidth={props.fullWidth}
       size={props.size}
       radius={props.radius}
       color={props.color}

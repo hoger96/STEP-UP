@@ -1,13 +1,13 @@
 "use client";
 import CommonButton from "@/app/components/Buttons";
 import CommonInput from "@/app/components/Input";
-import { Checkbox } from "@nextui-org/checkbox";
+import { Checkbox } from "@nextui-org/react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
-import React from "react";
 import { useEffect, useState } from "react";
 import { ToastContainer, TypeOptions, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Image from "next/image";
 
 export default function LoginForm() {
   const [userId, setUserId] = useState<string>("");
@@ -15,8 +15,6 @@ export default function LoginForm() {
   const [userIdCheck, setUserIdCheck] = useState(false);
   const [userPwCheck, setUserPwCheck] = useState(false);
   const [rememberId, setRememberId] = useState(false);
-  const [isSelected, setIsSelected] = React.useState(false);
-
   const router = useRouter();
 
   const loginValidation = () => {
@@ -31,6 +29,15 @@ export default function LoginForm() {
     }
 
     return isValid;
+  };
+
+  const handleRememberId = () => {
+    setRememberId(!rememberId); // 토글 기능을 위해 현재 상태의 반대값으로 설정
+    if (!rememberId) {
+      sessionStorage.setItem("userId", userId);
+    } else {
+      sessionStorage.removeItem("userId");
+    }
   };
 
   const showToast = (title: string, type?: TypeOptions) => {
@@ -79,19 +86,18 @@ export default function LoginForm() {
     }
   }, []);
 
-  useEffect(() => {
-    if (rememberId === true) {
-      sessionStorage.removeItem("userId");
-      sessionStorage.setItem("userId", userId);
-    } else {
-      sessionStorage.removeItem("userId");
-    }
-  }, [rememberId]);
-
   return (
-    <>
+    <div className="border rounded-md p-5">
       <ToastContainer autoClose={2000} hideProgressBar={true} />
       <div>
+        <h1 className="flex-center-column mb-7">
+          <Image
+            src="/icons/logo.svg"
+            width="160"
+            height="25"
+            alt="step-up logo"
+          />
+        </h1>
         <CommonInput
           value={userId || ""}
           label="아이디"
@@ -100,6 +106,7 @@ export default function LoginForm() {
           isRequired={true}
           isInvalid={userIdCheck}
           errorMessage={userIdCheck ? "아이디를 입력해주세요." : ""}
+          className="mb-3"
         />
       </div>
       <div onKeyUp={handleKeyUp}>
@@ -112,6 +119,7 @@ export default function LoginForm() {
           type="password"
           isInvalid={userPwCheck}
           errorMessage={userPwCheck ? "비밀번호를 입력해주세요." : ""}
+          className="mb-5"
         />
       </div>
       <div>
@@ -126,9 +134,10 @@ export default function LoginForm() {
           radius="md"
           color="primary"
           variant="solid"
+          fullWidth
           onClick={() => handleLogin()}
         />
       </div>
-    </>
+    </div>
   );
 }
