@@ -50,8 +50,13 @@ export default function LoginForm() {
 
   const handleLogin = async () => {
     try {
+      sessionStorage.setItem("rememberId", rememberId.toString());
+      if (rememberId) {
+        sessionStorage.setItem("userId", userId);
+      } else {
+        sessionStorage.removeItem("userId");
+      }
       const isValid = loginValidation();
-      sessionStorage.setItem("userId", userId);
       if (isValid) {
         const result = await axios.post("/stepup/api/login", {
           userId: userId,
@@ -81,8 +86,10 @@ export default function LoginForm() {
 
   useEffect(() => {
     const savedUserId = sessionStorage.getItem("userId");
-    if (savedUserId) {
+    const savedRememberId = sessionStorage.getItem("rememberId");
+    if (savedUserId && savedRememberId === "true") {
       setUserId(savedUserId);
+      setRememberId(true);
     }
   }, []);
 
