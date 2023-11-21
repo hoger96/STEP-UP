@@ -11,10 +11,10 @@ import Image from "next/image";
 
 export default function LoginForm() {
   const [userId, setUserId] = useState<string>("");
-  const [userPw, setUserPw] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
   const [userIdCheck, setUserIdCheck] = useState(false);
   const [userPwCheck, setUserPwCheck] = useState(false);
-  const [rememberId, setRememberId] = useState(false);
+  const [isRememberId, setIsRememberId] = useState(false);
   const router = useRouter();
 
   const loginValidation = () => {
@@ -23,21 +23,12 @@ export default function LoginForm() {
       setUserIdCheck(true);
       isValid = false;
     }
-    if (!userPw?.length) {
+    if (!password?.length) {
       setUserPwCheck(true);
       isValid = false;
     }
 
     return isValid;
-  };
-
-  const handleRememberId = () => {
-    setRememberId(!rememberId); // 토글 기능을 위해 현재 상태의 반대값으로 설정
-    if (!rememberId) {
-      sessionStorage.setItem("userId", userId);
-    } else {
-      sessionStorage.removeItem("userId");
-    }
   };
 
   const showToast = (title: string, type?: TypeOptions) => {
@@ -50,39 +41,39 @@ export default function LoginForm() {
 
   const handleLogin = async () => {
     try {
+      sessionStorage.setItem("isRememberId", isRememberId.toString());
+      if (isRememberId) {
+        sessionStorage.setItem("savedUserId", userId);
+      } else {
+        sessionStorage.removeItem("savedUserId");
+      }
       const isValid = loginValidation();
-      sessionStorage.setItem("userId", userId);
       if (isValid) {
         const result = await axios.post("/stepup/api/login", {
-          userId: userId,
-          password: userPw,
+          userId,
+          password,
         });
         sessionStorage.setItem("loginUserId", result.data.body.userId);
         sessionStorage.setItem("loginUserName", result.data.body.userNm);
         sessionStorage.setItem("loginUserMaster", result.data.body.masterYn);
-        if (
-          result.data.code === "20000000" &&
-          result.data.body.masterYn === "Y"
-        ) {
+
+        if (result.data.body.masterYn === "Y") {
           router.push("/confirm");
-        } else if (
-          result.data.code === "20000000" &&
-          result.data.body.masterYn === "Y"
-        ) {
+        } else if (result.data.body.masterYn === "N") {
           router.push(`/mypage/${result.data.body.userId}`);
         }
       }
     } catch (error: any) {
-      if (error.response.data.code === "40000000") {
-        showToast("아이디 또는 비밀번호가 일치하지 않습니다.", "error");
-      }
+      showToast("아이디 또는 비밀번호를 확인해주세요.", "error");
     }
   };
 
   useEffect(() => {
-    const savedUserId = sessionStorage.getItem("userId");
-    if (savedUserId) {
+    const savedUserId = sessionStorage.getItem("savedUserId");
+    const savedRememberId = sessionStorage.getItem("isRememberId");
+    if (savedUserId && savedRememberId === "true") {
       setUserId(savedUserId);
+      setIsRememberId(true);
     }
   }, []);
 
@@ -111,10 +102,10 @@ export default function LoginForm() {
       </div>
       <div onKeyUp={handleKeyUp}>
         <CommonInput
-          value={userPw}
+          value={password}
           label="비밀번호"
           placeholder="비밀번호를 입력해주세요."
-          onValueChange={setUserPw}
+          onValueChange={setPassword}
           isRequired={true}
           type="password"
           isInvalid={userPwCheck}
@@ -123,7 +114,7 @@ export default function LoginForm() {
         />
       </div>
       <div>
-        <Checkbox isSelected={rememberId} onValueChange={setRememberId}>
+        <Checkbox isSelected={isRememberId} onValueChange={setIsRememberId}>
           아이디 저장
         </Checkbox>
       </div>
