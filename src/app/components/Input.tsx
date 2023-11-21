@@ -25,6 +25,7 @@ export default function CommonInput(props: {
   errorMessage?: ReactNode;
   onValueChange?: (value: string) => void;
   onClear?: () => any;
+  className?: string;
 }) {
   return (
     <div>
@@ -33,6 +34,7 @@ export default function CommonInput(props: {
           label: "text-left font-semibold w-24",
           input: ["min-w-full w-64", "placeholder:text-gray-400"],
         }}
+        className={props.className}
         type={props.type ? props.type : "text"}
         value={props.value}
         label={props.label}
