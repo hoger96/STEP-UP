@@ -342,75 +342,72 @@ export default function Home() {
         <h2>TABLE</h2>
         <div>
           <CommonTable
-              tablekey="example table"
-              columns={columns}
-              rows={rows}
-              useRenderCell={true}
-              renderCell={renderCell}
-              emptyContent={"조회된 데이터가 없습니다."}
-              onChange={setCurrnetPage}
-              currentPage={currentPage}
-              total={5} 
-              uniqueKey={""} 
-              page={0} 
-              onRowAction={function (key: React.Key): void {
-                throw new Error("Function not implemented.");
-              }}          
-            />
+            tablekey="example table"
+            columns={columns}
+            rows={rows}
+            useRenderCell={true}
+            renderCell={renderCell}
+            emptyContent={"조회된 데이터가 없습니다."}
+            onChange={setCurrnetPage}
+            currentPage={currentPage}
+            total={5}
+            uniqueKey={""}
+            onRowAction={function (key: React.Key): void {
+              throw new Error("Function not implemented.");
+            }}
+          />
         </div>
         <div>
           <CommonTable
-              tablekey="example table 1"
-              columns={columns}
-              rows={rows}
-              emptyContent={"조회된 데이터가 없습니다."}
-              onChange={setCurrnetPage}
-              currentPage={currentPage}
-              total={5} 
-              uniqueKey={""} 
-              page={0} 
-              onRowAction={function (key: React.Key): void {
-                throw new Error("Function not implemented.");
-              } }              
-            />
+            tablekey="example table 1"
+            columns={columns}
+            rows={rows}
+            emptyContent={"조회된 데이터가 없습니다."}
+            onChange={setCurrnetPage}
+            currentPage={currentPage}
+            total={5}
+            uniqueKey={""}
+            onRowAction={function (key: React.Key): void {
+              throw new Error("Function not implemented.");
+            }}
+          />
         </div>
         <div>
           <div>no data</div>
           <CommonTable
-              tablekey="example table"
-              columns={columns}
-              rows={[]}
-              emptyContent={"조회된 데이터가 없습니다."} 
-              uniqueKey={""} 
-              total={0} 
-              page={0} 
-              onRowAction={function (key: React.Key): void {
-                throw new Error("Function not implemented.");
-              } }          
-            />
+            tablekey="example table"
+            columns={columns}
+            rows={[]}
+            emptyContent={"조회된 데이터가 없습니다."}
+            uniqueKey={""}
+            total={0}
+            onRowAction={function (key: React.Key): void {
+              throw new Error("Function not implemented.");
+            }}
+          />
         </div>
       </div>
       <div className="m-5">
         <div>Modal Popup</div>
-        <CommonButton 
-          label={"모달 오픈"} 
-          size={"sm"} 
-          radius={"sm"} 
-          color={"default"} 
-          variant={"flat"} 
+        <CommonButton
+          label={"모달 오픈"}
+          size={"sm"}
+          radius={"sm"}
+          color={"default"}
+          variant={"flat"}
           onClick={openPopup} // 팝업 열림 처리
         />
-        <CommonModal 
-            contents={<ModalExample />}
-            title={"컨펌 모달"}
-            isOpen={isOpen}
-            size={"lg"}
-            onConfirmBtn={() => {
-              closePopup(); // 팝업 닫힘 처리
-            }}
-            onClose={closePopup} // 팝업 상단 x 버튼 닫힘 처리
-          />
-        </div>
+        <CommonModal
+          contents={<ModalExample />}
+          title={"컨펌 모달"}
+          isOpen={isOpen}
+          size={"lg"}
+          onConfirmBtn={() => {
+            closePopup(); // 팝업 닫힘 처리
+          }}
+          onClose={closePopup} // 팝업 상단 x 버튼 닫힘 처리
+        />
       </div>
+    </div>
   );
 }

@@ -2,7 +2,7 @@
 
 import CommonButton from '@/app/components/Buttons'
 import CommonModal from '@/app/components/Confirm'
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import UseMileageP from '../popup/UseMileageP'
 import AllUsedMileageP from '../popup/AllUsedMileageP'
 import axios from 'axios'
@@ -15,9 +15,15 @@ interface IApplyUseMileageParams {
     userId: string
 }
 
-export default function MileageStatusBtn({ onRefreshTable }) {
+interface IProps {
+    requestId: string
+    onRefreshTable: () => void
+}
 
-    const [userId, setUserId] = useState<string>()
+export default function MileageStatusBtn(props: IProps) {
+
+    // const [userId, setUserId] = useState<string>()
+    const userId = sessionStorage.getItem("loginUserId")
 
     // 마일리지 사용 신청 팝업 데이터
     const [approvalReqDt, setApprovalReqDt] = useState(new Date()) // 신청일자
@@ -51,8 +57,9 @@ export default function MileageStatusBtn({ onRefreshTable }) {
 
             return true
         } catch (e) {
-            console.error(e)
-            toast.error(e?.response?.data.message)
+            // if (e instanceof AxiosError) {
+            //     toast.error(e?.response?.data.message)
+            // }
             return false
         }
     }
@@ -66,12 +73,12 @@ export default function MileageStatusBtn({ onRefreshTable }) {
         const isSuccess = await applyUseMileage(params)
         if (isSuccess) {
             setIsUseMileagePOpen(false)
-            onRefreshTable();
+            props.onRefreshTable();
             toast.success(`마일리지 사용 신청을 완료했어요 :)`);
         }
-        // else {
-        //     toast.error('마일리지 사용 신청이 불가합니다.')
-        // }
+        else {
+            toast.error('마일리지가 부족해요!')
+        }
     }
 
     // 전체 마일리지 사용 현황 팝업
@@ -83,12 +90,12 @@ export default function MileageStatusBtn({ onRefreshTable }) {
         setIsAllUseMileagePOpen(false)
     }
 
-    useEffect(() => {
-        const savedUserId = sessionStorage.getItem("userId");
-        if (savedUserId) {
-            setUserId(savedUserId);
-        }
-    }, []);
+    // useEffect(() => {
+    //     const savedUserId = sessionStorage.getItem("userId");
+    //     if (savedUserId) {
+    //         setUserId(savedUserId);
+    //     }
+    // }, []);
 
 
     return (
@@ -100,6 +107,7 @@ export default function MileageStatusBtn({ onRefreshTable }) {
                     radius={'sm'}
                     color={'default'}
                     variant={'flat'}
+                    isDisabled={userId !== props.requestId}
                     onClick={handleUseMileage}
                 />
                 <CommonModal
@@ -126,7 +134,7 @@ export default function MileageStatusBtn({ onRefreshTable }) {
                 />
                 <CommonModal
                     title={'전체 마일리지 사용 현황'}
-                    contents={<AllUsedMileageP />}
+                    contents={<AllUsedMileageP requestId={props.requestId} />}
                     size={'xl'}
                     isOpen={isAllUseMileagePOpen}
                     onClose={onCloseAllUseMileageP}

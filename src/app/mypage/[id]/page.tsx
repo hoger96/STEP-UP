@@ -1,16 +1,16 @@
-import { ReactChild, ReactFragment, ReactPortal } from "react";
 import StepupStatus from "../_components/StepupStatus";
 import StepupTabs from "../_components/StepupTabContainer";
 
 export default function Mypage(props: {
   params: {
-    id: boolean | ReactChild | ReactFragment | ReactPortal | null | undefined;
+    id: string
   };
 }) {
+
   return (
     <div>
-      <StepupStatus />
-      <StepupTabs />
+      <StepupStatus requestId={props.params.id} />
+      <StepupTabs requestId={props.params.id} />
     </div>
   );
 }

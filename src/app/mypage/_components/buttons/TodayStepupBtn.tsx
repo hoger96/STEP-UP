@@ -4,19 +4,17 @@ import CommonButton from '@/app/components/Buttons'
 import CommonModal from '@/app/components/Confirm'
 import React, { useState } from 'react'
 import CreateTodayStepupP from '../popup/CreateTodayStepupP'
-import axios from 'axios'
+import axios, { AxiosError } from 'axios'
 import { ToastContainer, toast } from 'react-toastify'
 
-// interface ICreateTodayStepupParams {
-//   startTm: string
-//   endTm: string
-//   userId: string
-//   file: any[]
-// }
+interface IProps {
+  requestId: string
+  onRefreshTable: () => void
+}
 
-export default function TodayStepupBtn({ onRefreshTable }) {
+export default function TodayStepupBtn(props: IProps) {
 
-  const userId = sessionStorage.getItem('userId')
+  const userId = sessionStorage.getItem('loginUserId')
 
   const [isOpen, setIsOpen] = useState(false)
   const [todayDate, setTodayDate] = useState(new Date().toISOString().split('T')[0]);
@@ -31,7 +29,7 @@ export default function TodayStepupBtn({ onRefreshTable }) {
   const setParams = async (startTm: Date, endTm: Date, userId: string, file: File[]) => {
     const formData = new FormData()
 
-    const options = { hour: "numeric", minute: "numeric", hour12: false }
+    const options: Intl.DateTimeFormatOptions = { hour: "numeric", minute: "numeric", hour12: false }
 
     const startTime = new Date(startTm).toLocaleTimeString("ko-KR", options)
     const endTime = new Date(endTm).toLocaleTimeString("ko-KR", options)
@@ -55,9 +53,10 @@ export default function TodayStepupBtn({ onRefreshTable }) {
 
       return true
     } catch (e) {
-      console.error(e)
-      toast.error(e?.response?.data.message)
-      return false
+      if (e instanceof AxiosError) {
+        toast.error(e?.response?.data.message)
+        return false
+      }
     }
   }
 
@@ -70,7 +69,7 @@ export default function TodayStepupBtn({ onRefreshTable }) {
       const isSuccess = await createTodayStepup(params)
       if (isSuccess) {
         setIsOpen(false)
-        onRefreshTable();
+        props.onRefreshTable();
         toast.success('축하합니다! 오늘의 운동기록을 기록하셨군요 :)')
       } else {
         // toast.error('오늘의 운동기록을 추가하지 못했어요')
@@ -93,6 +92,7 @@ export default function TodayStepupBtn({ onRefreshTable }) {
         radius={'sm'}
         color={'default'}
         variant={'flat'}
+        isDisabled={userId !== props.requestId}
         onClick={handelOpenCreateTodayStepupPopup}
       />
       <ToastContainer position="top-right" autoClose={2000} />

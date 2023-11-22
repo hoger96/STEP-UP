@@ -11,7 +11,11 @@ interface IHoldStepupData {
   holdCntn: string
 }
 
-export default function NotCountStatus() {
+interface IProps {
+  requestId: string
+}
+
+export default function NotCountStatus(props: IProps) {
   const columns = [
     {
       key: 'rowNum',
@@ -31,7 +35,7 @@ export default function NotCountStatus() {
     },
   ]
 
-  const userId = sessionStorage.getItem('userId')
+  // const userId = sessionStorage.getItem('loginUserId')
 
   const [rows, setRows] = useState<IHoldStepupData[]>([])
 
@@ -48,7 +52,7 @@ export default function NotCountStatus() {
     }
   }
 
-  const InitHoldStepupTable = async () => {
+  const InitHoldStepupTable = async (userId: string) => {
     if (!userId) {
       return
     }
@@ -60,7 +64,10 @@ export default function NotCountStatus() {
   }
 
   useEffect(() => {
-    InitHoldStepupTable()
+    if (!props.requestId) {
+      return
+    }
+    InitHoldStepupTable(props.requestId)
   }, [])
 
   return (

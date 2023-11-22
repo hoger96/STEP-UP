@@ -7,7 +7,11 @@ interface ITotalStepupData {
   achievementDt: string
 }
 
-export default function AllUsedMileageP() {
+interface IProps {
+  requestId: string
+}
+
+export default function AllUsedMileageP(props: IProps) {
 
   const columns = [
     {
@@ -24,7 +28,7 @@ export default function AllUsedMileageP() {
     }
   ]
 
-  const userId = sessionStorage.getItem('userId')
+  // const userId = sessionStorage.getItem('loginUserId')
   const [rows, setRows] = useState<ITotalStepupData[]>([])
   const [currentPage, setCurrentPage] = useState<number>()
   const [totalPage, setTotalPage] = useState<number>()
@@ -60,17 +64,17 @@ export default function AllUsedMileageP() {
   }
 
   const onPageChange = (page: number) => {
-    if (!userId) {
+    if (!props.requestId) {
       return
     }
-    initTotalUsedMileageTable(userId, page)
+    initTotalUsedMileageTable(props.requestId, page)
   }
 
   useEffect(() => {
-    if (!userId) {
+    if (!props.requestId) {
       return
     }
-    initTotalUsedMileageTable(userId, 1)
+    initTotalUsedMileageTable(props.requestId, 1)
   }, [])
 
   return (

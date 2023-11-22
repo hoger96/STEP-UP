@@ -9,7 +9,12 @@ interface ITotalStepupData {
   achievementDt: string
 }
 
-export default function TotalStepup({ shouldRefreshTable }) {
+interface IProps {
+  shouldRefreshTable: boolean
+  requestId: string
+}
+
+export default function TotalStepup(props: IProps) {
 
   const columns = [
     {
@@ -22,7 +27,7 @@ export default function TotalStepup({ shouldRefreshTable }) {
     }
   ]
 
-  const userId = sessionStorage.getItem('userId')
+  // const userId = sessionStorage.getItem('loginUserId')
   const [rows, setRows] = useState<ITotalStepupData[]>([])
 
   const getTotalStepupData = async (userId: string) => {
@@ -39,7 +44,7 @@ export default function TotalStepup({ shouldRefreshTable }) {
     }
   }
 
-  const initTotalSetupTable = async () => {
+  const initTotalSetupTable = async (userId: string) => {
     if (!userId) {
       return
     }
@@ -51,14 +56,18 @@ export default function TotalStepup({ shouldRefreshTable }) {
   }
 
   useEffect(() => {
-    if (shouldRefreshTable) {
-      initTotalSetupTable()
+    if (props.shouldRefreshTable && props.requestId) {
+      initTotalSetupTable(props.requestId)
     }
-  }, [shouldRefreshTable])
+  }, [props.shouldRefreshTable])
 
 
   useEffect(() => {
-    initTotalSetupTable()
+    if (!props.requestId) {
+      return
+    }
+
+    initTotalSetupTable(props.requestId)
   }, [])
 
   return (

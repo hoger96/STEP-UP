@@ -13,8 +13,11 @@ interface IStepupStatusData {
     mileageCnt: number
 }
 
+interface IProps {
+    requestId: string
+}
 
-export default function StepupStatus() {
+export default function StepupStatus(props: IProps) {
 
     const [userId, setUserId] = useState<string>()
     const [statusData, setStatusData] = useState<IStepupStatusData>()
@@ -34,8 +37,8 @@ export default function StepupStatus() {
     }
 
     const initStepupStatus = async () => {
-        if (userId) {
-            const result = await getStepupStatusData(userId)
+        if (props.requestId) {
+            const result = await getStepupStatusData(props.requestId)
             if (result) {
                 setStatusData(result)
             }
@@ -45,15 +48,6 @@ export default function StepupStatus() {
     useEffect(() => {
         initStepupStatus()
     }, [])
-
-    useEffect(() => {
-        const loginUserId = sessionStorage.getItem("userId");
-
-        if (loginUserId) {
-            setUserId(loginUserId)
-        }
-    }, []);
-
 
     return (
 
