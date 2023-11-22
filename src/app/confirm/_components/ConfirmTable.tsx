@@ -119,7 +119,6 @@ export default function ConfirmTable({
           columns={approvalColumns}
           rows={data?.length > 0 ? data : []}
           emptyContent={"조회된 데이터가 없습니다."}
-          page={currentPage}
           total={totalPage}
           onChange={handleChangePage}
           onRowAction={handleOpenPopup}
