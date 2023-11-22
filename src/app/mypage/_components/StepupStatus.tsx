@@ -19,7 +19,7 @@ interface IProps {
 
 export default function StepupStatus(props: IProps) {
 
-    const [userId, setUserId] = useState<string>()
+    // const [userId, setUserId] = useState<string>()
     const [statusData, setStatusData] = useState<IStepupStatusData>()
 
     const getStepupStatusData = async (userId: string) => {

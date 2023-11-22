@@ -5,6 +5,7 @@ import CommonTable from '@/app/components/Table'
 import { Chip, ChipProps, Tooltip } from '@nextui-org/react'
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
+import { ToastContainer, toast } from 'react-toastify'
 
 interface IProps {
   shouldRefreshTable: boolean
@@ -57,6 +58,37 @@ export default function MileageStatus(props: IProps) {
     CANCEL: "secondary"
   };
 
+  const getRequestData = (approvalId: string, userId: string) => {
+    return {
+      approvalId,
+      userId
+    }
+  }
+
+  const cancelApproval = async (data: { approvalId: string, userId: string }) => {
+    try {
+      await axios.put('/stepup/api/user/cancel/mileage', data)
+
+      return true
+    } catch (e) {
+      console.error(e)
+
+      return false
+    }
+  }
+
+  const handleCancelBtnClick = async (approvalId: string, userId: string) => {
+    const data = getRequestData(approvalId, userId)
+    if (!data) {
+      return
+    }
+    const isSuccess = await cancelApproval(data)
+    if (isSuccess) {
+      InitMileageStatusTable(userId)
+      toast.success('신청이 취소되었어요!')
+    }
+  }
+
   const renderCell = React.useCallback((items: IRows, columnKey: string) => {
     const cellValue = items[columnKey as keyof IRows];
 
@@ -77,7 +109,7 @@ export default function MileageStatus(props: IProps) {
           <Tooltip
             color="danger"
             content={
-              userId !== props.requestId ? '내 신청만 취소할 수 있어요!' : items?.approvalStus !== "WAIT" ? "이젠 신청 취소를 할 수 없어요" : "신청을 취소할래요?"
+              userId !== props.requestId ? '내 신청만 취소할 수 있어요!' : items?.approvalStus !== "WAIT" ? "신청을 취소할 수 없어요!" : "버튼을 눌러 신청을 취소해보아요!"
             }
           >
             <span className="text-lg text-danger cursor-pointer active:opacity-50">
@@ -88,7 +120,7 @@ export default function MileageStatus(props: IProps) {
                 color={"default"}
                 variant={"flat"}
                 isDisabled={items?.approvalStus !== "WAIT" || userId !== props.requestId}
-                onClick={() => console.log("신청 취소", items["approvalId"])}
+                onClick={() => { handleCancelBtnClick(items.approvalId, userId ? userId : '') }}
               />
             </span>
           </Tooltip>
@@ -149,6 +181,7 @@ export default function MileageStatus(props: IProps) {
         uniqueKey={'rowNum'}
         total={0}
       />
+      <ToastContainer autoClose={2000} hideProgressBar={true} />
     </div>
   )
 }

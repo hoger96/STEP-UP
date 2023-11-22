@@ -4,6 +4,8 @@ import CommonButton from '@/app/components/Buttons'
 import CommonModal from '@/app/components/Confirm'
 import React, { useState } from 'react'
 import AllTotalStepupP from '../popup/AllTotalStepupP'
+import axios, { AxiosError } from 'axios'
+import { toast } from 'react-toastify'
 
 interface IProps {
     requestId: string
@@ -12,11 +14,39 @@ interface IProps {
 
 export default function TotalStepupBtn(props: IProps) {
 
+    const [isConfirmOpen, setIsConfrimOpen] = useState(false)
     const userId = sessionStorage.getItem('loginUserId')
     const [isOpen, setIsOpen] = useState(false)
 
-    const handleChangeMileage = () => {
-        props.onRefreshTable()
+    const changeToMileage = async (userId: string) => {
+        try {
+            await axios.put(`/stepup/api/user/conversion/mileage/${userId}`)
+
+            return true
+        } catch (e) {
+            if (e instanceof AxiosError) {
+                toast.error(e?.response?.data.message)
+            }
+            return false
+        }
+    }
+
+    const handleChaneMileageBtnClick = () => {
+        setIsConfrimOpen(true)
+    }
+
+    const handleChangeMileage = async () => {
+        if (!userId) {
+            return
+        }
+
+        const isSuccess = await changeToMileage(userId)
+
+        if (isSuccess) {
+            setIsConfrimOpen(false)
+            props.onRefreshTable()
+            toast.success('1개의 마일리지가 생성되었어요!')
+        }
     }
 
     const handleShowAllTotalStepup = () => {
@@ -36,7 +66,7 @@ export default function TotalStepupBtn(props: IProps) {
                 color={'default'}
                 variant={'flat'}
                 isDisabled={userId !== props.requestId}
-                onClick={handleChangeMileage}
+                onClick={handleChaneMileageBtnClick}
             />
             <CommonButton
                 label={'전체보기'}
@@ -70,6 +100,16 @@ export default function TotalStepupBtn(props: IProps) {
                     />
                 </div>
             </div>
+            <CommonModal
+                title={"스텝업 보류하기"}
+                contents={'마일리지를 생성할래요?'}
+                isOpen={isConfirmOpen}
+                size={"sm"}
+                onClose={() => {
+                    setIsConfrimOpen(false);
+                }}
+                onConfirmBtn={handleChangeMileage}
+            />
         </div>
     )
 }
