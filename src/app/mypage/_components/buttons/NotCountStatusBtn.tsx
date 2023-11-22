@@ -5,7 +5,11 @@ import CommonModal from '@/app/components/Confirm'
 import React, { useState } from 'react'
 import AllHoldStepupP from '../popup/AllHoldStepupP'
 
-export default function NotCountStatusBtn() {
+interface IProps {
+  requestId: string
+}
+
+export default function NotCountStatusBtn(props: IProps) {
   const [isAllHoldStepupPOpen, setIsAllHoldStepupPOpen] = useState(false)
 
   const handleShowAllHoldStepup = () => {
@@ -28,7 +32,7 @@ export default function NotCountStatusBtn() {
       />
       <CommonModal
         title={'전체 스텝업 보류 내역'}
-        contents={<AllHoldStepupP />}
+        contents={<AllHoldStepupP requestId={props.requestId} />}
         size={'2xl'}
         isOpen={isAllHoldStepupPOpen}
         onClose={onCloseAllHoldStepupP}

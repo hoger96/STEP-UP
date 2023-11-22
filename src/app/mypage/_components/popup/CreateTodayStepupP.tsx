@@ -7,12 +7,12 @@ import { FileWithPath, useDropzone } from 'react-dropzone';
 
 interface ICreateTodayStepupProps {
   todayDate: string;
-  startTm: string | Date | undefined;
-  endTm: string | Date | undefined;
+  startTm: Date | undefined;
+  endTm: Date | undefined;
   file: FileWithPath[];
   setTodayDate: React.Dispatch<React.SetStateAction<string>>;
-  setStartTm: React.Dispatch<React.SetStateAction<string | undefined>>;
-  setEndTm: React.Dispatch<React.SetStateAction<string | undefined>>;
+  setStartTm: (data: Date) => void
+  setEndTm: (data: Date) => void
   setFile: React.Dispatch<React.SetStateAction<any>>;
 }
 
@@ -31,6 +31,7 @@ const CreateTodayStepupP: React.FC<ICreateTodayStepupProps> = ({
       setFile(acceptedFiles);
     },
     [setFile]
+
   );
   const { getRootProps, getInputProps, acceptedFiles } = useDropzone({ onDrop });
 
@@ -41,7 +42,7 @@ const CreateTodayStepupP: React.FC<ICreateTodayStepupProps> = ({
   //     }));
   // };
 
-  const files = acceptedFiles.map(item => (
+  const files = acceptedFiles.map((item: FileWithPath) => (
     <li key={item.path}>
       {`- ${item.path}`}
       {/* <button onClick={removeFile(item)}>삭제</button> */}

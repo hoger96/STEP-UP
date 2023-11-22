@@ -11,7 +11,11 @@ import TotalStepupBtn from './buttons/TotalStepupBtn';
 import MileageStatusBtn from './buttons/MileageStatusBtn';
 import NotCountStatusBtn from './buttons/NotCountStatusBtn';
 
-export default function StepupTab() {
+interface IProps {
+  requestId: string
+}
+
+export default function StepupTab(props: IProps) {
   const [refreshTodayStepupTable, setRefreshTodayStepupTable] = useState(false);
   const [refreshTotalStepupTable, setRefreshTotalStepupTable] = useState(false);
   const [refreshMileageStatusTable, setRefreshMileageStatusTable] = useState(false);
@@ -33,26 +37,26 @@ export default function StepupTab() {
     {
       id: "todayStepup",
       label: "오늘의 스텝업",
-      content: <TodayStepup shouldRefreshTable={refreshTodayStepupTable} />,
-      btnContent: <TodayStepupBtn onRefreshTable={handleRefreshTodayStepupTable} />
+      content: <TodayStepup shouldRefreshTable={refreshTodayStepupTable} requestId={props.requestId} />,
+      btnContent: <TodayStepupBtn onRefreshTable={handleRefreshTodayStepupTable} requestId={props.requestId} />
     },
     {
       id: "totalStepup",
       label: "연속 스텝업",
-      content: <TotalStepup shouldRefreshTable={refreshTotalStepupTable} />,
-      btnContent: <TotalStepupBtn onRefreshTable={handleRefreshTotalStepupTable} />
+      content: <TotalStepup shouldRefreshTable={refreshTotalStepupTable} requestId={props.requestId} />,
+      btnContent: <TotalStepupBtn onRefreshTable={handleRefreshTotalStepupTable} requestId={props.requestId} />
     },
     {
       id: "mileageStatus",
       label: "마일리지 사용현황",
-      content: <MileageStatus shouldRefreshTable={refreshMileageStatusTable} />,
-      btnContent: <MileageStatusBtn onRefreshTable={handleRefreshMileageStatusTable} />
+      content: <MileageStatus shouldRefreshTable={refreshMileageStatusTable} requestId={props.requestId} />,
+      btnContent: <MileageStatusBtn onRefreshTable={handleRefreshMileageStatusTable} requestId={props.requestId} />
     },
     {
       id: "notCountStatus",
       label: "스텝업 보류내역",
-      content: <NotCountStatus />,
-      btnContent: <NotCountStatusBtn />
+      content: <NotCountStatus requestId={props.requestId} />,
+      btnContent: <NotCountStatusBtn requestId={props.requestId} />
     }
   ];
 

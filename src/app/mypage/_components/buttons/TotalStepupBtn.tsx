@@ -5,12 +5,18 @@ import CommonModal from '@/app/components/Confirm'
 import React, { useState } from 'react'
 import AllTotalStepupP from '../popup/AllTotalStepupP'
 
-export default function TotalStepupBtn({ onRefreshTable }) {
+interface IProps {
+    requestId: string
+    onRefreshTable: () => void
+}
 
+export default function TotalStepupBtn(props: IProps) {
+
+    const userId = sessionStorage.getItem('loginUserId')
     const [isOpen, setIsOpen] = useState(false)
 
     const handleChangeMileage = () => {
-        onRefreshTable()
+        props.onRefreshTable()
     }
 
     const handleShowAllTotalStepup = () => {
@@ -29,6 +35,7 @@ export default function TotalStepupBtn({ onRefreshTable }) {
                 radius={'sm'}
                 color={'default'}
                 variant={'flat'}
+                isDisabled={userId !== props.requestId}
                 onClick={handleChangeMileage}
             />
             <CommonButton
@@ -43,7 +50,7 @@ export default function TotalStepupBtn({ onRefreshTable }) {
                 <div>
                     <CommonModal
                         title={'전체 스텝업'}
-                        contents={<AllTotalStepupP />}
+                        contents={<AllTotalStepupP requestId={props.requestId} />}
                         size={'2xl'}
                         isOpen={isOpen}
                         onClose={onClose}

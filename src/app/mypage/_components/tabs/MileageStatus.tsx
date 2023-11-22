@@ -6,7 +6,22 @@ import { Chip, ChipProps, Tooltip } from '@nextui-org/react'
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 
-export default function MileageStatus({ shouldRefreshTable }) {
+interface IProps {
+  shouldRefreshTable: boolean
+  requestId: string
+}
+
+interface IRows {
+  approvalId: string
+  approvalReqDt: string
+  approvalReqType: string
+  approvalReqTypeNm: string
+  approvalStus: string
+  approvalStusNm: string
+  rowNum: string
+}
+
+export default function MileageStatus(props: IProps) {
 
   const columns = [
     {
@@ -31,18 +46,19 @@ export default function MileageStatus({ shouldRefreshTable }) {
     },
   ]
 
-  const userId = sessionStorage.getItem('userId')
+  const userId = sessionStorage.getItem('loginUserId')
   const [rows, setRows] = useState([])
-  type Item = (typeof rows)[0];
+  // type Item = (typeof rows)[0];
 
   const statusColorMap: Record<string, ChipProps["color"]> = {
     APPROVAL: "success",
     REJECT: "danger",
     WAIT: "warning",
+    CANCEL: "secondary"
   };
 
-  const renderCell = React.useCallback((items: Item, columnKey: string) => {
-    const cellValue = items[columnKey as keyof Item];
+  const renderCell = React.useCallback((items: IRows, columnKey: string) => {
+    const cellValue = items[columnKey as keyof IRows];
 
     switch (columnKey) {
       case "confirmType":
@@ -61,7 +77,7 @@ export default function MileageStatus({ shouldRefreshTable }) {
           <Tooltip
             color="danger"
             content={
-              items?.approvalStus !== "WAIT" ? "대기 상태의 신청 건에 한하여 취소가 가능합니다" : "신청 취소하기"
+              userId !== props.requestId ? '내 신청만 취소할 수 있어요!' : items?.approvalStus !== "WAIT" ? "이젠 신청 취소를 할 수 없어요" : "신청을 취소할래요?"
             }
           >
             <span className="text-lg text-danger cursor-pointer active:opacity-50">
@@ -71,8 +87,8 @@ export default function MileageStatus({ shouldRefreshTable }) {
                 radius={"sm"}
                 color={"default"}
                 variant={"flat"}
-                isDisabled={items?.approvalStus !== "WAIT"}
-                onClick={() => console.log("신청 취소", items["id"])}
+                isDisabled={items?.approvalStus !== "WAIT" || userId !== props.requestId}
+                onClick={() => console.log("신청 취소", items["approvalId"])}
               />
             </span>
           </Tooltip>
@@ -106,18 +122,18 @@ export default function MileageStatus({ shouldRefreshTable }) {
   }
 
   useEffect(() => {
-    if (shouldRefreshTable && userId) {
-      InitMileageStatusTable(userId)
+    if (props.shouldRefreshTable && props.requestId) {
+      InitMileageStatusTable(props.requestId)
     }
-  }, [shouldRefreshTable])
+  }, [props.shouldRefreshTable])
 
 
   useEffect(() => {
-    if (!userId) {
+    if (!props.requestId) {
       return
     }
 
-    InitMileageStatusTable(userId)
+    InitMileageStatusTable(props.requestId)
   }, [])
 
 

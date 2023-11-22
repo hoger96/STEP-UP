@@ -7,8 +7,11 @@ interface ITotalStepupData {
   achievementDt: string
 }
 
+interface IProps {
+  requestId: string
+}
 
-export default function AllTotalStepupP() {
+export default function AllTotalStepupP(props: IProps) {
 
   const columns = [
     {
@@ -21,7 +24,7 @@ export default function AllTotalStepupP() {
     }
   ]
 
-  const userId = sessionStorage.getItem('userId')
+  // const userId = sessionStorage.getItem('loginUserId')
   const [currentPage, setCurrentPage] = useState<number>()
   const [totalPage, setTotalPage] = useState<number>()
   const [rows, setRows] = useState<ITotalStepupData[]>([])
@@ -56,17 +59,17 @@ export default function AllTotalStepupP() {
   }
 
   const onPageChange = (page: number) => {
-    if (!userId) {
+    if (!props.requestId) {
       return
     }
-    initTotalStepupTable(userId, page)
+    initTotalStepupTable(props.requestId, page)
   }
 
   useEffect(() => {
-    if (!userId) {
+    if (!props.requestId) {
       return
     }
-    initTotalStepupTable(userId, 1)
+    initTotalStepupTable(props.requestId, 1)
   }, [])
 
   return (

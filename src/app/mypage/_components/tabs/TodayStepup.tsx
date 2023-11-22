@@ -10,7 +10,12 @@ interface ITodayStepupData {
   endTm: string
 }
 
-export default function TodayStepup({ shouldRefreshTable }) {
+interface IProps {
+  shouldRefreshTable: boolean
+  requestId: string
+}
+
+export default function TodayStepup(props: IProps) {
   const columns = [
     {
       key: 'rowNum',
@@ -26,7 +31,7 @@ export default function TodayStepup({ shouldRefreshTable }) {
     },
   ]
 
-  const [userId, setUserId] = useState<string>()
+  // const [userId, setUserId] = useState<string>()
   const [rows, setRows] = useState<ITodayStepupData[]>([])
 
   const getTodayStepupData = async (userId: string) => {
@@ -54,26 +59,26 @@ export default function TodayStepup({ shouldRefreshTable }) {
   }
 
   useEffect(() => {
-    if (shouldRefreshTable && userId) {
-      InitTodayStepupTable(userId)
+    if (props.shouldRefreshTable && props.requestId) {
+      InitTodayStepupTable(props.requestId)
     }
-  }, [shouldRefreshTable])
+  }, [props.shouldRefreshTable])
 
   useEffect(() => {
-    if (!userId) {
+    if (!props.requestId) {
       return
     }
 
-    InitTodayStepupTable(userId)
-  }, [userId])
+    InitTodayStepupTable(props.requestId)
+  }, [props.requestId])
 
-  useEffect(() => {
-    const loginUserId = sessionStorage.getItem("userId");
+  // useEffect(() => {
+  //   const loginUserId = sessionStorage.getItem("userId");
 
-    if (loginUserId) {
-      setUserId(loginUserId)
-    }
-  }, []);
+  //   if (loginUserId) {
+  //     setUserId(loginUserId)
+  //   }
+  // }, []);
 
   return (
     <div>
