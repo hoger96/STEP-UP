@@ -29,6 +29,7 @@ export function SearchBar({
     { label: "대기", value: "WAIT" },
     { label: "반려", value: "REJECT" },
     { label: "승인", value: "APPROVAL" },
+    { label: "사용자 취소", value: "CANCEL" },
   ];
   const [approvalStatus, setApprovalStatus] = useState<string[]>([]);
   function handleSelectStatus(e: any) {
@@ -50,10 +51,6 @@ export function SearchBar({
 
   const [keyword, setKeyword] = useState<string>("");
 
-  const handleKeyUp = (event: React.KeyboardEvent<HTMLDivElement>) => {
-    if (event.key === "Enter") handleSearch();
-  };
-
   const handleSearch = () => {
     const formattedStartDate = startDate.toISOString().split("T")[0];
     const formattedEndDate = endDate.toISOString().split("T")[0];
@@ -67,6 +64,10 @@ export function SearchBar({
       currentPate: 1,
     };
     onSearch(searchParams);
+  };
+
+  const handleKeyUp = (event: React.KeyboardEvent<HTMLDivElement>) => {
+    if (event.key === "Enter") handleSearch();
   };
 
   const filterEndDate = (date: Date) => {

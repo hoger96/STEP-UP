@@ -1,87 +1,88 @@
-"use client"
+"use client";
 
-import CommonTable from '@/app/components/Table'
-import axios from 'axios'
-import React, { useEffect, useState } from 'react'
+import CommonTable from "@/app/components/Table";
+import axios from "axios";
+import { useRouter } from "next/navigation";
+import React, { useEffect, useState } from "react";
 
 interface IHoldStepupData {
-  rowNum: number
-  holdStartDt: string
-  holdEndDt: string
-  holdCntn: string
+  rowNum: number;
+  holdStartDt: string;
+  holdEndDt: string;
+  holdCntn: string;
 }
 
 interface IProps {
-  requestId: string
+  requestId: string;
 }
 
 export default function NotCountStatus(props: IProps) {
   const columns = [
     {
-      key: 'rowNum',
-      label: '번호'
+      key: "rowNum",
+      label: "번호",
     },
     {
-      key: 'holdStartDt',
-      label: '보류 시작일'
+      key: "holdStartDt",
+      label: "보류 시작일",
     },
     {
-      key: 'holdEndDt',
-      label: '보류 종료일'
+      key: "holdEndDt",
+      label: "보류 종료일",
     },
     {
-      key: 'holdCntn',
-      label: '보류 사유'
+      key: "holdCntn",
+      label: "보류 사유",
     },
-  ]
+  ];
 
   // const userId = sessionStorage.getItem('loginUserId')
 
-  const [rows, setRows] = useState<IHoldStepupData[]>([])
+  const [rows, setRows] = useState<IHoldStepupData[]>([]);
+  const router = useRouter();
 
   const getHoldStepupData = async (userId: string) => {
     try {
-      const result = await axios.get('/stepup/api/user/list/hold-exercise', {
+      const result = await axios.get("/stepup/api/user/list/hold-exercise", {
         params: {
-          userId
-        }
-      })
-      return result.data.body
+          userId,
+        },
+      });
+      return result.data.body;
     } catch (e) {
-      console.error(e)
+      console.error(e);
     }
-  }
+  };
 
   const InitHoldStepupTable = async (userId: string) => {
     if (!userId) {
-      return
+      router.push("/login");
+      return;
     }
 
-    const result = await getHoldStepupData(userId)
+    const result = await getHoldStepupData(userId);
     if (result) {
-      setRows(result)
+      setRows(result);
     }
-  }
+  };
 
   useEffect(() => {
     if (!props.requestId) {
-      return
+      return;
     }
-    InitHoldStepupTable(props.requestId)
-  }, [])
+    InitHoldStepupTable(props.requestId);
+  }, []);
 
   return (
     <div>
       <CommonTable
-        emptyContent={'조회된 데이터가 없습니다.'}
-        tablekey={'hold-step-table'}
+        emptyContent={"조회된 데이터가 없습니다."}
+        tablekey={"hold-step-table"}
         columns={columns}
         rows={rows}
-        uniqueKey={'rowNum'}
+        uniqueKey={"rowNum"}
         total={0}
       />
     </div>
-  )
+  );
 }
-
-

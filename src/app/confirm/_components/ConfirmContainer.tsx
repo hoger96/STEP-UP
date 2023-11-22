@@ -4,6 +4,7 @@ import ConfirmTable from "./ConfirmTable";
 import { SearchBar } from "./SearchBar";
 import axios from "axios";
 import CommonButton from "@/app/components/Buttons";
+import { useRouter } from "next/navigation";
 
 interface ISearchParams extends ICurrentPage {
   searchType?: string;
@@ -35,6 +36,8 @@ interface IWrap<T> {
 }
 
 export default function ConfirmContainer() {
+  const router = useRouter();
+  const userId = sessionStorage.getItem("loginUserId");
   const [fetchDataResult, setFetchDataResult] =
     useState<IWrap<IManagementApproval>>(); // 결재 현황 API 조회 결과
   const now = new Date();
@@ -60,6 +63,10 @@ export default function ConfirmContainer() {
 
   const getApprovalListData = async (searchOption: ISearchParams) => {
     try {
+      if (!userId) {
+        router.push("/login");
+        return;
+      }
       const result = await axios.get("/stepup/api/management/approval", {
         params: {
           searchType: searchOption.searchType,

@@ -6,6 +6,7 @@ import React, { useState } from "react";
 import AllTotalStepupP from "../popup/AllTotalStepupP";
 import axios, { AxiosError } from "axios";
 import { toast } from "react-toastify";
+import { useRouter } from "next/navigation";
 
 interface IProps {
   requestId: string;
@@ -16,6 +17,7 @@ export default function TotalStepupBtn(props: IProps) {
   const [isConfirmOpen, setIsConfrimOpen] = useState(false);
   const userId = sessionStorage.getItem("loginUserId");
   const [isOpen, setIsOpen] = useState(false);
+  const router = useRouter();
 
   const changeToMileage = async (userId: string) => {
     try {
@@ -35,8 +37,8 @@ export default function TotalStepupBtn(props: IProps) {
   };
 
   const handleChangeMileage = async () => {
-    // TODO
     if (!userId) {
+      router.push("/login");
       return;
     }
 

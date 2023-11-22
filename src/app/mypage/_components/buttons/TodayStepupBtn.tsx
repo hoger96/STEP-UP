@@ -6,6 +6,7 @@ import React, { useState } from "react";
 import CreateTodayStepupP from "../popup/CreateTodayStepupP";
 import axios, { AxiosError } from "axios";
 import { ToastContainer, toast } from "react-toastify";
+import { useRouter } from "next/navigation";
 
 interface IProps {
   requestId: string;
@@ -23,6 +24,7 @@ export default function TodayStepupBtn(props: IProps) {
   const [endTm, setEndTm] = useState<Date>(new Date());
   const [file, setFile] = useState<any>("");
   const holdYn = sessionStorage.getItem("holdYn");
+  const router = useRouter();
 
   const handelOpenCreateTodayStepupPopup = () => {
     setIsOpen(true);
@@ -77,6 +79,7 @@ export default function TodayStepupBtn(props: IProps) {
 
   const onConfirmBtn = async () => {
     if (!userId) {
+      router.push("/login");
       return;
     }
     const params = await setParams(startTm, endTm, userId, file);
