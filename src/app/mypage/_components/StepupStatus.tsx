@@ -50,25 +50,27 @@ export default function StepupStatus(props: IProps) {
 
   return (
     <div>
-      <Card className="max-w-[1500px] min-h-[150px] m-auto">
+      <Card className="rounded-2xl py-2.5 px-4">
         <CardBody>
-          <div>
+          {/* <div>
             <span>STEP-UP</span>
-          </div>
+          </div> */}
           <div className="m-auto">
             <div className="flex">
               <div className="inline-flex mr-4">
-                <span className="mr-4 text-green-500">TODAY</span>
+                <span className="mr-4 text-primary font-semibold">TODAY</span>
                 <p>{`${statusData?.todayStepUpCnt ?? 0}/${
                   statusData?.todayStepUpFixCnt ?? 3
                 }`}</p>
               </div>
               <div className="inline-flex mr-4">
-                <span className="mr-4 text-red-400">TOTAL</span>
+                <span className="mr-4 text-primary-300 font-bold">TOTAL</span>
                 <p>{statusData?.totalStepUpCnt ?? 0}</p>
               </div>
               <div className="inline-flex mr-4">
-                <span className="mr-4 text-blue-400">MILEAGE</span>
+                <span className="mr-4 text-primary-100 font-semibold">
+                  MILEAGE
+                </span>
                 <p>{statusData?.mileageCnt ?? 0}</p>
               </div>
             </div>

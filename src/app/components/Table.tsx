@@ -56,7 +56,7 @@ export default function CommonTable(props: CommonTableProps<any>) {
           {(item: any) => (
             <TableRow
               key={item[props.uniqueKey]}
-              className="cursor-pointer hover:bg-secondary-50"
+              className="hover:bg-secondary-50"
             >
               {(columnKey) => {
                 if (props.useRenderCell ? props.useRenderCell : false) {
