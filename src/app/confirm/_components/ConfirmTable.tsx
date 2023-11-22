@@ -111,7 +111,9 @@ export default function ConfirmTable({
   }, [approvalDataList]);
   return (
     <div>
-      <span>총 {totalCount} 개</span>
+      <span className="block text-sm mb-1">
+        총 <em className="font-semibold text-primary-300">{totalCount}</em> 개
+      </span>
       <div>
         <CommonTable
           tablekey="approvalId"

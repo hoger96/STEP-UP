@@ -9,11 +9,11 @@ export default function CommonInput(props: {
   value: string | (readonly string[] & string);
   type?: string;
   label?:
-  | boolean
-  | React.ReactChild
-  | React.ReactFragment
-  | React.ReactPortal
-  | null;
+    | boolean
+    | React.ReactChild
+    | React.ReactFragment
+    | React.ReactPortal
+    | null;
   labelPlacement?: "outside" | "outside-left" | "inside";
   placeholder?: string;
   description?: ReactNode;
@@ -32,13 +32,9 @@ export default function CommonInput(props: {
     <div>
       <Input
         classNames={{
-          label: "text-left font-semibold w-24",
+          label: "text-left font-semibold w-28",
           input: ["w-64", "placeholder:text-default-200", "caret-primary-50"],
-          inputWrapper: [
-            "!bg-white",
-            "border",
-            "focus-within:!border-primary-50",
-          ],
+          inputWrapper: ["!bg-white", "border", "shadow-inherit"],
         }}
         className={props.className}
         type={props.type ? props.type : "text"}

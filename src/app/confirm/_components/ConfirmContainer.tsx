@@ -123,12 +123,16 @@ export default function ConfirmContainer() {
   return (
     <div>
       <SearchBar onSearch={handleSearch} />
-      <CommonButton
-        label="엑셀 다운로드"
-        color="default"
-        variant="solid"
-        onClick={() => handleDownload()}
-      />
+      <div className="mt-5 flex justify-end">
+        <CommonButton
+          label="엑셀 다운로드"
+          color="primary"
+          size="sm"
+          variant="bordered"
+          onClick={() => handleDownload()}
+          className="border -mb-4"
+        />
+      </div>
       <ConfirmTable
         onChange={handleChange}
         approvalDataList={fetchDataResult}

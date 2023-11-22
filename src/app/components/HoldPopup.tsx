@@ -26,36 +26,37 @@ const HoldPopup: React.FC<IHoldupProps> = ({
 
   return (
     <div>
-      <div className="m-3">
+      <div className="flex items-center mb-3">
         <CommonDatePicker
-          name="보류 시작일"
-          placeholderText="보류 시작일을 선택하세요."
+          name="보류 시작/종료일"
+          placeholderText="YYYY-MM-DD"
           selected={startDate}
           minDate={new Date()}
           onChange={(date: Date) => setStartDate(date)}
         />
-      </div>
-      <div className="m-3">
         <CommonDatePicker
-          name="보류 종료일"
-          placeholderText="보류 종료일을 선택하세요."
+          name="~"
+          placeholderText="YYYY-MM-DD"
           selected={endDate}
           filterDate={filterEndDate}
           minDate={startDate}
           onChange={(date: Date) => setEndDate(date)}
+          className="ml-2"
         />
       </div>
-      <div className="m-3">
-        <Textarea
-          value={reason}
-          label="보류 사유"
-          labelPlacement="outside-left"
-          placeholder="보류 사유를 입력해주세요."
-          className="max-w-xs"
-          isRequired
-          onValueChange={setReason}
-        />
-      </div>
+      <Textarea
+        value={reason}
+        label="보류 사유"
+        labelPlacement="outside-left"
+        placeholder="보류 사유를 입력해주세요."
+        isRequired
+        onValueChange={setReason}
+        classNames={{
+          base: "flex items-start",
+          label: "w-28 text-small font-semibold pr-2",
+          inputWrapper: "bg-white hover:!bg-white border",
+        }}
+      />
     </div>
   );
 };

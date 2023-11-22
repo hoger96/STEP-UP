@@ -53,11 +53,16 @@ export default function CommonModal(props: {
                   else
                     return (
                       <div>
-                        <Button variant="light" onPress={onClose}>
+                        <Button
+                          variant="bordered"
+                          color="primary"
+                          onPress={onClose}
+                          className="mr-1 border"
+                        >
                           취소
                         </Button>
-                        <Button onPress={props.onConfirmBtn}>
-                          {props.confirmBtn ? props.confirmBtn : '확인'}
+                        <Button color="primary" onPress={props.onConfirmBtn}>
+                          {props.confirmBtn ? props.confirmBtn : "확인"}
                         </Button>
                       </div>
                     );
