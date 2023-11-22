@@ -1,9 +1,9 @@
-'use client'
+"use client";
 
-import CommonInput from '@/app/components/Input'
-import { CommonTimePicker } from '@/app/components/TimePicker';
-import React, { useCallback } from 'react'
-import { FileWithPath, useDropzone } from 'react-dropzone';
+import CommonInput from "@/app/components/Input";
+import { CommonTimePicker } from "@/app/components/TimePicker";
+import React, { useCallback } from "react";
+import { FileWithPath, useDropzone } from "react-dropzone";
 
 interface ICreateTodayStepupProps {
   todayDate: string;
@@ -11,8 +11,8 @@ interface ICreateTodayStepupProps {
   endTm: Date | undefined;
   file: FileWithPath[];
   setTodayDate: React.Dispatch<React.SetStateAction<string>>;
-  setStartTm: (data: Date) => void
-  setEndTm: (data: Date) => void
+  setStartTm: (data: Date) => void;
+  setEndTm: (data: Date) => void;
   setFile: React.Dispatch<React.SetStateAction<any>>;
 }
 
@@ -31,9 +31,10 @@ const CreateTodayStepupP: React.FC<ICreateTodayStepupProps> = ({
       setFile(acceptedFiles);
     },
     [setFile]
-
   );
-  const { getRootProps, getInputProps, acceptedFiles } = useDropzone({ onDrop });
+  const { getRootProps, getInputProps, acceptedFiles } = useDropzone({
+    onDrop,
+  });
 
   // const removeFile = (fileToRemove: FileWithPath) => () => {
   //   setFile((prevFiles: FileWithPath[]) =>
@@ -51,39 +52,36 @@ const CreateTodayStepupP: React.FC<ICreateTodayStepupProps> = ({
 
   return (
     <div>
-      <div>
-        <CommonInput
-          value={todayDate}
-          label={'일자'}
-          isReadOnly={true}
-          onValueChange={setTodayDate}
-        />
-      </div>
-      <div>
+      <CommonInput
+        value={todayDate}
+        label={"일자"}
+        isReadOnly={true}
+        onValueChange={setTodayDate}
+        className="mb-3"
+      />
+      <div className="flex items-center mb-3">
         <CommonTimePicker
-          name="시작시간"
+          name="시작/종료 시간"
           selected={startTm}
           onChange={(selectedTime: any) => setStartTm(selectedTime)}
         />
-      </div>
-      <div>
         <CommonTimePicker
-          name="종료시간"
+          name="~"
           selected={endTm}
           onChange={(selectedTime: any) => setEndTm(selectedTime)}
         />
       </div>
       <div>
-        <div {...getRootProps({ className: 'dropzone' })}>
+        <div {...getRootProps({ className: "dropzone" })}>
           <input {...getInputProps()} />
-          <p>파일선택</p>
+          <p className="inline-block text-small font-semibold pr-2">파일선택</p>
         </div>
         <aside>
           <ul>{files}</ul>
         </aside>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default CreateTodayStepupP
+export default CreateTodayStepupP;

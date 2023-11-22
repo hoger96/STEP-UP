@@ -101,15 +101,18 @@ export default function TodayStepupBtn(props: IProps) {
 
   return (
     <div>
-      <CommonButton
-        label={"오늘의 스텝업 기록하기"}
-        size={"sm"}
-        radius={"sm"}
-        color={"default"}
-        variant={"flat"}
-        isDisabled={userId !== props.requestId || holdYn === "Y"}
-        onClick={handelOpenCreateTodayStepupPopup}
-      />
+      <div className="flex justify-end">
+        <CommonButton
+          label={"오늘의 스텝업 기록하기"}
+          size={"sm"}
+          radius={"sm"}
+          color={"primary"}
+          variant={"solid"}
+          isDisabled={userId !== props.requestId || holdYn === "Y"}
+          onClick={handelOpenCreateTodayStepupPopup}
+          className="mb-3"
+        />
+      </div>
       <ToastContainer position="top-right" autoClose={2000} />
       <div>
         <CommonModal

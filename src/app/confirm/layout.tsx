@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Header from "../components/Header";
+// import { layout } from "./confirm";
 
 export const metadata: Metadata = {
   title: "Step-Up",
@@ -14,7 +15,7 @@ export default function RootLayout({
   return (
     <>
       <Header />
-      <div>{children}</div>
+      <div className="py-8 px-5">{children}</div>
     </>
   );
 }

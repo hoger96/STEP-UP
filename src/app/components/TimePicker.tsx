@@ -10,8 +10,8 @@ export interface CommonTimePickerProps extends ReactDatePickerProps {
 
 export function CommonTimePicker({ name, ...props }: CommonTimePickerProps) {
   return (
-    <div className="flex">
-      <p className="mt-2">{name}</p>
+    <div className="flex items-center">
+      <p className="inline-block text-small font-semibold pr-2">{name}</p>
       <ReactDatePicker
         {...props}
         locale={ko}
@@ -20,7 +20,7 @@ export function CommonTimePicker({ name, ...props }: CommonTimePickerProps) {
         timeIntervals={1}
         dateFormat="HH:mm"
         timeFormat="HH:mm"
-        className="border rounded"
+        className="text-small font-medium border rounded-xl py-2 text-center w-32 h-10 cursor-pointer"
       />
     </div>
   );

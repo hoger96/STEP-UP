@@ -74,7 +74,7 @@ export function SearchBar({
   };
 
   return (
-    <div className="flex bg-gray-100 rounded-2xl p-2 justify-between">
+    <div className="flex bg-gray-100 rounded-2xl py-2.5 px-4 justify-between">
       <div className="flex">
         <CommonDatePicker
           name="마일리지 신청 일자"
@@ -86,26 +86,23 @@ export function SearchBar({
           selected={endDate}
           onChange={(date: Date) => setEndDate(date)}
           filterDate={filterEndDate}
+          className="ml-2"
         />
       </div>
-      <div>
-        <CommonSelect
-          data={statusData}
-          selectValue={approvalStatus}
-          label="결재 상태"
-          labelType="outside-left"
-          onChange={handleSelectStatus}
-        />
-      </div>
-      <div>
-        <CommonSelect
-          data={searchData}
-          selectValue={searchType}
-          label="검색 조건"
-          labelType="outside-left"
-          onChange={handleSelectCondition}
-        />
-      </div>
+      <CommonSelect
+        data={statusData}
+        selectValue={approvalStatus}
+        label="결재 상태"
+        labelType="outside-left"
+        onChange={handleSelectStatus}
+      />
+      <CommonSelect
+        data={searchData}
+        selectValue={searchType}
+        label="검색 조건"
+        labelType="outside-left"
+        onChange={handleSelectCondition}
+      />
       <div className="flex">
         <div className="mr-2" onKeyUp={handleKeyUp}>
           <CommonInput
@@ -114,16 +111,14 @@ export function SearchBar({
             onValueChange={setKeyword}
           />
         </div>
-        <div>
-          <CommonButton
-            label="검색"
-            size="md"
-            radius="md"
-            color="default"
-            variant="solid"
-            onClick={() => handleSearch()}
-          />
-        </div>
+        <CommonButton
+          label="검색"
+          size="md"
+          radius="md"
+          color="primary"
+          variant="solid"
+          onClick={() => handleSearch()}
+        />
       </div>
     </div>
   );

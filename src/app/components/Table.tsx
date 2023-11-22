@@ -24,7 +24,6 @@ interface CommonTableProps<T> {
   onRowAction?: (key: React.Key) => void;
 }
 
-
 export default function CommonTable(props: CommonTableProps<any>) {
   return (
     <div>
@@ -55,7 +54,10 @@ export default function CommonTable(props: CommonTableProps<any>) {
         </TableHeader>
         <TableBody emptyContent={props.emptyContent} items={props.rows}>
           {(item: any) => (
-            <TableRow key={item[props.uniqueKey]}>
+            <TableRow
+              key={item[props.uniqueKey]}
+              className="hover:bg-secondary-50"
+            >
               {(columnKey) => {
                 if (props.useRenderCell ? props.useRenderCell : false) {
                   return (

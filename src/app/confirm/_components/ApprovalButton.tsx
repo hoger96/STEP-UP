@@ -42,32 +42,28 @@ export default function ApprovalButton(props: {
     <div className="flex ">
       {props.approvalStatus === "WAIT" && (
         <div className="flex">
-          <div className="mr-1">
-            <CommonButton
-              color={"primary"}
-              variant={"solid"}
-              onClick={() => handleReject(props.approvalId)}
-              label={"반려"}
-            />
-          </div>
-          <div className="mr-1">
-            <CommonButton
-              color={"primary"}
-              variant={"solid"}
-              onClick={() => handleApproval(props.approvalId)}
-              label={"승인"}
-            />
-          </div>
+          <CommonButton
+            color={"secondary"}
+            variant={"solid"}
+            onClick={() => handleReject(props.approvalId)}
+            label={"반려"}
+            className="mr-1"
+          />
+          <CommonButton
+            color={"primary"}
+            variant={"solid"}
+            onClick={() => handleApproval(props.approvalId)}
+            label={"승인"}
+            className="mr-1"
+          />
         </div>
       )}
-      <div>
-        <CommonButton
-          color={"default"}
-          variant={"solid"}
-          onClick={handleGotoUserPage}
-          label={"결재자 상세보기"}
-        />
-      </div>
+      <CommonButton
+        color="primary"
+        variant={"solid"}
+        onClick={handleGotoUserPage}
+        label={"결재자 상세보기"}
+      />
     </div>
   );
 }

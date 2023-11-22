@@ -23,7 +23,10 @@ export function CommonSelect(props: {
       <div>
         <Select
           classNames={{
-            label: "text-left align-middle mt-2 font-semibold w-64",
+            base: "flex items-center h-10",
+            label: "text-left align-middle font-semibold",
+            mainWrapper: "w-32",
+            trigger: "shadow-none border !bg-white",
           }}
           listboxProps={{
             itemClasses: {

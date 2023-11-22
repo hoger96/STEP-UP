@@ -4,6 +4,6 @@
 
 @layer base {
   * {
-    @apply font-pre !ring-transparent;
+    @apply font-pre !ring-transparent focus-visible:!outline-transparent not-italic;
   }
 }
