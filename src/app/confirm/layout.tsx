@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Header from "../components/Header";
+import { layout } from "./confirm";
 
 export const metadata: Metadata = {
   title: "Step-Up",
@@ -12,9 +13,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <>
+    <div>
       <Header />
-      <div>{children}</div>
-    </>
+      <div className={layout()}>{children}</div>
+    </div>
   );
 }
