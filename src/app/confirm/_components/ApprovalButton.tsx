@@ -1,7 +1,6 @@
 import CommonButton from "@/app/components/Buttons";
 import axios from "axios";
 import { useRouter } from "next/navigation";
-import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 export default function ApprovalButton(props: {
@@ -15,6 +14,7 @@ export default function ApprovalButton(props: {
     try {
       const params = {
         approvalStus: "REJECT",
+        userId: props.userId,
       };
       await axios.put(`stepup/api/management/approval/${approvalId}`, params);
       props.onClosePopup("반려");
@@ -26,6 +26,7 @@ export default function ApprovalButton(props: {
     try {
       const params = {
         approvalStus: "APPROVAL",
+        userId: props.userId,
       };
       await axios.put(`stepup/api/management/approval/${approvalId}`, params);
       props.onClosePopup("승인");
