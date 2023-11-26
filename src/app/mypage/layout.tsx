@@ -12,9 +12,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <>
+    <div className="desktop-width">
       <Header />
       <div className="py-8 px-5">{children}</div>
-    </>
+    </div>
   );
 }

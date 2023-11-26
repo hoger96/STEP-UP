@@ -151,8 +151,8 @@ export default function MileageStatusBtn(props: IProps) {
               <div>
                 <CommonButton
                   label={"확인"}
-                  color={"default"}
-                  variant={"flat"}
+                  color={"primary"}
+                  variant={"solid"}
                   onClick={onCloseAllUseMileageP}
                 />
               </div>

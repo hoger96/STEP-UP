@@ -7,6 +7,7 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
+import cn from "clsx";
 
 interface IProps {
   shouldRefreshTable: boolean;
@@ -115,7 +116,7 @@ export default function MileageStatus(props: IProps) {
       case "action":
         return (
           <Tooltip
-            color="danger"
+            color="secondary"
             content={
               userId !== props.requestId
                 ? "내 신청만 취소할 수 있어요!"
@@ -124,7 +125,12 @@ export default function MileageStatus(props: IProps) {
                 : "버튼을 눌러 신청을 취소해보아요!"
             }
           >
-            <span className="text-lg text-danger cursor-pointer active:opacity-50">
+            <span
+              className={cn("inline-block text-danger cursor-pointer", {
+                "!cursor-not-allowed":
+                  items?.approvalStus !== "WAIT" || userId !== props.requestId,
+              })}
+            >
               <CommonButton
                 label={"신청 취소"}
                 size={"sm"}
