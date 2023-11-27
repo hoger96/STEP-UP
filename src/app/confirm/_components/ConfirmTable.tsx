@@ -129,6 +129,7 @@ export default function ConfirmTable({
       </div>
       <CommonModal
         title={"결재"}
+        scrollBehavior={"inside"}
         contents={
           <ConfirmPopup approvalId={popupId} onFetchStatus={handleUserDetail} />
         }
