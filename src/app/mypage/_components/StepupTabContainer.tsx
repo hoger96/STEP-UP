@@ -1,7 +1,7 @@
 "use client"
 
 import { Card, CardBody, Tab, Tabs } from '@nextui-org/react'
-import React, { useState } from 'react'
+import React, { ReactNode, useState } from 'react'
 import TodayStepup from './tabs/TodayStepup';
 import TotalStepup from './tabs/TotalStepup';
 import MileageStatus from './tabs/MileageStatus';
@@ -64,7 +64,7 @@ export default function StepupTab(props: IProps) {
     <div>
       <div className="flex m-auto my-8 max-w-[1500px] flex-col">
         <Tabs aria-label="step-up-tab" items={tabs}>
-          {(item) => (
+          {(item: { id: string, label: string, btnContent: ReactNode, content: ReactNode }) => (
             <Tab key={item.id} title={item.label}>
               <Card>
                 <CardBody>

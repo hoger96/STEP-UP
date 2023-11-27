@@ -7,6 +7,7 @@ import React, { useEffect, useState } from 'react'
 interface ITotalStepupData {
   rowNum: number
   achievementDt: string
+  mileageUseYn: string
 }
 
 interface IProps {
@@ -24,16 +25,24 @@ export default function TotalStepup(props: IProps) {
     {
       key: 'achievementDt',
       label: '스텝업 달성일'
+    },
+    {
+      key: 'mileageUseYn',
+      label: '마일리지 사용 여부'
     }
   ]
 
   // const userId = sessionStorage.getItem('loginUserId')
   const [rows, setRows] = useState<ITotalStepupData[]>([])
+  const [currentPage, setCurrentPage] = useState<number>()
+  const [totalPage, setTotalPage] = useState<number>()
 
-  const getTotalStepupData = async (userId: string) => {
+  const getTotalStepupData = async (userId: string, currentPage: number) => {
     try {
       const result = await axios.get('/stepup/api/user/list/exercise', {
         params: {
+          currentPage,
+          limit: 10,
           userId
         }
       })
@@ -44,31 +53,41 @@ export default function TotalStepup(props: IProps) {
     }
   }
 
-  const initTotalSetupTable = async (userId: string) => {
+  const initTotalSetupTable = async (userId: string, currentPage: number) => {
     if (!userId) {
       return
     }
 
-    const result = await getTotalStepupData(userId)
+    const result = await getTotalStepupData(userId, currentPage)
     if (result) {
-      setRows(result)
+      setRows(result.data)
+      setCurrentPage(result.currentPage)
+      setTotalPage(result.totalPage)
     }
   }
 
+  const onPageChange = (page: number) => {
+    if (!props.requestId) {
+      return
+    }
+    initTotalSetupTable(props.requestId, page)
+  }
+
+
   useEffect(() => {
     if (props.shouldRefreshTable && props.requestId) {
-      initTotalSetupTable(props.requestId)
+      initTotalSetupTable(props.requestId, 1)
     }
   }, [props.shouldRefreshTable])
 
 
   useEffect(() => {
     if (!props.requestId) {
-      return
+      return;
     }
 
-    initTotalSetupTable(props.requestId)
-  }, [])
+    initTotalSetupTable(props.requestId, 1);
+  }, []);
 
   return (
     <div>
@@ -78,7 +97,9 @@ export default function TotalStepup(props: IProps) {
         columns={columns}
         rows={rows}
         uniqueKey={'rowNum'}
-        total={0}
+        currentPage={currentPage}
+        total={totalPage ?? 0}
+        onChange={(page) => onPageChange(page)}
       />
     </div>
   )

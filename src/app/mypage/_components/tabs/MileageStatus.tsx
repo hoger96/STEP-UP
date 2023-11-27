@@ -86,7 +86,7 @@ export default function MileageStatus(props: IProps) {
     }
     const isSuccess = await cancelApproval(data);
     if (isSuccess) {
-      InitMileageStatusTable(userId);
+      initMileageStatusTable(userId);
       toast.success("신청이 취소되었어요!");
     }
   };
@@ -114,8 +114,8 @@ export default function MileageStatus(props: IProps) {
               userId !== props.requestId
                 ? "내 신청만 취소할 수 있어요!"
                 : items?.approvalStus !== "WAIT"
-                ? "신청을 취소할 수 없어요!"
-                : "버튼을 눌러 신청을 취소해보아요!"
+                  ? "신청을 취소할 수 없어요!"
+                  : "버튼을 눌러 신청을 취소해보아요!"
             }
           >
             <span className="text-lg text-danger cursor-pointer active:opacity-50">
@@ -155,7 +155,7 @@ export default function MileageStatus(props: IProps) {
     }
   };
 
-  const InitMileageStatusTable = async (userId: string) => {
+  const initMileageStatusTable = async (userId: string) => {
     if (!userId) {
       return;
     }
@@ -166,7 +166,7 @@ export default function MileageStatus(props: IProps) {
 
   useEffect(() => {
     if (props.shouldRefreshTable && props.requestId) {
-      InitMileageStatusTable(props.requestId);
+      initMileageStatusTable(props.requestId);
     }
   }, [props.shouldRefreshTable]);
 
@@ -175,7 +175,7 @@ export default function MileageStatus(props: IProps) {
       return;
     }
 
-    InitMileageStatusTable(props.requestId);
+    initMileageStatusTable(props.requestId);
   }, []);
 
   return (
