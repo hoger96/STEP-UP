@@ -51,11 +51,11 @@ export default function ConfirmTable({
     },
     {
       key: "draftDt",
-      label: "결재 요청 일자",
+      label: "결재 신청 일자",
     },
     {
       key: "approvalReqDt",
-      label: "마일리지 신청 일자",
+      label: "마일리지 사용 일자",
     },
     {
       key: "approvalReqTypeNm",
