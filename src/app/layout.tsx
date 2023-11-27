@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Providers } from "./_providers";
 import "../app/globals.css";
-// import Header from "./components/Header";
 
 export const metadata: Metadata = {
   title: "Step-Up",

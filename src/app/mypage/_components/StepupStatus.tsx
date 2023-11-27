@@ -31,7 +31,6 @@ export default function StepupStatus(props: IProps) {
           userId,
         },
       });
-      sessionStorage.setItem("holdYn", result.data.body.holdYn);
       return result.data.body;
     } catch (e) {
       console.error(e);

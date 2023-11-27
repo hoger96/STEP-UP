@@ -116,6 +116,7 @@ export default function MileageStatusBtn(props: IProps) {
         />
         <CommonModal
           title={"마일리지 사용 신청"}
+          scrollBehavior={"inside"}
           contents={
             <UseMileageP
               approvalReqDt={approvalReqDt}

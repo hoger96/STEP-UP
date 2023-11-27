@@ -30,6 +30,7 @@ export default function CommonModal(props: {
   confirmBtn?: string; // 확인 버튼 위치의 버튼 명 기본값 : 확인
   onConfirmBtn?: (() => void) | undefined; // 확인 버튼의 동작을 설정
   onClose?: (() => void) | undefined;
+  scrollBehavior?: "normal" | "inside" | "outside";
 }) {
   return (
     <div>
@@ -38,7 +39,7 @@ export default function CommonModal(props: {
         onClose={props.onClose}
         size={props.size}
         backdrop="opaque"
-        scrollBehavior="inside"
+        scrollBehavior={props.scrollBehavior}
       >
         <ModalContent>
           {(onClose) => (

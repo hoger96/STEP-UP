@@ -56,6 +56,7 @@ export default function LoginForm() {
         sessionStorage.setItem("loginUserId", result.data.body.userId);
         sessionStorage.setItem("loginUserName", result.data.body.userNm);
         sessionStorage.setItem("loginUserMaster", result.data.body.masterYn);
+        sessionStorage.setItem("holdYn", result.data.body.holdYn);
 
         if (result.data.body.masterYn === "Y") {
           router.push("/confirm");

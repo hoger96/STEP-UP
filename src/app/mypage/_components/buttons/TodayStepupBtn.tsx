@@ -2,7 +2,7 @@
 
 import CommonButton from "@/app/components/Buttons";
 import CommonModal from "@/app/components/Confirm";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import CreateTodayStepupP from "../popup/CreateTodayStepupP";
 import axios, { AxiosError } from "axios";
 import { ToastContainer, toast } from "react-toastify";
@@ -71,7 +71,7 @@ export default function TodayStepupBtn(props: IProps) {
       return true;
     } catch (e) {
       if (e instanceof AxiosError) {
-        toast.error(e?.response?.data.message);
+        //toast.error(e?.response?.data.message);
         return false;
       }
     }
@@ -90,7 +90,9 @@ export default function TodayStepupBtn(props: IProps) {
         props.onRefreshTable();
         toast.success("축하합니다! 오늘의 운동기록을 기록하셨군요 :)");
       } else {
-        // toast.error('오늘의 운동기록을 추가하지 못했어요')
+        toast.error(
+          "오늘의 운동기록을 추가하지 못했어요. 파일을 첨부해주세요!"
+        );
       }
     }
   };
@@ -120,6 +122,7 @@ export default function TodayStepupBtn(props: IProps) {
       <div>
         <CommonModal
           title={"오늘의 스텝업 기록하기"}
+          scrollBehavior={"inside"}
           contents={
             <CreateTodayStepupP
               todayDate={todayDate}
