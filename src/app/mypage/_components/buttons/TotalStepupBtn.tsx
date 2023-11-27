@@ -58,13 +58,13 @@ export default function TotalStepupBtn(props: IProps) {
   };
 
   return (
-    <div>
+    <div className="flex justify-end mb-3">
       <CommonButton
         label={"마일리지로 변환하기"}
         size={"sm"}
         radius={"sm"}
-        color={"default"}
-        variant={"flat"}
+        color={"primary"}
+        variant={"solid"}
         isDisabled={userId !== props.requestId}
         onClick={handleChaneMileageBtnClick}
       />
@@ -72,9 +72,10 @@ export default function TotalStepupBtn(props: IProps) {
         label={"전체보기"}
         size={"sm"}
         radius={"sm"}
-        color={"default"}
-        variant={"flat"}
+        color={"primary"}
+        variant={"bordered"}
         onClick={handleShowAllTotalStepup}
+        className="ml-1 border"
       />
       <div>
         <div>
