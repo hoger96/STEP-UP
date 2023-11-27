@@ -9,6 +9,7 @@ import {
   Pagination,
   getKeyValue,
 } from "@nextui-org/react";
+import cn from "clsx";
 
 interface CommonTableProps<T> {
   uniqueKey: string;
@@ -22,6 +23,7 @@ interface CommonTableProps<T> {
   rows: Array<T>;
   onChange?: ((page: number) => void) | undefined;
   onRowAction?: (key: React.Key) => void;
+  rowPointer?: boolean;
 }
 
 export default function CommonTable(props: CommonTableProps<any>) {
@@ -56,7 +58,9 @@ export default function CommonTable(props: CommonTableProps<any>) {
           {(item: any) => (
             <TableRow
               key={item[props.uniqueKey]}
-              className="hover:bg-secondary-50"
+              className={cn("hover:bg-secondary-50", {
+                "cursor-pointer": props.rowPointer,
+              })}
             >
               {(columnKey) => {
                 if (props.useRenderCell ? props.useRenderCell : false) {

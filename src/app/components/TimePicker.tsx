@@ -3,15 +3,21 @@ import ReactDatePicker, { ReactDatePickerProps } from "react-datepicker";
 import { ko } from "date-fns/locale";
 
 import "react-datepicker/dist/react-datepicker.css";
-
+import cn from "clsx";
 export interface CommonTimePickerProps extends ReactDatePickerProps {
-  name: string;
+  name?: string;
 }
 
 export function CommonTimePicker({ name, ...props }: CommonTimePickerProps) {
   return (
-    <div className="flex items-center">
-      <p className="inline-block text-small font-semibold pr-2">{name}</p>
+    <div className="flex-center-ver">
+      <p
+        className={cn("inline-block text-small font-semibold pr-2 w-28", {
+          hidden: name === undefined,
+        })}
+      >
+        {name}
+      </p>
       <ReactDatePicker
         {...props}
         locale={ko}

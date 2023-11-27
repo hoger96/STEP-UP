@@ -21,6 +21,7 @@
     "@types/react-datepicker": "^4.19.2",
     "@types/styled-components": "^5.1.30",
     "axios": "^1.6.1",
+    "clsx": "^2.0.0",
     "date-fns": "^2.30.0",
     "framer-motion": "^10.16.4",
     "http-proxy-middleware": "^2.0.6",

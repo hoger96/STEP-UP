@@ -124,6 +124,7 @@ export default function ConfirmTable({
           total={totalPage}
           onChange={handleChangePage}
           onRowAction={handleOpenPopup}
+          rowPointer
         />
         <ToastContainer autoClose={2000} hideProgressBar={true} />
       </div>

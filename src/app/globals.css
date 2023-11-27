@@ -5,5 +5,13 @@
 @layer base {
   * {
     @apply font-pre !ring-transparent focus-visible:!outline-transparent not-italic;
+
+    &::-webkit-scrollbar {
+      @apply w-2 h-2;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      @apply rounded-xl bg-default-200;
+    }
   }
 }

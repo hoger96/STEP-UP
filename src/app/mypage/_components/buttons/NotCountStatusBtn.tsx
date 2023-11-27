@@ -45,8 +45,8 @@ export default function NotCountStatusBtn(props: IProps) {
             <div>
               <CommonButton
                 label={"확인"}
-                color={"default"}
-                variant={"flat"}
+                color={"primary"}
+                variant={"solid"}
                 onClick={onCloseAllHoldStepupP}
               />
             </div>

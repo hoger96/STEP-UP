@@ -139,7 +139,7 @@ export default function Header() {
               공통 컴포넌트 보러가기
             </Link>
           </nav>
-          <div className="flex items-center">
+          <div className="flex-center-ver">
             <div className="flex-center border rounded-full px-3 py-1">
               <span className="mr-1 text-default-300 text-sm font-medium">
                 {loginUserName}

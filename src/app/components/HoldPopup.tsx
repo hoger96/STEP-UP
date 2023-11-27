@@ -26,7 +26,7 @@ const HoldPopup: React.FC<IHoldupProps> = ({
 
   return (
     <div>
-      <div className="flex items-center mb-3">
+      <div className="flex-center-ver mb-3">
         <CommonDatePicker
           name="보류 시작/종료일"
           placeholderText="YYYY-MM-DD"
@@ -34,8 +34,8 @@ const HoldPopup: React.FC<IHoldupProps> = ({
           minDate={new Date()}
           onChange={(date: Date) => setStartDate(date)}
         />
+        <span className="inline-block text-small font-semibold mx-2">~</span>
         <CommonDatePicker
-          name="~"
           placeholderText="YYYY-MM-DD"
           selected={endDate}
           filterDate={filterEndDate}

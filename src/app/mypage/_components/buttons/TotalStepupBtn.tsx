@@ -93,8 +93,8 @@ export default function TotalStepupBtn(props: IProps) {
                 <div>
                   <CommonButton
                     label={"확인"}
-                    color={"default"}
-                    variant={"flat"}
+                    color={"primary"}
+                    variant={"solid"}
                     onClick={onClose}
                   />
                 </div>
@@ -104,8 +104,8 @@ export default function TotalStepupBtn(props: IProps) {
         </div>
       </div>
       <CommonModal
-        title={"스텝업 보류하기"}
-        contents={"마일리지를 생성할래요?"}
+        title={"확인"}
+        contents={"마일리지로 변환하시겠습니까?"}
         isOpen={isConfirmOpen}
         size={"sm"}
         onClose={() => {

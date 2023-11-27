@@ -140,18 +140,18 @@ export default function Home() {
       case "action":
         return (
           <Tooltip
-            color="danger"
+            color="secondary"
             content={
               items.status !== "Active" ? "취소가 불가합니다." : "신청 취소하기"
             }
           >
-            <span className="text-lg text-danger cursor-pointer active:opacity-50">
+            <span className="inline-block text-danger cursor-pointer">
               <CommonButton
                 label={"삭제"}
                 size={"sm"}
                 radius={"sm"}
                 color={"default"}
-                variant={"flat"}
+                variant={"bordered"}
                 isDisabled={items.status !== "Active"}
                 onClick={() => console.log("삭제", items["id"])}
               />

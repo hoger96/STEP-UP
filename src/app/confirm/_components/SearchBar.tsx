@@ -29,23 +29,15 @@ export function SearchBar({
     { label: "대기", value: "WAIT" },
     { label: "반려", value: "REJECT" },
     { label: "승인", value: "APPROVAL" },
+    { label: "사용자 취소", value: "CANCEL" },
   ];
   const [approvalStatus, setApprovalStatus] = useState<string[]>([]);
   function handleSelectStatus(e: any) {
     setApprovalStatus([e.target.value]);
   }
 
-  const searchData = [
-    { label: "전체", value: "ALL" },
-    { label: "사원 명", value: "USER_NM" },
-  ];
-  const [searchType, setSearchType] = useState<string[]>([]);
-  function handleSelectCondition(e: any) {
-    setSearchType([e.target.value]);
-  }
   useEffect(() => {
     setApprovalStatus(["ALL"]);
-    setSearchType(["ALL"]);
   }, []);
 
   const [keyword, setKeyword] = useState<string>("");
@@ -59,7 +51,7 @@ export function SearchBar({
     const formattedEndDate = endDate.toISOString().split("T")[0];
 
     const searchParams = {
-      searchType: searchType?.toString(),
+      searchType: "USER_NM",
       keyword: keyword,
       approvalStatus: approvalStatus?.toString(),
       startDate: formattedStartDate,
@@ -75,18 +67,17 @@ export function SearchBar({
 
   return (
     <div className="flex bg-gray-100 rounded-2xl py-2.5 px-4 justify-between">
-      <div className="flex">
+      <div className="flex-center-ver mr-3">
         <CommonDatePicker
           name="마일리지 신청 일자"
           selected={startDate}
           onChange={(date: Date) => setStartDate(date)}
         />
+        <span className="inline-block text-small font-semibold mx-2">~</span>
         <CommonDatePicker
-          name="~"
           selected={endDate}
           onChange={(date: Date) => setEndDate(date)}
           filterDate={filterEndDate}
-          className="ml-2"
         />
       </div>
       <CommonSelect
@@ -95,20 +86,22 @@ export function SearchBar({
         label="결재 상태"
         labelType="outside-left"
         onChange={handleSelectStatus}
+        className="mr-1"
       />
-      <CommonSelect
+      {/* <CommonSelect
         data={searchData}
         selectValue={searchType}
         label="검색 조건"
         labelType="outside-left"
         onChange={handleSelectCondition}
-      />
-      <div className="flex">
-        <div className="mr-2" onKeyUp={handleKeyUp}>
+      /> */}
+      <div className="flex flex-1">
+        <div className="mr-2 flex-1" onKeyUp={handleKeyUp}>
           <CommonInput
             value={keyword || ""}
-            placeholder="검색어를 입력해 주세요."
+            placeholder="사원 명을 입력해 주세요."
             onValueChange={setKeyword}
+            fullWidth
           />
         </div>
         <CommonButton

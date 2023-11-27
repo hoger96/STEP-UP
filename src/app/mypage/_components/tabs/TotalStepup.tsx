@@ -23,7 +23,7 @@ interface IRows {
   rowNum: string;
   achievementDt: string;
   mileageUseYn: string;
-  stepUpId: string
+  stepUpId: string;
 }
 
 export default function TotalStepup(props: IProps) {
@@ -37,9 +37,9 @@ export default function TotalStepup(props: IProps) {
       label: "스텝업 달성일",
     },
     {
-      key: 'action',
-      label: ''
-    }
+      key: "action",
+      label: "",
+    },
   ];
 
   // const userId = sessionStorage.getItem('loginUserId')
@@ -50,23 +50,23 @@ export default function TotalStepup(props: IProps) {
 
   const deleteStepupList = async (stepUpId: string) => {
     try {
-      await axios.delete(`/stepup/api/user/delete/exercise/${stepUpId}`)
+      await axios.delete(`/stepup/api/user/delete/exercise/${stepUpId}`);
 
-      return true
+      return true;
     } catch (e) {
-      console.error(e)
+      console.error(e);
 
-      return false
+      return false;
     }
-  }
+  };
 
   const handleDeleteBtnClick = async (stepupId: string) => {
-    const isSuccess = await deleteStepupList(stepupId)
+    const isSuccess = await deleteStepupList(stepupId);
     if (isSuccess) {
-      initTotalSetupTable(props.requestId, currentPage ?? 1)
+      initTotalSetupTable(props.requestId, currentPage ?? 1);
       toast.success("삭제되었어요!");
     }
-  }
+  };
 
   const renderCell = React.useCallback((items: IRows, columnKey: string) => {
     const cellValue = items[columnKey as keyof IRows];
@@ -74,11 +74,8 @@ export default function TotalStepup(props: IProps) {
     switch (columnKey) {
       case "action":
         return (
-          <Tooltip
-            color="danger"
-            content={"버튼을 눌러 삭제해보아요!"}
-          >
-            <span className="text-lg text-danger cursor-pointer active:opacity-50">
+          <Tooltip color="secondary" content={"버튼을 눌러 삭제해보아요!"}>
+            <span className="inline-block text-danger cursor-pointer">
               <CommonButton
                 label={"삭제"}
                 size={"sm"}

@@ -81,6 +81,11 @@ const config: Config = {
             display: "flex",
             justifyContent: "center",
           },
+          // min-width
+          // TODO: 김태일 공통 스타일을 tailwind.config.ts에 추가할지 공통 ts파일에서 tailwind variant를 사용할지 생각해보기
+          ".desktop-width": {
+            minWidth: "1280px",
+          },
         });
     }),
   ],

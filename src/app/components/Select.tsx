@@ -17,58 +17,55 @@ export function CommonSelect(props: {
   isDisabled?: boolean;
   onChange?: ChangeEventHandler<HTMLSelectElement>;
   onSelectedChange?: SelectProps["onSelectionChange"];
+  className?: string;
 }) {
   return (
-    <div>
-      <div>
-        <Select
-          classNames={{
-            base: "flex items-center h-10",
-            label: "text-left align-middle font-semibold",
-            mainWrapper: "w-32",
-            trigger: "shadow-none border !bg-white",
-          }}
-          listboxProps={{
-            itemClasses: {
-              base: [
-                "text-default-500",
-                "transition-opacity",
-                "data-[hover=true]:text-foreground",
-                "data-[hover=true]:bg-default-100",
-                "dark:data-[hover=true]:bg-default-50",
-                "data-[selectable=true]:focus:bg-default-50",
-                "data-[pressed=true]:opacity-70",
-                "data-[focus-visible=true]:ring-default-500",
-              ],
-            },
-          }}
-          popoverProps={{
-            classNames: {
-              base: "before:bg-default-200",
-              content: "p-0 border-small border-divider bg-background",
-            },
-          }}
-          labelPlacement={props.labelType}
-          label={props.label}
-          value={props.value}
-          placeholder={props.placeholer}
-          className="max-w-lg"
-          isDisabled={props.isDisabled}
-          isRequired={props.isRequired}
-          isInvalid={props.isInvalid}
-          selectedKeys={props.selectValue}
-          defaultSelectedKeys={props.defaultValue}
-          onChange={props.onChange}
-          onSelectionChange={props.onSelectedChange}
-          errorMessage={props.errorMessage}
-        >
-          {props.data.map((item) => (
-            <SelectItem key={item.value} value={item.value}>
-              {item.label}
-            </SelectItem>
-          ))}
-        </Select>
-      </div>
-    </div>
+    <Select
+      classNames={{
+        base: "!flex-center-ver h-10 w-fit",
+        label: "text-left align-middle font-semibold",
+        mainWrapper: "w-32",
+        trigger: "shadow-none border !bg-white",
+      }}
+      className={props.className}
+      listboxProps={{
+        itemClasses: {
+          base: [
+            "text-default-500",
+            "transition-opacity",
+            "data-[hover=true]:text-foreground",
+            "data-[hover=true]:bg-default-100",
+            "dark:data-[hover=true]:bg-default-50",
+            "data-[selectable=true]:focus:bg-default-50",
+            "data-[pressed=true]:opacity-70",
+            "data-[focus-visible=true]:ring-default-500",
+          ],
+        },
+      }}
+      popoverProps={{
+        classNames: {
+          base: "before:bg-default-200",
+          content: "p-0 border-small border-divider bg-background",
+        },
+      }}
+      labelPlacement={props.labelType}
+      label={props.label}
+      value={props.value}
+      placeholder={props.placeholer}
+      isDisabled={props.isDisabled}
+      isRequired={props.isRequired}
+      isInvalid={props.isInvalid}
+      selectedKeys={props.selectValue}
+      defaultSelectedKeys={props.defaultValue}
+      onChange={props.onChange}
+      onSelectionChange={props.onSelectedChange}
+      errorMessage={props.errorMessage}
+    >
+      {props.data.map((item) => (
+        <SelectItem key={item.value} value={item.value}>
+          {item.label}
+        </SelectItem>
+      ))}
+    </Select>
   );
 }
