@@ -38,6 +38,7 @@ export default function CommonModal(props: {
         onClose={props.onClose}
         size={props.size}
         backdrop="opaque"
+        scrollBehavior="inside"
       >
         <ModalContent>
           {(onClose) => (

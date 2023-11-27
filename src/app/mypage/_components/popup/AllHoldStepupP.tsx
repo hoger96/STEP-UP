@@ -1,5 +1,6 @@
 import CommonTable from "@/app/components/Table";
 import axios from "axios";
+import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 
 interface ITotalStepupData {
@@ -8,7 +9,7 @@ interface ITotalStepupData {
 }
 
 interface IProps {
-  requestId: string
+  requestId: string;
 }
 
 export default function AllHoldStepupP(props: IProps) {
@@ -35,6 +36,7 @@ export default function AllHoldStepupP(props: IProps) {
   const [currentPage, setCurrentPage] = useState<number>();
   const [totalPage, setTotalPage] = useState<number>();
   const [rows, setRows] = useState<ITotalStepupData[]>([]);
+  const router = useRouter();
 
   const getAllHoldStepupData = async (userId: string, currentPage: number) => {
     try {
@@ -55,8 +57,12 @@ export default function AllHoldStepupP(props: IProps) {
     }
   };
 
-  const initTotalHoldupStepupTable = async (userId: string, currentPage: number) => {
+  const initTotalHoldupStepupTable = async (
+    userId: string,
+    currentPage: number
+  ) => {
     if (!userId) {
+      router.push("/login");
       return;
     }
 
@@ -70,14 +76,14 @@ export default function AllHoldStepupP(props: IProps) {
 
   const onPageChange = (page: number) => {
     if (!props.requestId) {
-      return
+      return;
     }
-    initTotalHoldupStepupTable(props.requestId, page)
-  }
+    initTotalHoldupStepupTable(props.requestId, page);
+  };
 
   useEffect(() => {
     if (!props.requestId) {
-      return
+      return;
     }
     initTotalHoldupStepupTable(props.requestId, 1);
   }, []);

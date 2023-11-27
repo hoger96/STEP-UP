@@ -25,6 +25,7 @@ export default function Header() {
       sessionStorage.removeItem("loginUserId");
       sessionStorage.removeItem("loginUserName");
       sessionStorage.removeItem("loginUserMaster");
+      sessionStorage.removeItem("holdYn");
       setLoginUserId(null);
       setLoginUserName(null);
       setLoginUserMaster(null);

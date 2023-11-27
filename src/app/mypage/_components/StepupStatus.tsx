@@ -2,6 +2,7 @@
 
 import { Card, CardBody } from "@nextui-org/react";
 import axios from "axios";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 interface IStepupStatusData {
@@ -20,6 +21,8 @@ interface IProps {
 export default function StepupStatus(props: IProps) {
   // const [userId, setUserId] = useState<string>()
   const [statusData, setStatusData] = useState<IStepupStatusData>();
+  const userId = sessionStorage.getItem("loginUserId");
+  const router = useRouter();
 
   const getStepupStatusData = async (userId: string) => {
     try {
@@ -36,6 +39,10 @@ export default function StepupStatus(props: IProps) {
   };
 
   const initStepupStatus = async () => {
+    if (!userId) {
+      router.push("/login");
+      return;
+    }
     if (props.requestId) {
       const result = await getStepupStatusData(props.requestId);
       if (result) {

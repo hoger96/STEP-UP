@@ -4,6 +4,7 @@ import CommonButton from "@/app/components/Buttons";
 import CommonTable from "@/app/components/Table";
 import { Chip, ChipProps, Tooltip } from "@nextui-org/react";
 import axios from "axios";
+import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 
@@ -23,6 +24,7 @@ interface IRows {
 }
 
 export default function MileageStatus(props: IProps) {
+  const router = useRouter();
   const columns = [
     {
       key: "rowNum",
@@ -114,8 +116,8 @@ export default function MileageStatus(props: IProps) {
               userId !== props.requestId
                 ? "내 신청만 취소할 수 있어요!"
                 : items?.approvalStus !== "WAIT"
-                  ? "신청을 취소할 수 없어요!"
-                  : "버튼을 눌러 신청을 취소해보아요!"
+                ? "신청을 취소할 수 없어요!"
+                : "버튼을 눌러 신청을 취소해보아요!"
             }
           >
             <span className="text-lg text-danger cursor-pointer active:opacity-50">
@@ -157,6 +159,7 @@ export default function MileageStatus(props: IProps) {
 
   const initMileageStatusTable = async (userId: string) => {
     if (!userId) {
+      router.push("/login");
       return;
     }
 

@@ -8,6 +8,7 @@ import AllUsedMileageP from "../popup/AllUsedMileageP";
 import axios from "axios";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer, toast } from "react-toastify";
+import { useRouter } from "next/navigation";
 
 interface IApplyUseMileageParams {
   approvalReqDt: string;
@@ -30,6 +31,7 @@ export default function MileageStatusBtn(props: IProps) {
 
   const [isUseMileagePOpen, setIsUseMileagePOpen] = useState(false);
   const [isAllUseMileagePOpen, setIsAllUseMileagePOpen] = useState(false);
+  const router = useRouter();
 
   // 마일리지 사용 신청 팝업
   const handleUseMileage = () => {
@@ -69,6 +71,7 @@ export default function MileageStatusBtn(props: IProps) {
 
   const onConfirmUseMileageP = async () => {
     if (!userId) {
+      router.push("/login");
       return;
     }
 
