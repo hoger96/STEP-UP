@@ -58,14 +58,14 @@ export default function ConfirmPopup(props: {
       <div className="m-3">
         <CommonInput
           value={data ? data.draftDt : ""}
-          label="결재 요청 일자"
+          label="결재 신청 일자"
           isReadOnly={true}
         />
       </div>
       <div className="m-3">
         <CommonInput
           value={data ? data.approvalReqDt : ""}
-          label="마일리지 신청 일자"
+          label="마일리지 사용 일자"
           isReadOnly={true}
         />
       </div>

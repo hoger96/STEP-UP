@@ -22,6 +22,10 @@ export default function AllTotalStepupP(props: IProps) {
       key: "achievementDt",
       label: "스텝업 달성일",
     },
+    {
+      key: "mileageUseYn",
+      label: "마일리지 사용 여부",
+    },
   ];
 
   // const userId = sessionStorage.getItem('loginUserId')
@@ -39,7 +43,6 @@ export default function AllTotalStepupP(props: IProps) {
           limit: 10,
         },
       });
-
       return result.data.body;
     } catch (e) {
       console.error(e);

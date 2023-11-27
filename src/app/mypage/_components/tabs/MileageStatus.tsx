@@ -31,8 +31,12 @@ export default function MileageStatus(props: IProps) {
       label: "번호",
     },
     {
+      key: "draftDt",
+      label: "결재 신청 일자",
+    },
+    {
       key: "approvalReqDt",
-      label: "신청 일자",
+      label: "마일리지 사용 일자",
     },
     {
       key: "approvalReqTypeNm",
@@ -150,7 +154,7 @@ export default function MileageStatus(props: IProps) {
           userId,
         },
       });
-
+      console.log(result.data.body);
       return result.data.body;
     } catch (e) {
       console.error(e);
