@@ -122,7 +122,7 @@ export default function MileageStatus(props: IProps) {
                 ? "내 신청만 취소할 수 있어요!"
                 : items?.approvalStus !== "WAIT"
                 ? "신청을 취소할 수 없어요!"
-                : "버튼을 눌러 신청을 취소해보아요!"
+                : "버튼을 누르면 신청을 취소할 수 있어요!"
             }
           >
             <span

@@ -24,10 +24,11 @@ export function CommonDatePicker({ ...props }: ReactDatePickerProps) {
       <ReactDatePicker
         {...props}
         locale={ko}
+        showMonthDropdown
         shouldCloseOnSelect
         disabledKeyboardNavigation
         dateFormat="yyyy-MM-dd"
-        className="text-small font-medium border rounded-xl py-2 text-center w-32 h-10 cursor-pointer"
+        className="text-small font-medium border rounded-xl py-2 px-3 w-32 h-10 cursor-pointer outline-0"
       />
     </div>
   );

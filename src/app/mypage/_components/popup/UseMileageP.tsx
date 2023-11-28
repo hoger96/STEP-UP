@@ -36,7 +36,7 @@ export default function UseMileageP(props: {
         </Radio>
         <Radio
           value="MORNING_HALF_DAY_OFF"
-          classNames={{ label: "text-sm", wrapper: "border-default-100" }}
+          classNames={{ label: "text-sm", wrapper: "border-default-100 " }}
         >
           오전반차
         </Radio>

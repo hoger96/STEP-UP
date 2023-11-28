@@ -41,7 +41,6 @@ const HoldPopup: React.FC<IHoldupProps> = ({
           filterDate={filterEndDate}
           minDate={startDate}
           onChange={(date: Date) => setEndDate(date)}
-          className="ml-2"
         />
       </div>
       <Textarea
@@ -54,7 +53,7 @@ const HoldPopup: React.FC<IHoldupProps> = ({
         classNames={{
           base: "flex items-start",
           label: "w-28 text-small font-semibold pr-2",
-          inputWrapper: "bg-white hover:!bg-white border",
+          inputWrapper: "!bg-white hover:!bg-white border",
         }}
       />
     </div>

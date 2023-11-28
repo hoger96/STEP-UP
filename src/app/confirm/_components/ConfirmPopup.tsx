@@ -52,28 +52,32 @@ export default function ConfirmPopup(props: {
         <CommonInput
           value={data ? data.userNm : ""}
           label="사원 명"
-          isReadOnly={true}
+          isReadOnly
+          fullWidth
         />
       </div>
       <div className="m-3">
         <CommonInput
           value={data ? data.draftDt : ""}
           label="결재 신청 일자"
-          isReadOnly={true}
+          isReadOnly
+          fullWidth
         />
       </div>
       <div className="m-3">
         <CommonInput
           value={data ? data.approvalReqDt : ""}
           label="마일리지 사용 일자"
-          isReadOnly={true}
+          isReadOnly
+          fullWidth
         />
       </div>
       <div className="m-3">
         <CommonInput
           value={data ? data.approvalReqTypeNm : ""}
           label="신청 타입"
-          isReadOnly={true}
+          isReadOnly
+          fullWidth
         />
       </div>
     </div>

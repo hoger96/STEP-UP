@@ -8,6 +8,7 @@ import HoldPopup from "./HoldPopup";
 import { ToastContainer, toast } from "react-toastify";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { Tooltip } from "@nextui-org/react";
 
 export default function Header() {
   const [openSignal, setOpenSignal] = useState(false);
@@ -146,24 +147,32 @@ export default function Header() {
               </span>
               <Image src="/icons/user.svg" width="10" height="10" alt="" />
             </div>
+            <Tooltip
+              color="default"
+              content={"스텝업 보류하기"}
+              classNames={{ base: "border-primary" }}
+            >
+              <div className="inline-block text-danger cursor-pointer">
+                <CommonButton
+                  size="sm"
+                  color="primary"
+                  variant="light"
+                  isIconOnly
+                  className="ml-2 font-semibold"
+                  onClick={handleOpenHoldPopup}
+                >
+                  <Image
+                    src="/icons/setting.svg"
+                    width="18"
+                    height="18"
+                    alt="logout"
+                  />
+                </CommonButton>
+              </div>
+            </Tooltip>
             <CommonButton
               size="sm"
               color="secondary"
-              variant="light"
-              isIconOnly
-              className="ml-2 font-semibold"
-              onClick={handleOpenHoldPopup}
-            >
-              <Image
-                src="/icons/setting.svg"
-                width="18"
-                height="18"
-                alt="logout"
-              />
-            </CommonButton>
-            <CommonButton
-              size="sm"
-              color="primary"
               variant="light"
               isIconOnly
               className="ml-1"
