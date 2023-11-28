@@ -51,19 +51,12 @@ export default function LoginForm() {
       }
       const isValid = loginValidation();
       if (isValid) {
-        // const result = await axios.post("/stepup/api/login", {
-        //   userId,
-        //   password,
-        // });
-        if (renderCtx) renderCtx.login(userId, password);
-        if (renderCtx?.master === "Y") {
-          router.push("/confirm");
-        } else {
-          router.push(`/mypage/${renderCtx?.userId}`);
+        if (renderCtx) {
+          await renderCtx.login(userId, password);
         }
       }
     } catch (error: any) {
-      showToast("아이디 또는 비밀번호를 확인해주세요.", "error");
+      console.log(error);
     }
   };
 

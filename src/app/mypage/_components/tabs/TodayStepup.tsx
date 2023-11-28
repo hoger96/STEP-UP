@@ -55,10 +55,10 @@ export default function TodayStepup(props: IProps) {
     //   router.push("/login");
     //   return;
     // }
-    const result = await renderCtx?.fetchTodayTable(userId);
-    if (result) {
-      setRows(result);
-    }
+    await renderCtx?.fetchTodayTable(userId);
+    // if (result) {
+    //   setRows(result);
+    // }
     // const result = await getTodayStepupData(renderCtx.userId);
     // if (result) {
     //   setRows(result);
@@ -72,8 +72,16 @@ export default function TodayStepup(props: IProps) {
   // }, [props.shouldRefreshTable]);
 
   useEffect(() => {
-    InitTodayStepupTable(renderCtx?.userId);
-  }, []);
+    if (props.requestId) {
+      InitTodayStepupTable(props.requestId);
+    }
+  }, [props.requestId]);
+
+  useEffect(() => {
+    if (!props.requestId) {
+      InitTodayStepupTable(renderCtx?.userId);
+    }
+  }, [renderCtx?.userId]);
 
   // useEffect(() => {
   //   const loginUserId = sessionStorage.getItem("userId");

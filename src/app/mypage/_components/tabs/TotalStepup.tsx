@@ -134,25 +134,22 @@ export default function TotalStepup(props: IProps) {
   // };
 
   const initTotalSetupTable = async (userId: string, currentPage: number) => {
-    if (!userId) {
-      router.push("/login");
-      return;
-    }
-
-    const result: ITotalResponse<ITotalStepupData> =
-      await renderCtx?.fetchTotalTable(userId, currentPage);
-    if (result) {
-      setRows(result.data);
-      setCurrentPage(result.currentPage);
-      setTotalPage(result.totalPage);
-    }
+    await renderCtx?.fetchTotalTable(userId, currentPage);
+    // if (result) {
+    //   setRows(result.data);
+    //   setCurrentPage(result.currentPage);
+    //   setTotalPage(result.totalPage);
+    // }
   };
 
   const onPageChange = (page: number) => {
     // if (!props.requestId) {
     //   return;
     // }
-    initTotalSetupTable(renderCtx?.userId, page);
+    if (props.requestId) initTotalSetupTable(props.requestId, page);
+    else {
+      initTotalSetupTable(renderCtx?.userId, page);
+    }
   };
 
   // useEffect(() => {
@@ -162,8 +159,13 @@ export default function TotalStepup(props: IProps) {
   // }, [props.shouldRefreshTable]);
 
   useEffect(() => {
-    initTotalSetupTable(renderCtx?.userId, 1);
-  }, []);
+    if (props.requestId) {
+      initTotalSetupTable(props.requestId, 1);
+    }
+  }, [props.requestId]);
+  useEffect(() => {
+    if (!props.requestId) initTotalSetupTable(renderCtx?.userId, 1);
+  }, [renderCtx?.userId]);
 
   return (
     <div>
@@ -175,8 +177,8 @@ export default function TotalStepup(props: IProps) {
         columns={columns}
         rows={renderCtx?.totalRow}
         uniqueKey={"rowNum"}
-        currentPage={currentPage}
-        total={totalPage ?? 0}
+        currentPage={renderCtx?.currentPage}
+        total={renderCtx?.totalPage ?? 0}
         onChange={(page) => onPageChange(page)}
       />
       <ToastContainer autoClose={2000} hideProgressBar={true} />

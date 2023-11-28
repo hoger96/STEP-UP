@@ -78,18 +78,18 @@ export default function TodayStepupBtn(props: IProps) {
   };
 
   const onConfirmBtn = async () => {
-    if (!renderCtx?.userId) {
-      router.push("/login");
-      return;
-    }
-    const params = await setParams(startTm, endTm, renderCtx.userId, file);
+    // if (!renderCtx?.userId) {
+    //   router.push("/login");
+    //   return;
+    // }
+    const params = await setParams(startTm, endTm, renderCtx?.userId, file);
     if (params) {
       const isSuccess = await createTodayStepup(params);
       if (isSuccess) {
         setIsOpen(false);
         props.onRefreshTable();
         if (renderCtx) {
-          await renderCtx.fetchSession();
+          await renderCtx.fetchSession(renderCtx?.userId);
           await renderCtx.fetchTodayTable(renderCtx?.userId);
         }
         toast.success("축하합니다! 오늘의 운동기록을 기록하셨군요 :)");
@@ -114,7 +114,9 @@ export default function TodayStepupBtn(props: IProps) {
           radius={"sm"}
           color={"primary"}
           variant={"solid"}
-          // isDisabled={userId !== props.requestId || renderCtx?.hold === "Y"}
+          isDisabled={
+            renderCtx?.userId !== props.requestId || renderCtx?.hold === "Y"
+          }
           onClick={handelOpenCreateTodayStepupPopup}
           className="mb-3"
         />

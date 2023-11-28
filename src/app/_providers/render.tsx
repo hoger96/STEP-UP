@@ -1,23 +1,10 @@
 "use client";
 
 import axios from "axios";
+import { useRouter } from "next/navigation";
 import { createContext, useContext, useEffect, useState } from "react";
+import { toast } from "react-toastify";
 
-interface ITotalResponse<T> {
-  data: T[];
-  currentPage: number;
-  totalPage: number;
-  totalCount: number;
-  limit: number;
-}
-
-interface ITotalTable {
-  rowNum: number;
-  stepUpId: string;
-  achievementDt: string;
-  mileageUseYn: string;
-  delYn: string;
-}
 type TRender = any;
 type RTU = ReturnType<typeof useState<TRender | null>>;
 type RenderContextType = {
@@ -41,12 +28,18 @@ type RenderContextType = {
   setTodayRow: RTU[1];
   totalRow: RTU[0];
   setTotalRow: RTU[1];
-  total;
+  currentPage: RTU[0];
+  setCurrentPage: RTU[1];
+  totalPage: RTU[0];
+  setTotalPage: RTU[1];
+  holdRow: RTU[0];
+  setHoldRow: RTU[1];
   login: (userId: string, password: string) => Promise<void>;
-  fetchSession: () => Promise<void>;
+  fetchSession: (id: string) => Promise<void>;
   fetchTodayTable: (userId: string) => Promise<void>;
   fetchMileageTable: (userId: string) => Promise<void>;
   fetchTotalTable: (userId: string, currentPage: number) => Promise<void>;
+  fetchHoldTable: (userId: string) => Promise<void>;
 };
 
 export const RenderContext = createContext<RenderContextType | undefined>(
@@ -68,6 +61,10 @@ export default function RenderProvider({
   const [mileageRow, setMileageRow] = useState<[]>([]);
   const [todayRow, setTodayRow] = useState<[]>([]);
   const [totalRow, setTotalRow] = useState<[]>([]);
+  const [currentPage, setCurrentPage] = useState<number>();
+  const [totalPage, setTotalPage] = useState<number>();
+  const [holdRow, setHoldRow] = useState<[]>([]);
+  const router = useRouter();
 
   const login = async (userId: string, password: string) => {
     try {
@@ -79,16 +76,21 @@ export default function RenderProvider({
       setUserNm(result.data.body.userNm);
       setMaster(result.data.body.master);
       setHold(result.data.body.holdYn);
+      if (master === "Y") {
+        router.push("/confirm");
+      } else {
+        router.push(`/mypage/${userId}`);
+      }
     } catch (error: any) {
-      console.log(error);
+      toast.error("아이디 또는 비밀번호를 확인해주세요.");
     }
   };
 
-  const fetchSession = async () => {
+  const fetchSession = async (id: string) => {
     try {
       const result = await axios.get("/stepup/api/user", {
         params: {
-          userId,
+          userId: id,
         },
       });
       setHold(result.data.body.holdYn);
@@ -100,11 +102,11 @@ export default function RenderProvider({
     }
   };
 
-  const fetchTodayTable = async (userId: string) => {
+  const fetchTodayTable = async (id: string) => {
     try {
       const result = await axios.get("/stepup/api/user/list/today-exercise", {
         params: {
-          userId,
+          userId: id,
         },
       });
       setTodayRow(result.data.body);
@@ -113,11 +115,11 @@ export default function RenderProvider({
     }
   };
 
-  const fetchMileageTable = async (userId: string) => {
+  const fetchMileageTable = async (id: string) => {
     try {
       const result = await axios.get("/stepup/api/user/list/mileage", {
         params: {
-          userId,
+          userId: id,
         },
       });
       setMileageRow(result.data.body);
@@ -126,26 +128,40 @@ export default function RenderProvider({
     }
   };
 
-  const fetchTotalTable = async (userId: string, currentPage: number) => {
+  const fetchTotalTable = async (id: string, currentPage: number) => {
     try {
       const result = await axios.get("/stepup/api/user/list/exercise", {
         params: {
           currentPage,
           limit: 5,
-          userId,
+          userId: id,
         },
       });
-      console.log("...", result.data.body);
-      setTotalRow(result.data.body);
+      setTotalRow(result.data.body.data);
+      setCurrentPage(result.data.body.currentPage);
+      setTotalPage(result.data.body.totalPage);
     } catch (e) {
       console.error(e);
     }
   };
 
-  useEffect(() => {
-    fetchSession();
-    if (userId) fetchTotalTable(userId, 1);
-  }, []);
+  const fetchHoldTable = async (id: string) => {
+    try {
+      const result = await axios.get("/stepup/api/user/list/hold-exercise", {
+        params: {
+          userId: id,
+        },
+      });
+      setHoldRow(result.data.body);
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  // useEffect(() => {
+  //   fetchSession();
+  //   //if (userId) fetchTotalTable(userId, 1);
+  // }, []);
 
   return (
     <RenderContext.Provider
@@ -170,11 +186,18 @@ export default function RenderProvider({
         setTodayRow,
         totalRow,
         setTotalRow,
+        currentPage,
+        setCurrentPage,
+        totalPage,
+        setTotalPage,
+        holdRow,
+        setHoldRow,
         login,
         fetchSession,
         fetchTodayTable,
         fetchMileageTable,
         fetchTotalTable,
+        fetchHoldTable,
       }}
     >
       {children}

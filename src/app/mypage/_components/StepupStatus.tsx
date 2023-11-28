@@ -23,16 +23,26 @@ export default function StepupStatus(props: IProps) {
   const router = useRouter();
   const renderCtx = useRenderCtx();
 
-  useEffect(() => {
-    if (!renderCtx?.userId) {
-      router.push("/login");
-      return;
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (!renderCtx?.userId) {
+  //     router.push("/login");
+  //     return;
+  //   }
+  // }, []);
 
   useEffect(() => {
-    if (renderCtx) {
-      renderCtx.fetchSession();
+    if (!renderCtx?.userId) router.push("/login");
+  });
+
+  useEffect(() => {
+    if (props.requestId && renderCtx) {
+      renderCtx.fetchSession(props.requestId);
+    }
+  }, [props.requestId]);
+
+  useEffect(() => {
+    if (!props.requestId && renderCtx) {
+      renderCtx.fetchSession(renderCtx?.userId);
     }
   }, [renderCtx?.userId]);
 

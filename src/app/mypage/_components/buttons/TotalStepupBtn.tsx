@@ -49,7 +49,7 @@ export default function TotalStepupBtn(props: IProps) {
       setIsConfrimOpen(false);
       props.onRefreshTable();
       if (renderCtx) {
-        await renderCtx.fetchSession();
+        await renderCtx.fetchSession(renderCtx?.userId);
         await renderCtx.fetchTotalTable(renderCtx?.userId, 1);
       }
       toast.success("1개의 마일리지가 생성되었어요!");
@@ -72,7 +72,7 @@ export default function TotalStepupBtn(props: IProps) {
         radius={"sm"}
         color={"primary"}
         variant={"solid"}
-        // isDisabled={renderCtx?.userId !== props.requestId}
+        isDisabled={renderCtx?.userId !== props.requestId}
         onClick={handleChaneMileageBtnClick}
       />
       <CommonButton

@@ -98,7 +98,7 @@ export default function MileageStatus(props: IProps) {
     const isSuccess = await cancelApproval(data);
     if (isSuccess) {
       setIsConfrimOpen(false);
-      if (renderCtx) await renderCtx.fetchSession();
+      if (renderCtx) await renderCtx.fetchSession(renderCtx.userId);
       initMileageStatusTable(userId);
       toast.success("신청이 취소되었어요!");
     }
@@ -144,10 +144,10 @@ export default function MileageStatus(props: IProps) {
                 radius={"sm"}
                 color={"secondary"}
                 variant={"bordered"}
-                // isDisabled={
-                //   items?.approvalStus !== "WAIT" ||
-                //   renderCtx?.userId !== props.requestId
-                // }
+                isDisabled={
+                  items?.approvalStus !== "WAIT" ||
+                  renderCtx?.userId !== props.requestId
+                }
                 onClick={() => {
                   setApprovalId(items?.approvalId);
                   setIsConfrimOpen(true);
@@ -181,13 +181,7 @@ export default function MileageStatus(props: IProps) {
   // };
 
   const initMileageStatusTable = async (userId: string) => {
-    if (!userId) {
-      router.push("/login");
-      return;
-    }
-
-    const result = await renderCtx?.fetchMileageTable(userId);
-    if (result) setRows(result);
+    await renderCtx?.fetchMileageTable(userId);
   };
 
   // useEffect(() => {
@@ -195,14 +189,12 @@ export default function MileageStatus(props: IProps) {
   //     initMileageStatusTable(props.requestId);
   //   }
   // }, [props.shouldRefreshTable]);
-
   useEffect(() => {
-    // if (!props.requestId) {
-    //   return;
-    // }
-
-    initMileageStatusTable(renderCtx?.userId);
-  }, []);
+    if (props.requestId) initMileageStatusTable(props.requestId);
+  }, [props.requestId]);
+  useEffect(() => {
+    if (!props.requestId) initMileageStatusTable(renderCtx?.userId);
+  }, [renderCtx?.userId]);
 
   return (
     <div>

@@ -80,7 +80,7 @@ export default function MileageStatusBtn(props: IProps) {
       setIsUseMileagePOpen(false);
       props.onRefreshTable();
       if (renderCtx) {
-        await renderCtx.fetchSession();
+        await renderCtx.fetchSession(renderCtx?.userId);
         await renderCtx.fetchMileageTable(renderCtx?.userId);
       }
       toast.success(`마일리지 사용 신청을 완료했어요 :)`);
@@ -114,7 +114,7 @@ export default function MileageStatusBtn(props: IProps) {
           radius={"sm"}
           color={"primary"}
           variant={"solid"}
-          // isDisabled={renderCtx?.userId !== props.requestId}
+          isDisabled={renderCtx?.userId !== props.requestId}
           onClick={handleUseMileage}
         />
         <CommonModal
