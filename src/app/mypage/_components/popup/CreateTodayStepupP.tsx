@@ -4,7 +4,6 @@ import CommonInput from "@/app/components/Input";
 import { CommonTimePicker } from "@/app/components/TimePicker";
 import React, { useCallback } from "react";
 import { FileWithPath, useDropzone } from "react-dropzone";
-import Image from "next/image";
 
 interface ICreateTodayStepupProps {
   todayDate: string;
@@ -49,7 +48,7 @@ const CreateTodayStepupP: React.FC<ICreateTodayStepupProps> = ({
       {`- ${item.path}`}
       {/* <button onClick={removeFile(item)}>삭제</button> */}
       <button>
-        <Image src="/icons/close.svg" width="20" height="20" alt="삭제"></Image>
+        <img src="/icons/close.svg" width="20" height="auto" alt="삭제" />
       </button>
     </li>
   ));

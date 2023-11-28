@@ -7,7 +7,6 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { ToastContainer, TypeOptions, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import Image from "next/image";
 
 export default function LoginForm() {
   const [userId, setUserId] = useState<string>("");
@@ -82,10 +81,10 @@ export default function LoginForm() {
     <div className="border border-default-100 rounded-xl px-6 py-8 bg-white shadow-xl">
       <ToastContainer autoClose={2000} hideProgressBar={true} />
       <h1 className="flex-center-column mb-7">
-        <Image
+        <img
           src="/icons/logo.svg"
           width="160"
-          height="25"
+          height="auto"
           alt="step-up logo"
         />
       </h1>

@@ -6,7 +6,6 @@ import axios from "axios";
 import CommonModal from "./Confirm";
 import HoldPopup from "./HoldPopup";
 import { ToastContainer, toast } from "react-toastify";
-import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { Tooltip } from "@nextui-org/react";
 
@@ -110,10 +109,10 @@ export default function Header() {
       {loginUserId && (
         <div className="py-3 px-5 flex justify-between items-center border-b">
           <h1>
-            <Image
+            <img
               src="/icons/logo.svg"
               width="130"
-              height="25"
+              height="auto"
               alt="step-up logo"
             />
           </h1>
@@ -140,12 +139,12 @@ export default function Header() {
               공통 컴포넌트 보러가기
             </Link>
           </nav>
-          <div className="flex-center-ver">
+          <div className="flex items-center">
             <div className="flex-center border rounded-full px-3 py-1">
               <span className="mr-1 text-default-300 text-sm font-medium">
                 {loginUserName}
               </span>
-              <Image src="/icons/user.svg" width="10" height="10" alt="" />
+              <img src="/icons/user.svg" width="10" height="auto" alt="" />
             </div>
             <Tooltip
               color="default"
@@ -161,10 +160,10 @@ export default function Header() {
                   className="ml-2 font-semibold"
                   onClick={handleOpenHoldPopup}
                 >
-                  <Image
+                  <img
                     src="/icons/setting.svg"
                     width="18"
-                    height="18"
+                    height="auto"
                     alt="logout"
                   />
                 </CommonButton>
@@ -172,16 +171,16 @@ export default function Header() {
             </Tooltip>
             <CommonButton
               size="sm"
-              color="secondary"
+              color="primary"
               variant="light"
               isIconOnly
               className="ml-1"
               onClick={handleLogout}
             >
-              <Image
+              <img
                 src="/icons/logout.svg"
                 width="18"
-                height="18"
+                height="auto"
                 alt="logout"
               />
             </CommonButton>
