@@ -10,16 +10,16 @@ interface IButtonProps {
   radius?: "full" | "lg" | "md" | "sm" | "none";
   color: "default" | "primary" | "secondary" | "success" | "warning" | "danger";
   variant:
-    | "solid"
-    | "faded"
-    | "bordered"
-    | "light"
-    | "flat"
-    | "ghost"
-    | "shadow";
+  | "solid"
+  | "faded"
+  | "bordered"
+  | "light"
+  | "flat"
+  | "ghost"
+  | "shadow";
   isIconOnly?: boolean;
   // IConContents: ReactNode;
-  onClick: MouseEventHandler<HTMLButtonElement> | Promise<void> | undefined;
+  onClick: () => void;
   children?: React.ReactNode;
   className?: string;
 }

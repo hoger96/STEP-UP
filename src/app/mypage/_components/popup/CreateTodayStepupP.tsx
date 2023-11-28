@@ -34,19 +34,31 @@ const CreateTodayStepupP: React.FC<ICreateTodayStepupProps> = ({
   );
   const { getRootProps, getInputProps, acceptedFiles } = useDropzone({
     onDrop,
+    multiple: false
   });
 
-  // const removeFile = (fileToRemove: FileWithPath) => () => {
-  //   setFile((prevFiles: FileWithPath[]) =>
-  //     prevFiles.filter((prevFile) => {
-  //       console.log('fileToRemove', fileToRemove)
-  //     }));
+  // const handleRemove = () => {
+
+  //   setFile((prevFiles: any) => {
+  //     const newFiles = [...prevFiles];
+  //     newFiles.splice(0, 1);
+  //     return newFiles;
+  //   });
   // };
+
+  // {
+  //   const deletedFile = acceptedFiles.forEach((selected, index) => {
+  //     if (selected.name === item.name) {
+  //       acceptedFiles.splice(index)
+  //     }
+  //   })
+  //   setFile(deletedFile)
+  //   console.log('fule', file)
+  // }
 
   const files = acceptedFiles.map((item: FileWithPath) => (
     <li key={item.path} className="flex-center-ver">
       {`- ${item.path}`}
-      {/* <button onClick={removeFile(item)}>삭제</button> */}
       <button>
         <img src="/icons/close.svg" width="20" height="auto" alt="삭제" />
       </button>

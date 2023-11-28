@@ -50,7 +50,8 @@ export default function TodayStepupBtn(props: IProps) {
     formData.append("startTm", startTime);
     formData.append("endTm", endTime);
     formData.append("userId", userId);
-    if (file[0]) {
+
+    if (file[0] !== undefined) {
       formData.append(
         "file",
         new Blob([await file[0].arrayBuffer()], { type: file[0].type }),
@@ -71,7 +72,7 @@ export default function TodayStepupBtn(props: IProps) {
       return true;
     } catch (e) {
       if (e instanceof AxiosError) {
-        //toast.error(e?.response?.data.message);
+        toast.error(e?.response?.data.message);
         return false;
       }
     }
@@ -87,12 +88,8 @@ export default function TodayStepupBtn(props: IProps) {
       const isSuccess = await createTodayStepup(params);
       if (isSuccess) {
         setIsOpen(false);
-        props.onRefreshTable();
         toast.success("축하합니다! 오늘의 운동기록을 기록하셨군요 :)");
-      } else {
-        toast.error(
-          "오늘의 운동기록을 추가하지 못했어요. 파일을 첨부해주세요!"
-        );
+        props.onRefreshTable();
       }
     }
   };
