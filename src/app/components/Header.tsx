@@ -107,12 +107,14 @@ export default function Header() {
           >
             나의 현황
           </Link>
-          <Link
-            href="/confirm"
-            className="px-3 py-1 mx-3 cursor-pointer text-black-2 font-semibold hover:text-primary-4"
-          >
-            결재 현황
-          </Link>
+          {renderCtx?.master === "Y" && (
+            <Link
+              href="/confirm"
+              className="px-3 py-1 mx-3 cursor-pointer text-black-2 font-semibold hover:text-primary-4"
+            >
+              결재 현황
+            </Link>
+          )}
           <Link
             href="/example"
             className="px-3 py-1 mx-3 cursor-pointer text-black-2 font-semibold hover:text-primary-4"
