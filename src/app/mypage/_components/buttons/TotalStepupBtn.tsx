@@ -38,12 +38,12 @@ export default function TotalStepupBtn(props: IProps) {
   };
 
   const handleChangeMileage = async () => {
-    if (!renderCtx?.userId) {
-      router.push("/login");
-      return;
-    }
+    // if (!renderCtx?.userId) {
+    //   router.push("/login");
+    //   return;
+    // }
 
-    const isSuccess = await changeToMileage(renderCtx.userId);
+    const isSuccess = await changeToMileage(renderCtx?.userId);
 
     if (isSuccess) {
       setIsConfrimOpen(false);

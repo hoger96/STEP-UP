@@ -35,6 +35,7 @@ type RenderContextType = {
   holdRow: RTU[0];
   setHoldRow: RTU[1];
   login: (userId: string, password: string) => Promise<void>;
+  reloadSession: (id: string) => Promise<void>;
   fetchSession: (id: string) => Promise<void>;
   fetchTodayTable: (userId: string) => Promise<void>;
   fetchMileageTable: (userId: string) => Promise<void>;
@@ -74,7 +75,7 @@ export default function RenderProvider({
       });
       setUserId(result.data.body.userId);
       setUserNm(result.data.body.userNm);
-      setMaster(result.data.body.master);
+      setMaster(result.data.body.masterYn);
       setHold(result.data.body.holdYn);
       if (master === "Y") {
         router.push("/confirm");
@@ -83,6 +84,22 @@ export default function RenderProvider({
       }
     } catch (error: any) {
       toast.error("아이디 또는 비밀번호를 확인해주세요.");
+    }
+  };
+
+  const reloadSession = async (id: string) => {
+    try {
+      const result = await axios.get("/stepup/api/common/session", {
+        params: {
+          userId: id,
+        },
+      });
+      setUserId(result.data.body.userId);
+      setUserNm(result.data.body.userNm);
+      setMaster(result.data.body.masterYn);
+      setHold(result.data.body.holdYn);
+    } catch (error: any) {
+      console.log(error);
     }
   };
 
@@ -193,6 +210,7 @@ export default function RenderProvider({
         holdRow,
         setHoldRow,
         login,
+        reloadSession,
         fetchSession,
         fetchTodayTable,
         fetchMileageTable,

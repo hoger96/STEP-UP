@@ -69,12 +69,12 @@ export default function MileageStatusBtn(props: IProps) {
   };
 
   const onConfirmUseMileageP = async () => {
-    if (!renderCtx?.userId) {
-      router.push("/login");
-      return;
-    }
+    // if (!renderCtx?.userId) {
+    //   router.push("/login");
+    //   return;
+    // }
 
-    const params = setParams(approvalReqDt, approvalReqType, renderCtx.userId);
+    const params = setParams(approvalReqDt, approvalReqType, renderCtx?.userId);
     const isSuccess = await applyUseMileage(params);
     if (isSuccess) {
       setIsUseMileagePOpen(false);

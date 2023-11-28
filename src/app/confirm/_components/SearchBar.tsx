@@ -88,13 +88,6 @@ export function SearchBar({
         onChange={handleSelectStatus}
         className="mr-1"
       />
-      {/* <CommonSelect
-        data={searchData}
-        selectValue={searchType}
-        label="검색 조건"
-        labelType="outside-left"
-        onChange={handleSelectCondition}
-      /> */}
       <div className="flex flex-1">
         <div className="mr-2 flex-1" onKeyUp={handleKeyUp}>
           <CommonInput
