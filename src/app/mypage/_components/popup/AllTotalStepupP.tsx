@@ -1,3 +1,4 @@
+import { useRenderCtx } from "@/app/_providers/render";
 import CommonTable from "@/app/components/Table";
 import axios from "axios";
 import { useRouter } from "next/navigation";
@@ -27,12 +28,11 @@ export default function AllTotalStepupP(props: IProps) {
       label: "마일리지 사용 여부",
     },
   ];
-
-  // const userId = sessionStorage.getItem('loginUserId')
   const [currentPage, setCurrentPage] = useState<number>();
   const [totalPage, setTotalPage] = useState<number>();
   const [rows, setRows] = useState<ITotalStepupData[]>([]);
   const router = useRouter();
+  const renderCtx = useRenderCtx();
 
   const getAllTotalStepupData = async (userId: string, currentPage: number) => {
     try {
@@ -50,16 +50,12 @@ export default function AllTotalStepupP(props: IProps) {
   };
 
   const initTotalStepupTable = async (userId: string, currentPage: number) => {
-    if (!userId) {
-      router.push("/login");
-      return;
-    }
-    const result = await getAllTotalStepupData(userId, currentPage);
-    if (result) {
-      setRows(result.data);
-      setCurrentPage(result.currentPage);
-      setTotalPage(result.totalPage);
-    }
+    await getAllTotalStepupData(userId, currentPage);
+    // if (result) {
+    //   setRows(result.data);
+    //   setCurrentPage(result.currentPage);
+    //   setTotalPage(result.totalPage);
+    // }
   };
 
   const onPageChange = (page: number) => {
@@ -82,10 +78,10 @@ export default function AllTotalStepupP(props: IProps) {
         emptyContent={"조회된 데이터가 없습니다."}
         tablekey={"total-step-table"}
         columns={columns}
-        rows={rows}
+        rows={renderCtx?.totalRow}
         uniqueKey={"rowNum"}
-        total={totalPage ?? 0}
-        currentPage={currentPage}
+        total={renderCtx?.totalPage ?? 0}
+        currentPage={renderCtx?.currentPage}
         onChange={(page) => onPageChange(page)}
       />
     </div>

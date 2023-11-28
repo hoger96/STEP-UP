@@ -27,7 +27,6 @@ export default function AllUsedMileageP(props: IProps) {
     },
   ];
 
-  // const userId = sessionStorage.getItem('loginUserId')
   const [rows, setRows] = useState<ITotalStepupData[]>([]);
   const [currentPage, setCurrentPage] = useState<number>();
   const [totalPage, setTotalPage] = useState<number>();

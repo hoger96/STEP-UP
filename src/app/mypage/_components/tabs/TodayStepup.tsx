@@ -1,5 +1,6 @@
 "use client";
 
+import { useRenderCtx } from "@/app/_providers/render";
 import CommonTable from "@/app/components/Table";
 import axios from "axios";
 import { useRouter } from "next/navigation";
@@ -32,48 +33,55 @@ export default function TodayStepup(props: IProps) {
     },
   ];
 
-  // const [userId, setUserId] = useState<string>()
   const [rows, setRows] = useState<ITodayStepupData[]>([]);
   const router = useRouter();
+  const renderCtx = useRenderCtx();
 
-  const getTodayStepupData = async (userId: string) => {
-    try {
-      const result = await axios.get("/stepup/api/user/list/today-exercise", {
-        params: {
-          userId,
-        },
-      });
-      return result.data.body;
-    } catch (e) {
-      console.error(e);
-    }
-  };
+  // const getTodayStepupData = async (userId: string) => {
+  //   try {
+  //     const result = await axios.get("/stepup/api/user/list/today-exercise", {
+  //       params: {
+  //         userId,
+  //       },
+  //     });
+  //     return result.data.body;
+  //   } catch (e) {
+  //     console.error(e);
+  //   }
+  // };
 
   const InitTodayStepupTable = async (userId: string) => {
-    if (!userId) {
-      router.push("/login");
-      return;
-    }
-
-    const result = await getTodayStepupData(userId);
-    if (result) {
-      setRows(result);
-    }
+    // if (!renderCtx?.userId) {
+    //   router.push("/login");
+    //   return;
+    // }
+    await renderCtx?.fetchTodayTable(userId);
+    // if (result) {
+    //   setRows(result);
+    // }
+    // const result = await getTodayStepupData(renderCtx.userId);
+    // if (result) {
+    //   setRows(result);
+    // }
   };
 
+  // useEffect(() => {
+  //   if (props.shouldRefreshTable && renderCtx?.userId) {
+  //     InitTodayStepupTable(renderCtx?.userId);
+  //   }
+  // }, [props.shouldRefreshTable]);
+
   useEffect(() => {
-    if (props.shouldRefreshTable && props.requestId) {
+    if (props.requestId) {
       InitTodayStepupTable(props.requestId);
     }
-  }, [props.shouldRefreshTable]);
+  }, [props.requestId]);
 
   useEffect(() => {
     if (!props.requestId) {
-      return;
+      InitTodayStepupTable(renderCtx?.userId);
     }
-
-    InitTodayStepupTable(props.requestId);
-  }, [props.requestId]);
+  }, [renderCtx?.userId]);
 
   // useEffect(() => {
   //   const loginUserId = sessionStorage.getItem("userId");
@@ -89,7 +97,7 @@ export default function TodayStepup(props: IProps) {
         emptyContent={"조회된 데이터가 없습니다."}
         tablekey={"today-step-table"}
         columns={columns}
-        rows={rows}
+        rows={renderCtx?.todayRow}
         uniqueKey={"rowNum"}
         total={0}
       />

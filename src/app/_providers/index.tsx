@@ -1,8 +1,10 @@
 "use client";
 
-import { NextUIProvider } from '@nextui-org/react'
+import { NextUIProvider } from "@nextui-org/react";
 import { ThemeProvider as NextThemesProvider, useTheme } from "next-themes";
-import { ThemeProviderProps } from "next-themes/dist/types"
+import { ThemeProviderProps } from "next-themes/dist/types";
+import RenderProvider from "./render";
+import { ToastContainer } from "react-toastify";
 
 export interface ProvidersProps {
   children: React.ReactNode;
@@ -10,11 +12,20 @@ export interface ProvidersProps {
 }
 
 export function Providers({ children, themeProps }: ProvidersProps) {
-
   return (
     <NextUIProvider>
       <NextThemesProvider {...themeProps}>
-        {children}
+        <RenderProvider>
+          {children}
+          <ToastContainer
+            position="top-right"
+            autoClose={false}
+            pauseOnHover={false}
+            hideProgressBar={false}
+            newestOnTop={false}
+            rtl={false}
+          />
+        </RenderProvider>
       </NextThemesProvider>
     </NextUIProvider>
   );

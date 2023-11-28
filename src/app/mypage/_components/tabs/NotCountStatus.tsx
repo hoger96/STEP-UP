@@ -1,5 +1,6 @@
 "use client";
 
+import { useRenderCtx } from "@/app/_providers/render";
 import CommonTable from "@/app/components/Table";
 import axios from "axios";
 import { useRouter } from "next/navigation";
@@ -36,42 +37,35 @@ export default function NotCountStatus(props: IProps) {
     },
   ];
 
-  // const userId = sessionStorage.getItem('loginUserId')
-
   const [rows, setRows] = useState<IHoldStepupData[]>([]);
   const router = useRouter();
+  const renderCtx = useRenderCtx();
 
-  const getHoldStepupData = async (userId: string) => {
-    try {
-      const result = await axios.get("/stepup/api/user/list/hold-exercise", {
-        params: {
-          userId,
-        },
-      });
-      return result.data.body;
-    } catch (e) {
-      console.error(e);
-    }
-  };
+  // const getHoldStepupData = async (userId: string) => {
+  //   try {
+  //     const result = await axios.get("/stepup/api/user/list/hold-exercise", {
+  //       params: {
+  //         userId,
+  //       },
+  //     });
+  //     return result.data.body;
+  //   } catch (e) {
+  //     console.error(e);
+  //   }
+  // };
 
   const InitHoldStepupTable = async (userId: string) => {
-    if (!userId) {
-      router.push("/login");
-      return;
-    }
-
-    const result = await getHoldStepupData(userId);
-    if (result) {
-      setRows(result);
-    }
+    await renderCtx?.fetchHoldTable(userId);
   };
 
   useEffect(() => {
-    if (!props.requestId) {
-      return;
+    if (props.requestId) {
+      InitHoldStepupTable(props.requestId);
     }
-    InitHoldStepupTable(props.requestId);
-  }, []);
+  }, [props.requestId]);
+  useEffect(() => {
+    if (!props.requestId) InitHoldStepupTable(renderCtx?.userId);
+  }, [renderCtx?.userId]);
 
   return (
     <div>
@@ -79,7 +73,7 @@ export default function NotCountStatus(props: IProps) {
         emptyContent={"조회된 데이터가 없습니다."}
         tablekey={"hold-step-table"}
         columns={columns}
-        rows={rows}
+        rows={renderCtx?.holdRow}
         uniqueKey={"rowNum"}
         total={0}
       />

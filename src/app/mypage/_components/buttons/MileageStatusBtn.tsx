@@ -9,6 +9,7 @@ import axios from "axios";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer, toast } from "react-toastify";
 import { useRouter } from "next/navigation";
+import { useRenderCtx } from "@/app/_providers/render";
 
 interface IApplyUseMileageParams {
   approvalReqDt: string;
@@ -22,9 +23,6 @@ interface IProps {
 }
 
 export default function MileageStatusBtn(props: IProps) {
-  // const [userId, setUserId] = useState<string>()
-  const userId = sessionStorage.getItem("loginUserId");
-
   // 마일리지 사용 신청 팝업 데이터
   const [approvalReqDt, setApprovalReqDt] = useState(new Date()); // 신청일자
   const [approvalReqType, setApprovalReqType] = useState<string>("EARLY_OFF"); // 신청타입
@@ -32,6 +30,7 @@ export default function MileageStatusBtn(props: IProps) {
   const [isUseMileagePOpen, setIsUseMileagePOpen] = useState(false);
   const [isAllUseMileagePOpen, setIsAllUseMileagePOpen] = useState(false);
   const router = useRouter();
+  const renderCtx = useRenderCtx();
 
   // 마일리지 사용 신청 팝업
   const handleUseMileage = () => {
@@ -52,7 +51,7 @@ export default function MileageStatusBtn(props: IProps) {
     return {
       approvalReqDt: new Date(approvalReqDt).toISOString().split("T")[0],
       approvalReqType,
-      userId,
+      userId: renderCtx?.userId,
     };
   };
 
@@ -70,16 +69,20 @@ export default function MileageStatusBtn(props: IProps) {
   };
 
   const onConfirmUseMileageP = async () => {
-    if (!userId) {
+    if (!renderCtx?.userId) {
       router.push("/login");
       return;
     }
 
-    const params = setParams(approvalReqDt, approvalReqType, userId);
+    const params = setParams(approvalReqDt, approvalReqType, renderCtx.userId);
     const isSuccess = await applyUseMileage(params);
     if (isSuccess) {
       setIsUseMileagePOpen(false);
       props.onRefreshTable();
+      if (renderCtx) {
+        await renderCtx.fetchSession(renderCtx?.userId);
+        await renderCtx.fetchMileageTable(renderCtx?.userId);
+      }
       toast.success(`마일리지 사용 신청을 완료했어요 :)`);
     } else {
       toast.error("마일리지가 부족해요!");
@@ -111,7 +114,7 @@ export default function MileageStatusBtn(props: IProps) {
           radius={"sm"}
           color={"primary"}
           variant={"solid"}
-          isDisabled={userId !== props.requestId}
+          isDisabled={renderCtx?.userId !== props.requestId}
           onClick={handleUseMileage}
         />
         <CommonModal

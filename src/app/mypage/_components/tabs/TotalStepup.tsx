@@ -1,5 +1,6 @@
 "use client";
 
+import { useRenderCtx } from "@/app/_providers/render";
 import CommonButton from "@/app/components/Buttons";
 import CommonModal from "@/app/components/Confirm";
 import CommonTable from "@/app/components/Table";
@@ -8,6 +9,7 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
+import { StringDecoder } from "string_decoder";
 
 interface ITotalStepupData {
   rowNum: number;
@@ -27,6 +29,22 @@ interface IRows {
   stepUpId: string;
 }
 
+interface ITotalResponse<T> {
+  data: T[];
+  currentPage: number;
+  totalPage: number;
+  totalCount: number;
+  limit: number;
+}
+
+interface ITotalTable {
+  rowNum: number;
+  stepUpId: string;
+  achievementDt: string;
+  mileageUseYn: string;
+  delYn: string;
+}
+
 export default function TotalStepup(props: IProps) {
   const columns = [
     {
@@ -43,13 +61,13 @@ export default function TotalStepup(props: IProps) {
     },
   ];
 
-  // const userId = sessionStorage.getItem('loginUserId')
   const [rows, setRows] = useState<ITotalStepupData[]>([]);
   const [currentPage, setCurrentPage] = useState<number>();
   const [totalPage, setTotalPage] = useState<number>();
   const [isConfirmOpen, setIsConfrimOpen] = useState(false);
   const [stepupId, setStepupId] = useState<string>();
   const router = useRouter();
+  const renderCtx = useRenderCtx();
 
   const deleteStepupList = async (stepUpId: string) => {
     try {
@@ -66,8 +84,8 @@ export default function TotalStepup(props: IProps) {
   const handleDeleteBtnClick = async (stepupId: string) => {
     const isSuccess = await deleteStepupList(stepupId);
     if (isSuccess) {
-      setIsConfrimOpen(false)
-      initTotalSetupTable(props.requestId, currentPage ?? 1)
+      setIsConfrimOpen(false);
+      initTotalSetupTable(props.requestId, currentPage ?? 1);
       toast.success("삭제되었어요!");
     }
   };
@@ -78,11 +96,8 @@ export default function TotalStepup(props: IProps) {
     switch (columnKey) {
       case "action":
         return (
-          <Tooltip
-            color="secondary"
-            content={"버튼을 누르면 삭제할 수 있어요!"}
-          >
-            <span className="inline-block text-danger cursor-pointer">
+          <Tooltip color="danger" content={"버튼을 눌러 삭제해보아요!"}>
+            <span className="text-lg text-danger cursor-pointer active:opacity-50">
               <CommonButton
                 label={"삭제"}
                 size={"sm"}
@@ -90,7 +105,7 @@ export default function TotalStepup(props: IProps) {
                 color={"secondary"}
                 variant={"bordered"}
                 onClick={() => {
-                  setStepupId(items.stepUpId)
+                  setStepupId(items.stepUpId);
                   setIsConfrimOpen(true);
                 }}
                 className="border"
@@ -103,55 +118,54 @@ export default function TotalStepup(props: IProps) {
     }
   }, []);
 
-  const getTotalStepupData = async (userId: string, currentPage: number) => {
-    try {
-      const result = await axios.get("/stepup/api/user/list/exercise", {
-        params: {
-          currentPage,
-          limit: 5,
-          userId,
-        },
-      });
-      return result.data.body;
-    } catch (e) {
-      console.error(e);
-    }
-  };
+  // const getTotalStepupData = async (userId: string, currentPage: number) => {
+  //   try {
+  //     const result = await axios.get("/stepup/api/user/list/exercise", {
+  //       params: {
+  //         currentPage,
+  //         limit: 5,
+  //         userId,
+  //       },
+  //     });
+  //     return result.data.body;
+  //   } catch (e) {
+  //     console.error(e);
+  //   }
+  // };
 
   const initTotalSetupTable = async (userId: string, currentPage: number) => {
-    if (!userId) {
-      router.push("/login");
-      return;
-    }
-
-    const result = await getTotalStepupData(userId, currentPage);
-    if (result) {
-      setRows(result.data);
-      setCurrentPage(result.currentPage);
-      setTotalPage(result.totalPage);
-    }
+    await renderCtx?.fetchTotalTable(userId, currentPage);
+    // if (result) {
+    //   setRows(result.data);
+    //   setCurrentPage(result.currentPage);
+    //   setTotalPage(result.totalPage);
+    // }
   };
 
   const onPageChange = (page: number) => {
-    if (!props.requestId) {
-      return;
+    // if (!props.requestId) {
+    //   return;
+    // }
+    if (props.requestId) initTotalSetupTable(props.requestId, page);
+    else {
+      initTotalSetupTable(renderCtx?.userId, page);
     }
-    initTotalSetupTable(props.requestId, page);
   };
 
+  // useEffect(() => {
+  //   if (props.shouldRefreshTable && props.requestId) {
+  //     initTotalSetupTable(props.requestId, 1);
+  //   }
+  // }, [props.shouldRefreshTable]);
+
   useEffect(() => {
-    if (props.shouldRefreshTable && props.requestId) {
+    if (props.requestId) {
       initTotalSetupTable(props.requestId, 1);
     }
-  }, [props.shouldRefreshTable]);
-
+  }, [props.requestId]);
   useEffect(() => {
-    if (!props.requestId) {
-      return;
-    }
-
-    initTotalSetupTable(props.requestId, 1);
-  }, []);
+    if (!props.requestId) initTotalSetupTable(renderCtx?.userId, 1);
+  }, [renderCtx?.userId]);
 
   return (
     <div>
@@ -161,10 +175,10 @@ export default function TotalStepup(props: IProps) {
         useRenderCell={true}
         renderCell={renderCell}
         columns={columns}
-        rows={rows}
+        rows={renderCtx?.totalRow}
         uniqueKey={"rowNum"}
-        currentPage={currentPage}
-        total={totalPage ?? 0}
+        currentPage={renderCtx?.currentPage}
+        total={renderCtx?.totalPage ?? 0}
         onChange={(page) => onPageChange(page)}
       />
       <ToastContainer autoClose={2000} hideProgressBar={true} />
@@ -176,7 +190,7 @@ export default function TotalStepup(props: IProps) {
         onClose={() => {
           setIsConfrimOpen(false);
         }}
-        onConfirmBtn={() => handleDeleteBtnClick(stepupId ?? '')}
+        onConfirmBtn={() => handleDeleteBtnClick(stepupId ?? "")}
       />
     </div>
   );

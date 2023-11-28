@@ -32,7 +32,6 @@ export default function AllHoldStepupP(props: IProps) {
     },
   ];
 
-  // const userId = sessionStorage.getItem("userId");
   const [currentPage, setCurrentPage] = useState<number>();
   const [totalPage, setTotalPage] = useState<number>();
   const [rows, setRows] = useState<ITotalStepupData[]>([]);
@@ -61,11 +60,6 @@ export default function AllHoldStepupP(props: IProps) {
     userId: string,
     currentPage: number
   ) => {
-    if (!userId) {
-      router.push("/login");
-      return;
-    }
-
     const result = await getAllHoldStepupData(userId, currentPage);
     if (result) {
       setRows(result.data);

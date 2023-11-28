@@ -8,27 +8,19 @@ import HoldPopup from "./HoldPopup";
 import { ToastContainer, toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 import { Tooltip } from "@nextui-org/react";
+import { useRenderCtx } from "../_providers/render";
 
 export default function Header() {
   const [openSignal, setOpenSignal] = useState(false);
-  const [loginUserId, setLoginUserId] = useState<string | null>(null);
-  const [loginUserName, setLoginUserName] = useState<string | null>(null);
-  const [loginUserMaster, setLoginUserMaster] = useState<string | null>(null);
   const [startDate, setStartDate] = useState<Date>();
   const [endDate, setEndDate] = useState<Date>();
   const [reason, setReason] = useState<string>("");
   const router = useRouter();
+  const renderCtx = useRenderCtx();
 
   const handleLogout = async () => {
     try {
       await axios.get("/stepup/api/logout");
-      sessionStorage.removeItem("loginUserId");
-      sessionStorage.removeItem("loginUserName");
-      sessionStorage.removeItem("loginUserMaster");
-      sessionStorage.removeItem("holdYn");
-      setLoginUserId(null);
-      setLoginUserName(null);
-      setLoginUserMaster(null);
       router.push("/login");
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -78,9 +70,13 @@ export default function Header() {
             holdStartDt: formatDate(startDate),
             holdEndDt: formatDate(endDate),
             holdCntn: reason,
-            userId: loginUserId,
+            userId: renderCtx?.userId,
           };
           await axios.post("/stepup/api/user/hold/exercise", params);
+          if (renderCtx) {
+            await renderCtx.fetchSession(renderCtx.userId);
+            await renderCtx.fetchHoldTable(renderCtx.userId);
+          }
           setOpenSignal(false);
           toast.success("보류 등록을 완료했습니다.");
         }
@@ -91,123 +87,130 @@ export default function Header() {
     }
   };
 
-  useEffect(() => {
-    const savedLoginUserId = sessionStorage.getItem("loginUserId");
-    const savedLoginUserName = sessionStorage.getItem("loginUserName");
-    const savedLoginUserMaster = sessionStorage.getItem("loginUserMaster");
-
-    if (savedLoginUserId && savedLoginUserName && savedLoginUserMaster) {
-      setLoginUserId(savedLoginUserId);
-      setLoginUserName(savedLoginUserName);
-      setLoginUserMaster(savedLoginUserMaster);
-    }
-  }, []);
-
   return (
     <div>
       <ToastContainer position="top-right" autoClose={2000} />
-      {loginUserId && (
-        <div className="py-3 px-5 flex justify-between items-center border-b">
-          <h1>
-            <img
-              src="/icons/logo.svg"
-              width="130"
-              height="auto"
-              alt="step-up logo"
-            />
-          </h1>
+      <div className="py-3 px-5 flex justify-between items-center border-b">
+        <h1>
+          <img
+            src="/icons/logo.svg"
+            width="130"
+            height="auto"
+            alt="step-up logo"
+          />
+        </h1>
 
-          <nav>
-            <Link
-              href={`/mypage/${loginUserId}`}
-              className="px-3 py-1 mx-3 cursor-pointer text-black-2 font-semibold hover:text-primary-4"
-            >
-              나의 현황
-            </Link>
-            {loginUserMaster === "Y" && (
-              <Link
-                href="/confirm"
-                className="px-3 py-1 mx-3 cursor-pointer text-black-2 font-semibold hover:text-primary-4"
-              >
-                결재 현황
-              </Link>
-            )}
-            <Link
-              href="/example"
-              className="px-3 py-1 mx-3 cursor-pointer text-black-2 font-semibold hover:text-primary-4"
-            >
-              공통 컴포넌트 보러가기
-            </Link>
-          </nav>
-          <div className="flex items-center">
-            <div className="flex-center border rounded-full px-3 py-1">
-              <span className="mr-1 text-default-300 text-sm font-medium">
-                {loginUserName}
-              </span>
-              <img src="/icons/user.svg" width="10" height="auto" alt="" />
-            </div>
-            <Tooltip
-              color="default"
-              content={"스텝업 보류하기"}
-              classNames={{ base: "border-primary" }}
-            >
-              <div className="inline-block text-danger cursor-pointer">
-                <CommonButton
-                  size="sm"
-                  color="primary"
-                  variant="light"
-                  isIconOnly
-                  className="ml-2 font-semibold"
-                  onClick={handleOpenHoldPopup}
-                >
-                  <img
-                    src="/icons/setting.svg"
-                    width="18"
-                    height="auto"
-                    alt="logout"
-                  />
-                </CommonButton>
-              </div>
-            </Tooltip>
-            <CommonButton
-              size="sm"
-              color="primary"
-              variant="light"
-              isIconOnly
-              className="ml-1"
-              onClick={handleLogout}
-            >
-              <img
-                src="/icons/logout.svg"
-                width="18"
-                height="auto"
-                alt="logout"
-              />
-            </CommonButton>
-            <CommonModal
-              title={"스텝업 보류하기"}
-              contents={
-                <HoldPopup
-                  startDate={startDate}
-                  endDate={endDate}
-                  reason={reason}
-                  setStartDate={setStartDate}
-                  setEndDate={setEndDate}
-                  setReason={setReason}
-                />
-              }
-              isOpen={openSignal}
-              size={"lg"}
-              onClose={() => {
-                setOpenSignal(false);
-              }}
-              onConfirmBtn={() => {
-                handleConfirm();
-              }}
-            />
+        <nav>
+          <Link
+            href={`/mypage/${renderCtx?.userId}`}
+            className="px-3 py-1 mx-3 cursor-pointer text-black-2 font-semibold hover:text-primary-4"
+          >
+            나의 현황
+          </Link>
+          <Link
+            href="/confirm"
+            className="px-3 py-1 mx-3 cursor-pointer text-black-2 font-semibold hover:text-primary-4"
+          >
+            결재 현황
+          </Link>
+          <Link
+            href="/example"
+            className="px-3 py-1 mx-3 cursor-pointer text-black-2 font-semibold hover:text-primary-4"
+          >
+            공통 컴포넌트 보러가기
+          </Link>
+        </nav>
+        <div className="flex items-center">
+          <div className="flex-center border rounded-full px-3 py-1">
+            <span className="mr-1 text-default-300 text-sm font-medium">
+              {renderCtx?.userNm}
+            </span>
+            <img src="/icons/user.svg" width="10" height="auto" alt="" />
           </div>
+          <Tooltip
+            color="default"
+            content={"스텝업 보류하기"}
+            classNames={{ base: "border-primary" }}
+          >
+            <div className="inline-block text-danger cursor-pointer">
+              <CommonButton
+                size="sm"
+                color="primary"
+                variant="light"
+                isIconOnly
+                className="ml-2 font-semibold"
+                onClick={handleOpenHoldPopup}
+              >
+                <img
+                  src="/icons/setting.svg"
+                  width="18"
+                  height="auto"
+                  alt="logout"
+                />
+              </CommonButton>
+            </div>
+          </Tooltip>
+          <CommonButton
+            size="sm"
+            color="primary"
+            variant="light"
+            isIconOnly
+            className="ml-1"
+            onClick={handleLogout}
+          >
+            <img
+              src="/icons/logout.svg"
+              width="18"
+              height="auto"
+              alt="logout"
+            />
+          </CommonButton>
+          <CommonModal
+            title={"스텝업 보류하기"}
+            scrollBehavior={"inside"}
+            contents={
+              <HoldPopup
+                startDate={startDate}
+                endDate={endDate}
+                reason={reason}
+                setStartDate={setStartDate}
+                setEndDate={setEndDate}
+                setReason={setReason}
+              />
+            }
+            isOpen={openSignal}
+            size={"lg"}
+            onClose={() => {
+              setOpenSignal(false);
+            }}
+            onConfirmBtn={() => {
+              handleConfirm();
+            }}
+          />
         </div>
-      )}
+        <CommonModal
+          title={"스텝업 보류하기"}
+          scrollBehavior={"inside"}
+          contents={
+            <HoldPopup
+              startDate={startDate}
+              endDate={endDate}
+              reason={reason}
+              setStartDate={setStartDate}
+              setEndDate={setEndDate}
+              setReason={setReason}
+            />
+          }
+          isOpen={openSignal}
+          size={"lg"}
+          onClose={() => {
+            setOpenSignal(false);
+          }}
+          onConfirmBtn={() => {
+            handleConfirm();
+          }}
+        />
+      </div>
     </div>
   );
 }
