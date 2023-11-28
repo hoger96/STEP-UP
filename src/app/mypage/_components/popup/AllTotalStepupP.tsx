@@ -27,8 +27,6 @@ export default function AllTotalStepupP(props: IProps) {
       label: "마일리지 사용 여부",
     },
   ];
-
-  // const userId = sessionStorage.getItem('loginUserId')
   const [currentPage, setCurrentPage] = useState<number>();
   const [totalPage, setTotalPage] = useState<number>();
   const [rows, setRows] = useState<ITotalStepupData[]>([]);

@@ -7,6 +7,8 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { ToastContainer, TypeOptions, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Image from "next/image";
+import { useRenderCtx } from "@/app/_providers/render";
 
 export default function LoginForm() {
   const [userId, setUserId] = useState<string>("");
@@ -15,6 +17,7 @@ export default function LoginForm() {
   const [userPwCheck, setUserPwCheck] = useState(false);
   const [isRememberId, setIsRememberId] = useState(false);
   const router = useRouter();
+  const renderCtx = useRenderCtx();
 
   const loginValidation = () => {
     let isValid = true;
@@ -48,19 +51,15 @@ export default function LoginForm() {
       }
       const isValid = loginValidation();
       if (isValid) {
-        const result = await axios.post("/stepup/api/login", {
-          userId,
-          password,
-        });
-        sessionStorage.setItem("loginUserId", result.data.body.userId);
-        sessionStorage.setItem("loginUserName", result.data.body.userNm);
-        sessionStorage.setItem("loginUserMaster", result.data.body.masterYn);
-        sessionStorage.setItem("holdYn", result.data.body.holdYn);
-
-        if (result.data.body.masterYn === "Y") {
+        // const result = await axios.post("/stepup/api/login", {
+        //   userId,
+        //   password,
+        // });
+        if (renderCtx) renderCtx.login(userId, password);
+        if (renderCtx?.master === "Y") {
           router.push("/confirm");
-        } else if (result.data.body.masterYn === "N") {
-          router.push(`/mypage/${result.data.body.userId}`);
+        } else {
+          router.push(`/mypage/${renderCtx?.userId}`);
         }
       }
     } catch (error: any) {

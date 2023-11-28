@@ -1,5 +1,6 @@
 "use client";
 
+import { useRenderCtx } from "@/app/_providers/render";
 import CommonButton from "@/app/components/Buttons";
 import CommonTable from "@/app/components/Table";
 import { Chip, ChipProps, Tooltip } from "@nextui-org/react";
@@ -27,6 +28,7 @@ interface IRows {
 
 export default function MileageStatus(props: IProps) {
   const router = useRouter();
+  const renderCtx = useRenderCtx();
   const columns = [
     {
       key: "rowNum",
@@ -54,10 +56,9 @@ export default function MileageStatus(props: IProps) {
     },
   ];
 
-  const userId = sessionStorage.getItem("loginUserId");
   const [rows, setRows] = useState([]);
   const [isConfirmOpen, setIsConfrimOpen] = useState(false);
-  const [approvalId, setApprovalId] = useState<string>()
+  const [approvalId, setApprovalId] = useState<string>();
   // type Item = (typeof rows)[0];
 
   const statusColorMap: Record<string, ChipProps["color"]> = {
@@ -96,7 +97,8 @@ export default function MileageStatus(props: IProps) {
     }
     const isSuccess = await cancelApproval(data);
     if (isSuccess) {
-      setIsConfrimOpen(false)
+      setIsConfrimOpen(false);
+      if (renderCtx) await renderCtx.fetchSession();
       initMileageStatusTable(userId);
       toast.success("신청이 취소되었어요!");
     }
@@ -122,17 +124,18 @@ export default function MileageStatus(props: IProps) {
           <Tooltip
             color="secondary"
             content={
-              userId !== props.requestId
+              renderCtx?.userId !== props.requestId
                 ? "내 신청만 취소할 수 있어요!"
                 : items?.approvalStus !== "WAIT"
-                  ? "신청을 취소할 수 없어요!"
-                  : "버튼을 누르면 신청을 취소할 수 있어요!"
+                ? "신청을 취소할 수 없어요!"
+                : "버튼을 누르면 신청을 취소할 수 있어요!"
             }
           >
             <span
               className={cn("inline-block text-danger cursor-pointer", {
                 "!cursor-not-allowed":
-                  items?.approvalStus !== "WAIT" || userId !== props.requestId,
+                  items?.approvalStus !== "WAIT" ||
+                  renderCtx?.userId !== props.requestId,
               })}
             >
               <CommonButton
@@ -141,12 +144,17 @@ export default function MileageStatus(props: IProps) {
                 radius={"sm"}
                 color={"secondary"}
                 variant={"bordered"}
-                isDisabled={
-                  items?.approvalStus !== "WAIT" || userId !== props.requestId
-                }
+                // isDisabled={
+                //   items?.approvalStus !== "WAIT" ||
+                //   renderCtx?.userId !== props.requestId
+                // }
                 onClick={() => {
-                  setApprovalId(items?.approvalId)
-                  setIsConfrimOpen(true)
+                  setApprovalId(items?.approvalId);
+                  setIsConfrimOpen(true);
+                  handleCancelBtnClick(
+                    items.approvalId,
+                    renderCtx?.userId ? renderCtx.userId : ""
+                  );
                 }}
                 className="border"
               />
@@ -158,18 +166,19 @@ export default function MileageStatus(props: IProps) {
     }
   }, []);
 
-  const getMileageStatusData = async (userId: string) => {
-    try {
-      const result = await axios.get("/stepup/api/user/list/mileage", {
-        params: {
-          userId,
-        },
-      });
-      return result.data.body;
-    } catch (e) {
-      console.error(e);
-    }
-  };
+  // const getMileageStatusData = async (userId: string) => {
+  //   try {
+  //     const result = await axios.get("/stepup/api/user/list/mileage", {
+  //       params: {
+  //         userId,
+  //       },
+  //     });
+
+  //     return result.data.body;
+  //   } catch (e) {
+  //     console.error(e);
+  //   }
+  // };
 
   const initMileageStatusTable = async (userId: string) => {
     if (!userId) {
@@ -177,22 +186,22 @@ export default function MileageStatus(props: IProps) {
       return;
     }
 
-    const result = await getMileageStatusData(userId);
-    setRows(result);
+    const result = await renderCtx?.fetchMileageTable(userId);
+    if (result) setRows(result);
   };
 
-  useEffect(() => {
-    if (props.shouldRefreshTable && props.requestId) {
-      initMileageStatusTable(props.requestId);
-    }
-  }, [props.shouldRefreshTable]);
+  // useEffect(() => {
+  //   if (props.shouldRefreshTable && props.requestId) {
+  //     initMileageStatusTable(props.requestId);
+  //   }
+  // }, [props.shouldRefreshTable]);
 
   useEffect(() => {
-    if (!props.requestId) {
-      return;
-    }
+    // if (!props.requestId) {
+    //   return;
+    // }
 
-    initMileageStatusTable(props.requestId);
+    initMileageStatusTable(renderCtx?.userId);
   }, []);
 
   return (
@@ -203,7 +212,7 @@ export default function MileageStatus(props: IProps) {
         useRenderCell={true}
         renderCell={renderCell}
         columns={columns}
-        rows={rows}
+        rows={renderCtx?.mileageRow}
         uniqueKey={"rowNum"}
         total={0}
       />
@@ -216,7 +225,12 @@ export default function MileageStatus(props: IProps) {
         onClose={() => {
           setIsConfrimOpen(false);
         }}
-        onConfirmBtn={() => handleCancelBtnClick(approvalId ?? '', userId ? userId : "")}
+        onConfirmBtn={() =>
+          handleCancelBtnClick(
+            approvalId ?? "",
+            renderCtx?.userId ? renderCtx?.userId : ""
+          )
+        }
       />
     </div>
   );

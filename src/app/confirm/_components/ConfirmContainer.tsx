@@ -5,6 +5,7 @@ import { SearchBar } from "./SearchBar";
 import axios from "axios";
 import CommonButton from "@/app/components/Buttons";
 import { useRouter } from "next/navigation";
+import { useRenderCtx } from "@/app/_providers/render";
 
 interface ISearchParams extends ICurrentPage {
   searchType?: string;
@@ -36,8 +37,8 @@ interface IWrap<T> {
 }
 
 export default function ConfirmContainer() {
+  const renderCtx = useRenderCtx();
   const router = useRouter();
-  const userId = sessionStorage.getItem("loginUserId");
   const [fetchDataResult, setFetchDataResult] =
     useState<IWrap<IManagementApproval>>(); // 결재 현황 API 조회 결과
   const now = new Date();
@@ -63,7 +64,7 @@ export default function ConfirmContainer() {
 
   const getApprovalListData = async (searchOption: ISearchParams) => {
     try {
-      if (!userId) {
+      if (!renderCtx?.userId) {
         router.push("/login");
         return;
       }

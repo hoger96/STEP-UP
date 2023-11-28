@@ -7,6 +7,7 @@ import CreateTodayStepupP from "../popup/CreateTodayStepupP";
 import axios, { AxiosError } from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import { useRouter } from "next/navigation";
+import { useRenderCtx } from "@/app/_providers/render";
 
 interface IProps {
   requestId: string;
@@ -14,8 +15,6 @@ interface IProps {
 }
 
 export default function TodayStepupBtn(props: IProps) {
-  const userId = sessionStorage.getItem("loginUserId");
-
   const [isOpen, setIsOpen] = useState(false);
   const [todayDate, setTodayDate] = useState(
     new Date().toISOString().split("T")[0]
@@ -23,7 +22,7 @@ export default function TodayStepupBtn(props: IProps) {
   const [startTm, setStartTm] = useState<Date>(new Date());
   const [endTm, setEndTm] = useState<Date>(new Date());
   const [file, setFile] = useState<any>("");
-  const holdYn = sessionStorage.getItem("holdYn");
+  const renderCtx = useRenderCtx();
   const router = useRouter();
 
   const handelOpenCreateTodayStepupPopup = () => {
@@ -79,15 +78,20 @@ export default function TodayStepupBtn(props: IProps) {
   };
 
   const onConfirmBtn = async () => {
-    if (!userId) {
+    if (!renderCtx?.userId) {
       router.push("/login");
       return;
     }
-    const params = await setParams(startTm, endTm, userId, file);
+    const params = await setParams(startTm, endTm, renderCtx.userId, file);
     if (params) {
       const isSuccess = await createTodayStepup(params);
       if (isSuccess) {
         setIsOpen(false);
+        props.onRefreshTable();
+        if (renderCtx) {
+          await renderCtx.fetchSession();
+          await renderCtx.fetchTodayTable(renderCtx?.userId);
+        }
         toast.success("축하합니다! 오늘의 운동기록을 기록하셨군요 :)");
         props.onRefreshTable();
       }
@@ -110,7 +114,7 @@ export default function TodayStepupBtn(props: IProps) {
           radius={"sm"}
           color={"primary"}
           variant={"solid"}
-          isDisabled={userId !== props.requestId || holdYn === "Y"}
+          // isDisabled={userId !== props.requestId || renderCtx?.hold === "Y"}
           onClick={handelOpenCreateTodayStepupPopup}
           className="mb-3"
         />

@@ -32,7 +32,6 @@ export default function AllHoldStepupP(props: IProps) {
     },
   ];
 
-  // const userId = sessionStorage.getItem("userId");
   const [currentPage, setCurrentPage] = useState<number>();
   const [totalPage, setTotalPage] = useState<number>();
   const [rows, setRows] = useState<ITotalStepupData[]>([]);

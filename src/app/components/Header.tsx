@@ -8,27 +8,19 @@ import HoldPopup from "./HoldPopup";
 import { ToastContainer, toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 import { Tooltip } from "@nextui-org/react";
+import { useRenderCtx } from "../_providers/render";
 
 export default function Header() {
   const [openSignal, setOpenSignal] = useState(false);
-  const [loginUserId, setLoginUserId] = useState<string | null>(null);
-  const [loginUserName, setLoginUserName] = useState<string | null>(null);
-  const [loginUserMaster, setLoginUserMaster] = useState<string | null>(null);
   const [startDate, setStartDate] = useState<Date>();
   const [endDate, setEndDate] = useState<Date>();
   const [reason, setReason] = useState<string>("");
   const router = useRouter();
+  const renderCtx = useRenderCtx();
 
   const handleLogout = async () => {
     try {
       await axios.get("/stepup/api/logout");
-      sessionStorage.removeItem("loginUserId");
-      sessionStorage.removeItem("loginUserName");
-      sessionStorage.removeItem("loginUserMaster");
-      sessionStorage.removeItem("holdYn");
-      setLoginUserId(null);
-      setLoginUserName(null);
-      setLoginUserMaster(null);
       router.push("/login");
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -78,9 +70,10 @@ export default function Header() {
             holdStartDt: formatDate(startDate),
             holdEndDt: formatDate(endDate),
             holdCntn: reason,
-            userId: loginUserId,
+            userId: renderCtx?.userId,
           };
           await axios.post("/stepup/api/user/hold/exercise", params);
+          if (renderCtx) await renderCtx.fetchSession();
           setOpenSignal(false);
           toast.success("보류 등록을 완료했습니다.");
         }
@@ -91,22 +84,10 @@ export default function Header() {
     }
   };
 
-  useEffect(() => {
-    const savedLoginUserId = sessionStorage.getItem("loginUserId");
-    const savedLoginUserName = sessionStorage.getItem("loginUserName");
-    const savedLoginUserMaster = sessionStorage.getItem("loginUserMaster");
-
-    if (savedLoginUserId && savedLoginUserName && savedLoginUserMaster) {
-      setLoginUserId(savedLoginUserId);
-      setLoginUserName(savedLoginUserName);
-      setLoginUserMaster(savedLoginUserMaster);
-    }
-  }, []);
-
   return (
     <div>
       <ToastContainer position="top-right" autoClose={2000} />
-      {loginUserId && (
+      {renderCtx?.userId && (
         <div className="py-3 px-5 flex justify-between items-center border-b">
           <h1>
             <img
@@ -119,12 +100,12 @@ export default function Header() {
 
           <nav>
             <Link
-              href={`/mypage/${loginUserId}`}
+              href={`/mypage/${renderCtx?.userId}`}
               className="px-3 py-1 mx-3 cursor-pointer text-black-2 font-semibold hover:text-primary-4"
             >
               나의 현황
             </Link>
-            {loginUserMaster === "Y" && (
+            {renderCtx?.master === "Y" && (
               <Link
                 href="/confirm"
                 className="px-3 py-1 mx-3 cursor-pointer text-black-2 font-semibold hover:text-primary-4"
@@ -142,7 +123,7 @@ export default function Header() {
           <div className="flex items-center">
             <div className="flex-center border rounded-full px-3 py-1">
               <span className="mr-1 text-default-300 text-sm font-medium">
-                {loginUserName}
+                {renderCtx?.userNm}
               </span>
               <img src="/icons/user.svg" width="10" height="auto" alt="" />
             </div>
@@ -186,6 +167,7 @@ export default function Header() {
             </CommonButton>
             <CommonModal
               title={"스텝업 보류하기"}
+              scrollBehavior={"inside"}
               contents={
                 <HoldPopup
                   startDate={startDate}

@@ -1,5 +1,6 @@
 "use client";
 
+import { useRenderCtx } from "@/app/_providers/render";
 import CommonTable from "@/app/components/Table";
 import axios from "axios";
 import { useRouter } from "next/navigation";
@@ -36,10 +37,9 @@ export default function NotCountStatus(props: IProps) {
     },
   ];
 
-  // const userId = sessionStorage.getItem('loginUserId')
-
   const [rows, setRows] = useState<IHoldStepupData[]>([]);
   const router = useRouter();
+  const renderCtx = useRenderCtx();
 
   const getHoldStepupData = async (userId: string) => {
     try {
@@ -67,10 +67,10 @@ export default function NotCountStatus(props: IProps) {
   };
 
   useEffect(() => {
-    if (!props.requestId) {
-      return;
-    }
-    InitHoldStepupTable(props.requestId);
+    // if (!props.requestId) {
+    //   return;
+    // }
+    InitHoldStepupTable(renderCtx?.userId);
   }, []);
 
   return (
