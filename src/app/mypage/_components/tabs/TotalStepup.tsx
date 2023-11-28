@@ -74,7 +74,10 @@ export default function TotalStepup(props: IProps) {
     switch (columnKey) {
       case "action":
         return (
-          <Tooltip color="secondary" content={"버튼을 눌러 삭제해보아요!"}>
+          <Tooltip
+            color="secondary"
+            content={"버튼을 누르면 삭제할 수 있어요!"}
+          >
             <span className="inline-block text-danger cursor-pointer">
               <CommonButton
                 label={"삭제"}

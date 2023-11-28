@@ -35,7 +35,7 @@ export default function CommonInput(props: {
         label: "text-left font-semibold w-28",
         input: ["w-64", "placeholder:text-default-200", "caret-primary-50"],
         inputWrapper: ["!bg-white", "border", "shadow-inherit"],
-        mainWrapper: cn({ "w-full": props.fullWidth }),
+        mainWrapper: cn({ "flex-1": props.fullWidth }),
       }}
       className={props.className}
       type={props.type ? props.type : "text"}

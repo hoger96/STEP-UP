@@ -43,11 +43,11 @@ export default function ApprovalButton(props: {
       {props.approvalStatus === "WAIT" && (
         <div className="flex">
           <CommonButton
-            color={"secondary"}
-            variant={"solid"}
+            color={"primary"}
+            variant={"bordered"}
             onClick={() => handleReject(props.approvalId)}
             label={"반려"}
-            className="mr-1"
+            className="mr-1 border"
           />
           <CommonButton
             color={"primary"}
