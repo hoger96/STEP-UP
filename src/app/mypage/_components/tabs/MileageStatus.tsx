@@ -8,6 +8,7 @@ import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import cn from "clsx";
+import CommonModal from "@/app/components/Confirm";
 
 interface IProps {
   shouldRefreshTable: boolean;
@@ -55,6 +56,8 @@ export default function MileageStatus(props: IProps) {
 
   const userId = sessionStorage.getItem("loginUserId");
   const [rows, setRows] = useState([]);
+  const [isConfirmOpen, setIsConfrimOpen] = useState(false);
+  const [approvalId, setApprovalId] = useState<string>()
   // type Item = (typeof rows)[0];
 
   const statusColorMap: Record<string, ChipProps["color"]> = {
@@ -93,6 +96,7 @@ export default function MileageStatus(props: IProps) {
     }
     const isSuccess = await cancelApproval(data);
     if (isSuccess) {
+      setIsConfrimOpen(false)
       initMileageStatusTable(userId);
       toast.success("신청이 취소되었어요!");
     }
@@ -121,8 +125,8 @@ export default function MileageStatus(props: IProps) {
               userId !== props.requestId
                 ? "내 신청만 취소할 수 있어요!"
                 : items?.approvalStus !== "WAIT"
-                ? "신청을 취소할 수 없어요!"
-                : "버튼을 누르면 신청을 취소할 수 있어요!"
+                  ? "신청을 취소할 수 없어요!"
+                  : "버튼을 누르면 신청을 취소할 수 있어요!"
             }
           >
             <span
@@ -141,7 +145,8 @@ export default function MileageStatus(props: IProps) {
                   items?.approvalStus !== "WAIT" || userId !== props.requestId
                 }
                 onClick={() => {
-                  handleCancelBtnClick(items.approvalId, userId ? userId : "");
+                  setApprovalId(items?.approvalId)
+                  setIsConfrimOpen(true)
                 }}
                 className="border"
               />
@@ -160,7 +165,6 @@ export default function MileageStatus(props: IProps) {
           userId,
         },
       });
-      console.log(result.data.body);
       return result.data.body;
     } catch (e) {
       console.error(e);
@@ -204,6 +208,16 @@ export default function MileageStatus(props: IProps) {
         total={0}
       />
       <ToastContainer autoClose={2000} hideProgressBar={true} />
+      <CommonModal
+        title={"확인"}
+        contents={"마일리지 사용 신청을 취소하시겠습니까?"}
+        isOpen={isConfirmOpen}
+        size={"sm"}
+        onClose={() => {
+          setIsConfrimOpen(false);
+        }}
+        onConfirmBtn={() => handleCancelBtnClick(approvalId ?? '', userId ? userId : "")}
+      />
     </div>
   );
 }

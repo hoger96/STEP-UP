@@ -1,6 +1,7 @@
 "use client";
 
 import CommonButton from "@/app/components/Buttons";
+import CommonModal from "@/app/components/Confirm";
 import CommonTable from "@/app/components/Table";
 import { Tooltip } from "@nextui-org/react";
 import axios from "axios";
@@ -46,6 +47,8 @@ export default function TotalStepup(props: IProps) {
   const [rows, setRows] = useState<ITotalStepupData[]>([]);
   const [currentPage, setCurrentPage] = useState<number>();
   const [totalPage, setTotalPage] = useState<number>();
+  const [isConfirmOpen, setIsConfrimOpen] = useState(false);
+  const [stepupId, setStepupId] = useState<string>();
   const router = useRouter();
 
   const deleteStepupList = async (stepUpId: string) => {
@@ -63,7 +66,8 @@ export default function TotalStepup(props: IProps) {
   const handleDeleteBtnClick = async (stepupId: string) => {
     const isSuccess = await deleteStepupList(stepupId);
     if (isSuccess) {
-      initTotalSetupTable(props.requestId, currentPage ?? 1);
+      setIsConfrimOpen(false)
+      initTotalSetupTable(props.requestId, currentPage ?? 1)
       toast.success("삭제되었어요!");
     }
   };
@@ -86,7 +90,8 @@ export default function TotalStepup(props: IProps) {
                 color={"secondary"}
                 variant={"bordered"}
                 onClick={() => {
-                  handleDeleteBtnClick(items.stepUpId);
+                  setStepupId(items.stepUpId)
+                  setIsConfrimOpen(true);
                 }}
                 className="border"
               />
@@ -163,6 +168,16 @@ export default function TotalStepup(props: IProps) {
         onChange={(page) => onPageChange(page)}
       />
       <ToastContainer autoClose={2000} hideProgressBar={true} />
+      <CommonModal
+        title={"확인"}
+        contents={"스텝업 기록을 삭제하시겠습니까?"}
+        isOpen={isConfirmOpen}
+        size={"sm"}
+        onClose={() => {
+          setIsConfrimOpen(false);
+        }}
+        onConfirmBtn={() => handleDeleteBtnClick(stepupId ?? '')}
+      />
     </div>
   );
 }
