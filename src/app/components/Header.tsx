@@ -107,14 +107,12 @@ export default function Header() {
           >
             나의 현황
           </Link>
-          {renderCtx?.master === "Y" && (
-            <Link
-              href="/confirm"
-              className="px-3 py-1 mx-3 cursor-pointer text-black-2 font-semibold hover:text-primary-4"
-            >
-              결재 현황
-            </Link>
-          )}
+          <Link
+            href="/confirm"
+            className="px-3 py-1 mx-3 cursor-pointer text-black-2 font-semibold hover:text-primary-4"
+          >
+            결재 현황
+          </Link>
           <Link
             href="/example"
             className="px-3 py-1 mx-3 cursor-pointer text-black-2 font-semibold hover:text-primary-4"
@@ -190,26 +188,6 @@ export default function Header() {
             }}
           />
         </div>
-        <CommonButton
-          size="sm"
-          color="secondary"
-          variant="light"
-          isIconOnly
-          className="ml-2 font-semibold"
-          onClick={handleOpenHoldPopup}
-        >
-          <img src="/icons/setting.svg" width="18" height="auto" alt="logout" />
-        </CommonButton>
-        <CommonButton
-          size="sm"
-          color="primary"
-          variant="light"
-          isIconOnly
-          className="ml-1"
-          onClick={handleLogout}
-        >
-          <img src="/icons/logout.svg" width="18" height="auto" alt="logout" />
-        </CommonButton>
         <CommonModal
           title={"스텝업 보류하기"}
           scrollBehavior={"inside"}

@@ -69,7 +69,7 @@ export function SearchBar({
     <div className="flex bg-gray-100 rounded-2xl py-2.5 px-4 justify-between">
       <div className="flex-center-ver mr-3">
         <CommonDatePicker
-          name="마일리지 신청 일자"
+          name="결재 신청 일자"
           selected={startDate}
           onChange={(date: Date) => setStartDate(date)}
         />
