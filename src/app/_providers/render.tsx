@@ -77,7 +77,7 @@ export default function RenderProvider({
       setUserNm(result.data.body.userNm);
       setMaster(result.data.body.masterYn);
       setHold(result.data.body.holdYn);
-      if (master === "Y") {
+      if (result.data.body.masterYn === "Y") {
         router.push("/confirm");
       } else {
         router.push(`/mypage/${userId}`);

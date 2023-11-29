@@ -19,10 +19,9 @@ export function Providers({ children, themeProps }: ProvidersProps) {
           {children}
           <ToastContainer
             position="top-right"
-            autoClose={false}
-            pauseOnHover={false}
-            hideProgressBar={false}
-            newestOnTop={false}
+            autoClose={2000}
+            hideProgressBar
+            limit={1}
             rtl={false}
           />
         </RenderProvider>
