@@ -1,3 +1,4 @@
+import { useRenderCtx } from "@/app/_providers/render";
 import CommonButton from "@/app/components/Buttons";
 import axios from "axios";
 import { useRouter } from "next/navigation";
@@ -10,6 +11,7 @@ export default function ApprovalButton(props: {
   onClosePopup: (title: string) => void;
 }) {
   const router = useRouter();
+  const renderCtx = useRenderCtx();
   const handleReject = async (approvalId: string) => {
     try {
       const params = {
@@ -35,6 +37,8 @@ export default function ApprovalButton(props: {
     }
   };
   const handleGotoUserPage = () => {
+    renderCtx?.setIsReadMode(true)
+    renderCtx?.setRequestId(props.userId) // 상세보기 사용자 아이디 셋팅
     router.push(`/mypage/${props.userId}`);
   };
 

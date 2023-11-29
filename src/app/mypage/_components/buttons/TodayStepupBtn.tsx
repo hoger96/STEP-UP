@@ -2,19 +2,13 @@
 
 import CommonButton from "@/app/components/Buttons";
 import CommonModal from "@/app/components/Confirm";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import CreateTodayStepupP from "../popup/CreateTodayStepupP";
 import axios, { AxiosError } from "axios";
 import { ToastContainer, toast } from "react-toastify";
-import { useRouter } from "next/navigation";
 import { useRenderCtx } from "@/app/_providers/render";
 
-interface IProps {
-  requestId: string;
-  onRefreshTable: () => void;
-}
-
-export default function TodayStepupBtn(props: IProps) {
+export default function TodayStepupBtn() {
   const [isOpen, setIsOpen] = useState(false);
   const [todayDate, setTodayDate] = useState(
     new Date().toISOString().split("T")[0]
@@ -22,8 +16,8 @@ export default function TodayStepupBtn(props: IProps) {
   const [startTm, setStartTm] = useState<Date>(new Date());
   const [endTm, setEndTm] = useState<Date>(new Date());
   const [file, setFile] = useState<any>("");
+
   const renderCtx = useRenderCtx();
-  const router = useRouter();
 
   const handelOpenCreateTodayStepupPopup = () => {
     setIsOpen(true);
@@ -78,22 +72,16 @@ export default function TodayStepupBtn(props: IProps) {
   };
 
   const onConfirmBtn = async () => {
-    // if (!renderCtx?.userId) {
-    //   router.push("/login");
-    //   return;
-    // }
     const params = await setParams(startTm, endTm, renderCtx?.userId, file);
     if (params) {
       const isSuccess = await createTodayStepup(params);
       if (isSuccess) {
         setIsOpen(false);
-        props.onRefreshTable();
         if (renderCtx) {
-          await renderCtx.fetchSession(renderCtx?.userId);
-          await renderCtx.fetchTodayTable(renderCtx?.userId);
+          await renderCtx.fetchUserCurrentStatus(renderCtx?.userId);
+          await renderCtx.fetchTodayStepup(renderCtx?.userId);
         }
         toast.success("축하합니다! 오늘의 운동기록을 기록하셨군요 :)");
-        props.onRefreshTable();
       }
     }
   };
@@ -115,7 +103,7 @@ export default function TodayStepupBtn(props: IProps) {
           color={"primary"}
           variant={"solid"}
           isDisabled={
-            renderCtx?.userId !== props.requestId || renderCtx?.hold === "Y"
+            renderCtx?.isReadMode || renderCtx?.holdYn === "Y"
           }
           onClick={handelOpenCreateTodayStepupPopup}
           className="mb-3"

@@ -2,22 +2,16 @@
 
 import CommonButton from "@/app/components/Buttons";
 import CommonModal from "@/app/components/Confirm";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import AllTotalStepupP from "../popup/AllTotalStepupP";
 import axios, { AxiosError } from "axios";
 import { toast } from "react-toastify";
-import { useRouter } from "next/navigation";
 import { useRenderCtx } from "@/app/_providers/render";
 
-interface IProps {
-  requestId: string;
-  onRefreshTable: () => void;
-}
-
-export default function TotalStepupBtn(props: IProps) {
+export default function TotalStepupBtn() {
   const [isConfirmOpen, setIsConfrimOpen] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
-  const router = useRouter();
+  const [requestId, setRequestId] = useState<string>()
   const renderCtx = useRenderCtx();
 
   const changeToMileage = async (userId: string) => {
@@ -29,6 +23,7 @@ export default function TotalStepupBtn(props: IProps) {
       if (e instanceof AxiosError) {
         toast.error(e?.response?.data.message);
       }
+      setIsConfrimOpen(false)
       return false;
     }
   };
@@ -37,19 +32,14 @@ export default function TotalStepupBtn(props: IProps) {
     setIsConfrimOpen(true);
   };
 
+  // 마일리지로 변환하기
   const handleChangeMileage = async () => {
-    // if (!renderCtx?.userId) {
-    //   router.push("/login");
-    //   return;
-    // }
-
-    const isSuccess = await changeToMileage(renderCtx?.userId);
+    const isSuccess = await changeToMileage(renderCtx?.userId); // 본인만 가능
 
     if (isSuccess) {
       setIsConfrimOpen(false);
-      props.onRefreshTable();
       if (renderCtx) {
-        await renderCtx.fetchSession(renderCtx?.userId);
+        await renderCtx.fetchUserCurrentStatus(renderCtx?.userId);
         await renderCtx.fetchTotalTable(renderCtx?.userId, 1);
       }
       toast.success("1개의 마일리지가 생성되었어요!");
@@ -64,6 +54,15 @@ export default function TotalStepupBtn(props: IProps) {
     setIsOpen(false);
   };
 
+  useEffect(() => {
+    if (!renderCtx?.isReadMode) {
+      setRequestId(renderCtx?.userId)
+    } else {
+      setRequestId(renderCtx.requestId)
+    }
+  }, []);
+
+
   return (
     <div className="flex justify-end mb-3">
       <CommonButton
@@ -72,7 +71,7 @@ export default function TotalStepupBtn(props: IProps) {
         radius={"sm"}
         color={"primary"}
         variant={"solid"}
-        isDisabled={renderCtx?.userId !== props.requestId}
+        isDisabled={renderCtx?.isReadMode}
         onClick={handleChaneMileageBtnClick}
       />
       <CommonButton
@@ -88,7 +87,7 @@ export default function TotalStepupBtn(props: IProps) {
         <div>
           <CommonModal
             title={"전체 스텝업"}
-            contents={<AllTotalStepupP requestId={props.requestId} />}
+            contents={<AllTotalStepupP requestId={requestId ?? ''} />}
             size={"2xl"}
             isOpen={isOpen}
             onClose={onClose}

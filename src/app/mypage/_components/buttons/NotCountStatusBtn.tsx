@@ -2,15 +2,14 @@
 
 import CommonButton from "@/app/components/Buttons";
 import CommonModal from "@/app/components/Confirm";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import AllHoldStepupP from "../popup/AllHoldStepupP";
+import { useRenderCtx } from "@/app/_providers/render";
 
-interface IProps {
-  requestId: string;
-}
-
-export default function NotCountStatusBtn(props: IProps) {
+export default function NotCountStatusBtn() {
+  const renderCtx = useRenderCtx();
   const [isAllHoldStepupPOpen, setIsAllHoldStepupPOpen] = useState(false);
+  const [requestId, setRequestId] = useState<string>();
 
   const handleShowAllHoldStepup = () => {
     setIsAllHoldStepupPOpen(true);
@@ -19,6 +18,14 @@ export default function NotCountStatusBtn(props: IProps) {
   const onCloseAllHoldStepupP = () => {
     setIsAllHoldStepupPOpen(false);
   };
+
+  useEffect(() => {
+    if (!renderCtx?.isReadMode) {
+      setRequestId(renderCtx?.userId)
+    } else {
+      setRequestId(renderCtx.requestId)
+    }
+  }, []);
 
   return (
     <div>
@@ -35,7 +42,7 @@ export default function NotCountStatusBtn(props: IProps) {
       </div>
       <CommonModal
         title={"전체 스텝업 보류 내역"}
-        contents={<AllHoldStepupP requestId={props.requestId} />}
+        contents={<AllHoldStepupP requestId={requestId ?? ''} />}
         size={"2xl"}
         isOpen={isAllHoldStepupPOpen}
         onClose={onCloseAllHoldStepupP}
