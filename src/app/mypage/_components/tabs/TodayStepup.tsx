@@ -2,22 +2,9 @@
 
 import { useRenderCtx } from "@/app/_providers/render";
 import CommonTable from "@/app/components/Table";
-import axios from "axios";
-import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 
-interface ITodayStepupData {
-  rowNum: number;
-  startTm: string;
-  endTm: string;
-}
-
-interface IProps {
-  shouldRefreshTable: boolean;
-  requestId: string;
-}
-
-export default function TodayStepup(props: IProps) {
+export default function TodayStepup() {
   const columns = [
     {
       key: "rowNum",
@@ -33,63 +20,29 @@ export default function TodayStepup(props: IProps) {
     },
   ];
 
-  const [rows, setRows] = useState<ITodayStepupData[]>([]);
-  const router = useRouter();
+  const [requestId, setRequestId] = useState<string>();
   const renderCtx = useRenderCtx();
 
-  // const getTodayStepupData = async (userId: string) => {
-  //   try {
-  //     const result = await axios.get("/stepup/api/user/list/today-exercise", {
-  //       params: {
-  //         userId,
-  //       },
-  //     });
-  //     return result.data.body;
-  //   } catch (e) {
-  //     console.error(e);
-  //   }
-  // };
-
-  const InitTodayStepupTable = async (userId: string) => {
-    // if (!renderCtx?.userId) {
-    //   router.push("/login");
-    //   return;
-    // }
-    await renderCtx?.fetchTodayTable(userId);
-    // if (result) {
-    //   setRows(result);
-    // }
-    // const result = await getTodayStepupData(renderCtx.userId);
-    // if (result) {
-    //   setRows(result);
-    // }
+  const initTodayStepupTable = async (userId: string) => {
+    await renderCtx?.fetchTodayStepup(userId)
   };
 
-  // useEffect(() => {
-  //   if (props.shouldRefreshTable && renderCtx?.userId) {
-  //     InitTodayStepupTable(renderCtx?.userId);
-  //   }
-  // }, [props.shouldRefreshTable]);
-
   useEffect(() => {
-    if (props.requestId) {
-      InitTodayStepupTable(props.requestId);
+    if (!requestId) {
+      return
     }
-  }, [props.requestId]);
+    initTodayStepupTable(requestId)
+  }, [requestId])
 
   useEffect(() => {
-    if (!props.requestId) {
-      InitTodayStepupTable(renderCtx?.userId);
+    if (!renderCtx?.isReadMode) {
+      setRequestId(renderCtx?.userId)
+    } else {
+      setRequestId(renderCtx?.requestId)
     }
   }, [renderCtx?.userId]);
 
-  // useEffect(() => {
-  //   const loginUserId = sessionStorage.getItem("userId");
 
-  //   if (loginUserId) {
-  //     setUserId(loginUserId)
-  //   }
-  // }, []);
 
   return (
     <div>

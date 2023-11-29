@@ -4,8 +4,6 @@ import ConfirmTable from "./ConfirmTable";
 import { SearchBar } from "./SearchBar";
 import axios from "axios";
 import CommonButton from "@/app/components/Buttons";
-import { useRouter } from "next/navigation";
-import { useRenderCtx } from "@/app/_providers/render";
 
 interface ISearchParams extends ICurrentPage {
   searchType?: string;
@@ -37,8 +35,6 @@ interface IWrap<T> {
 }
 
 export default function ConfirmContainer() {
-  const renderCtx = useRenderCtx();
-  const router = useRouter();
   const [fetchDataResult, setFetchDataResult] =
     useState<IWrap<IManagementApproval>>(); // 결재 현황 API 조회 결과
   const now = new Date();
@@ -62,12 +58,9 @@ export default function ConfirmContainer() {
     });
   };
 
+  // 결재 현황 리스트 조회
   const getApprovalListData = async (searchOption: ISearchParams) => {
     try {
-      if (!renderCtx?.userId) {
-        router.push("/login");
-        return;
-      }
       const result = await axios.get("/stepup/api/management/approval", {
         params: {
           searchType: searchOption.searchType,
@@ -79,19 +72,22 @@ export default function ConfirmContainer() {
         },
       });
       return result.data.body;
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    }
-  };
-  const setApprovalListData = async () => {
-    try {
-      const result = await getApprovalListData(searchOption);
-      setFetchDataResult(result);
-    } catch (error) {
-      console.error("Error setting data:", error);
+    } catch (e) {
+      console.error(e);
     }
   };
 
+  // 결재 현황 리스트 셋팅
+  const initApprovalListData = async () => {
+    try {
+      const result = await getApprovalListData(searchOption);
+      setFetchDataResult(result);
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  // 엑셀 다운로드
   const handleDownload = async () => {
     try {
       const res = await axios.get(
@@ -124,8 +120,9 @@ export default function ConfirmContainer() {
     }
   };
 
+
   useEffect(() => {
-    setApprovalListData();
+    initApprovalListData();
   }, [searchOption]);
 
   return (
@@ -144,7 +141,7 @@ export default function ConfirmContainer() {
       <ConfirmTable
         onChange={handleChange}
         approvalDataList={fetchDataResult}
-        onDateUpdate={setApprovalListData}
+        onDateUpdate={initApprovalListData}
       />
     </div>
   );

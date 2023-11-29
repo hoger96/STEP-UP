@@ -2,47 +2,26 @@
 
 import { useRenderCtx } from "@/app/_providers/render";
 import { Card, CardBody } from "@nextui-org/react";
-import axios from "axios";
-import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
-interface IStepupStatusData {
-  userId: string;
-  userNm: string;
-  todayStepUpCnt: number;
-  todayStepUpFixCnt: number;
-  totalStepUpCnt: number;
-  mileageCnt: number;
-}
-
-interface IProps {
-  requestId: string;
-}
-
-export default function StepupStatus(props: IProps) {
-  const router = useRouter();
+export default function StepupStatus() {
   const renderCtx = useRenderCtx();
 
-  // useEffect(() => {
-  //   if (!renderCtx?.userId) {
-  //     router.push("/login");
-  //     return;
-  //   }
-  // }, []);
+  const [requestId, setRequestId] = useState<string>()
 
   useEffect(() => {
-    if (!renderCtx?.userId) router.push("/login");
-  });
-
-  useEffect(() => {
-    if (props.requestId && renderCtx) {
-      renderCtx.fetchSession(props.requestId);
+    if (!requestId) {
+      return
     }
-  }, [props.requestId]);
+    renderCtx?.fetchUserCurrentStatus(requestId)
+  }, [requestId]);
+
 
   useEffect(() => {
-    if (!props.requestId && renderCtx) {
-      renderCtx.fetchSession(renderCtx?.userId);
+    if (!renderCtx?.isReadMode) {
+      setRequestId(renderCtx?.userId)
+    } else {
+      setRequestId(renderCtx?.requestId)
     }
   }, [renderCtx?.userId]);
 
@@ -50,9 +29,6 @@ export default function StepupStatus(props: IProps) {
     <div>
       <Card className="rounded-2xl py-2.5 px-4">
         <CardBody>
-          {/* <div>
-            <span>STEP-UP</span>
-          </div> */}
           <div className="m-auto">
             <div className="flex">
               <div className="inline-flex mr-4">

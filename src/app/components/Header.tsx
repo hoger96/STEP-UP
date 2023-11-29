@@ -18,10 +18,25 @@ export default function Header() {
   const router = useRouter();
   const renderCtx = useRenderCtx();
 
-  const handleLogout = async () => {
+  const logout = async () => {
     try {
       await axios.get("/stepup/api/logout");
-      router.push("/login");
+
+      return true
+    } catch (e) {
+      console.error(e)
+
+      return false
+    }
+  }
+
+  const handleLogout = async () => {
+    try {
+      const isSuccess = await logout()
+      if (isSuccess) {
+        renderCtx?.setIsReadMode(false)
+        router.push('/login')
+      }
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -61,31 +76,45 @@ export default function Header() {
     return `${year}-${month}-${day}`;
   };
 
-  const handleConfirm = async () => {
+  const requestHoldExercise = async (params: { holdStartDt: string; holdEndDt: string; holdCntn: string; userId: any; }) => {
     try {
-      const isValid = holdValidation();
-      if (isValid) {
-        if (startDate && endDate) {
-          const params = {
-            holdStartDt: formatDate(startDate),
-            holdEndDt: formatDate(endDate),
-            holdCntn: reason,
-            userId: renderCtx?.userId,
-          };
-          await axios.post("/stepup/api/user/hold/exercise", params);
+      await axios.post("/stepup/api/user/hold/exercise", params);
+
+      return true
+    } catch (e) {
+      console.error(e)
+      toast.error("보류 등록을 실패했습니다.");
+      return false
+    }
+  }
+  const handleConfirmBtnClick = async () => {
+    const isValid = holdValidation();
+    if (isValid) {
+      if (startDate && endDate) {
+        const params = {
+          holdStartDt: formatDate(startDate),
+          holdEndDt: formatDate(endDate),
+          holdCntn: reason,
+          userId: renderCtx?.userId,
+        };
+        const isRequestSuccess = await requestHoldExercise(params) // 본인만 보류 가능
+
+        if (isRequestSuccess) {
+          setOpenSignal(false);
           if (renderCtx) {
-            await renderCtx.fetchSession(renderCtx.userId);
+            await renderCtx.fetchUserCurrentStatus(renderCtx.userId);
             await renderCtx.fetchHoldTable(renderCtx.userId);
           }
-          setOpenSignal(false);
           toast.success("보류 등록을 완료했습니다.");
         }
+
       }
-    } catch (e) {
-      console.error(e);
-      toast.error("보류 등록을 실패했습니다.");
     }
   };
+
+  useEffect(() => {
+    renderCtx?.setSessionData()
+  }, [])
 
   return (
     <div>
@@ -104,10 +133,13 @@ export default function Header() {
           <Link
             href={`/mypage/${renderCtx?.userId}`}
             className="px-3 py-1 mx-3 cursor-pointer text-black-2 font-semibold hover:text-primary-4"
+            onClick={() => {
+              renderCtx?.setIsReadMode(false)
+            }}
           >
             나의 현황
           </Link>
-          {renderCtx?.master === "Y" && (
+          {renderCtx?.masterYn === "Y" && (
             <Link
               href="/confirm"
               className="px-3 py-1 mx-3 cursor-pointer text-black-2 font-semibold hover:text-primary-4"
@@ -115,12 +147,12 @@ export default function Header() {
               결재 현황
             </Link>
           )}
-          <Link
+          {/* <Link
             href="/example"
             className="px-3 py-1 mx-3 cursor-pointer text-black-2 font-semibold hover:text-primary-4"
           >
             공통 컴포넌트 보러가기
-          </Link>
+          </Link> */}
         </nav>
         <div className="flex items-center">
           <div className="flex-center border rounded-full px-3 py-1">
@@ -186,32 +218,10 @@ export default function Header() {
               setOpenSignal(false);
             }}
             onConfirmBtn={() => {
-              handleConfirm();
+              handleConfirmBtnClick();
             }}
           />
         </div>
-        <CommonModal
-          title={"스텝업 보류하기"}
-          scrollBehavior={"inside"}
-          contents={
-            <HoldPopup
-              startDate={startDate}
-              endDate={endDate}
-              reason={reason}
-              setStartDate={setStartDate}
-              setEndDate={setEndDate}
-              setReason={setReason}
-            />
-          }
-          isOpen={openSignal}
-          size={"lg"}
-          onClose={() => {
-            setOpenSignal(false);
-          }}
-          onConfirmBtn={() => {
-            handleConfirm();
-          }}
-        />
       </div>
     </div>
   );

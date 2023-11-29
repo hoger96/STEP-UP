@@ -2,22 +2,10 @@
 
 import { useRenderCtx } from "@/app/_providers/render";
 import CommonTable from "@/app/components/Table";
-import axios from "axios";
-import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 
-interface IHoldStepupData {
-  rowNum: number;
-  holdStartDt: string;
-  holdEndDt: string;
-  holdCntn: string;
-}
-
-interface IProps {
-  requestId: string;
-}
-
-export default function NotCountStatus(props: IProps) {
+export default function NotCountStatus() {
+  const renderCtx = useRenderCtx();
   const columns = [
     {
       key: "rowNum",
@@ -37,35 +25,26 @@ export default function NotCountStatus(props: IProps) {
     },
   ];
 
-  const [rows, setRows] = useState<IHoldStepupData[]>([]);
-  const router = useRouter();
-  const renderCtx = useRenderCtx();
-
-  // const getHoldStepupData = async (userId: string) => {
-  //   try {
-  //     const result = await axios.get("/stepup/api/user/list/hold-exercise", {
-  //       params: {
-  //         userId,
-  //       },
-  //     });
-  //     return result.data.body;
-  //   } catch (e) {
-  //     console.error(e);
-  //   }
-  // };
+  const [requestId, setRequestId] = useState<string>()
 
   const InitHoldStepupTable = async (userId: string) => {
     await renderCtx?.fetchHoldTable(userId);
   };
 
   useEffect(() => {
-    if (props.requestId) {
-      InitHoldStepupTable(props.requestId);
+    if (!requestId) {
+      return
     }
-  }, [props.requestId]);
+    InitHoldStepupTable(requestId)
+  }, [requestId])
+
   useEffect(() => {
-    if (!props.requestId) InitHoldStepupTable(renderCtx?.userId);
-  }, [renderCtx?.userId]);
+    if (!renderCtx?.isReadMode) {
+      setRequestId(renderCtx?.userId)
+    } else {
+      setRequestId(renderCtx.requestId)
+    }
+  }, []);
 
   return (
     <div>

@@ -26,8 +26,7 @@ interface IRows {
   rowNum: string;
 }
 
-export default function MileageStatus(props: IProps) {
-  const router = useRouter();
+export default function MileageStatus() {
   const renderCtx = useRenderCtx();
   const columns = [
     {
@@ -56,10 +55,9 @@ export default function MileageStatus(props: IProps) {
     },
   ];
 
-  const [rows, setRows] = useState([]);
   const [isConfirmOpen, setIsConfrimOpen] = useState(false);
   const [approvalId, setApprovalId] = useState<string>();
-  // type Item = (typeof rows)[0];
+  const [requestId, setRequestId] = useState<string>()
 
   const statusColorMap: Record<string, ChipProps["color"]> = {
     APPROVAL: "success",
@@ -98,8 +96,8 @@ export default function MileageStatus(props: IProps) {
     const isSuccess = await cancelApproval(data);
     if (isSuccess) {
       setIsConfrimOpen(false);
-      if (renderCtx) await renderCtx.fetchSession(renderCtx.userId);
-      initMileageStatusTable(userId);
+      await renderCtx?.fetchMileageTable(requestId ?? '');
+      initMileageStatusTable(userId, 1);
       toast.success("신청이 취소되었어요!");
     }
   };
@@ -124,18 +122,18 @@ export default function MileageStatus(props: IProps) {
           <Tooltip
             color="secondary"
             content={
-              renderCtx?.userId !== props.requestId
+              renderCtx?.isReadMode
                 ? "내 신청만 취소할 수 있어요!"
                 : items?.approvalStus !== "WAIT"
-                ? "신청을 취소할 수 없어요!"
-                : "버튼을 누르면 신청을 취소할 수 있어요!"
+                  ? "신청을 취소할 수 없어요!"
+                  : "버튼을 누르면 신청을 취소할 수 있어요!"
             }
           >
             <span
               className={cn("inline-block text-danger cursor-pointer", {
                 "!cursor-not-allowed":
                   items?.approvalStus !== "WAIT" ||
-                  renderCtx?.userId !== props.requestId,
+                  renderCtx?.isReadMode,
               })}
             >
               <CommonButton
@@ -146,15 +144,11 @@ export default function MileageStatus(props: IProps) {
                 variant={"bordered"}
                 isDisabled={
                   items?.approvalStus !== "WAIT" ||
-                  renderCtx?.userId !== props.requestId
+                  renderCtx?.isReadMode
                 }
                 onClick={() => {
                   setApprovalId(items?.approvalId);
                   setIsConfrimOpen(true);
-                  handleCancelBtnClick(
-                    items.approvalId,
-                    renderCtx?.userId ? renderCtx.userId : ""
-                  );
                 }}
                 className="border"
               />
@@ -166,35 +160,33 @@ export default function MileageStatus(props: IProps) {
     }
   }, []);
 
-  // const getMileageStatusData = async (userId: string) => {
-  //   try {
-  //     const result = await axios.get("/stepup/api/user/list/mileage", {
-  //       params: {
-  //         userId,
-  //       },
-  //     });
-
-  //     return result.data.body;
-  //   } catch (e) {
-  //     console.error(e);
-  //   }
-  // };
-
-  const initMileageStatusTable = async (userId: string) => {
-    await renderCtx?.fetchMileageTable(userId);
+  const initMileageStatusTable = async (userId: string, currentPage: number) => {
+    await renderCtx?.fetchMileageTable(userId, currentPage);
   };
 
-  // useEffect(() => {
-  //   if (props.shouldRefreshTable && props.requestId) {
-  //     initMileageStatusTable(props.requestId);
-  //   }
-  // }, [props.shouldRefreshTable]);
+  // 페이지 변환
+  const onPageChange = (page: number) => {
+    if (!requestId) {
+      return;
+    }
+    initMileageStatusTable(requestId, page)
+  };
+
   useEffect(() => {
-    if (props.requestId) initMileageStatusTable(props.requestId);
-  }, [props.requestId]);
+    if (!requestId) {
+      return
+    }
+    initMileageStatusTable(requestId, 1)
+  }, [requestId])
+
   useEffect(() => {
-    if (!props.requestId) initMileageStatusTable(renderCtx?.userId);
-  }, [renderCtx?.userId]);
+    if (!renderCtx?.isReadMode) {
+      setRequestId(renderCtx?.userId)
+    } else {
+      setRequestId(renderCtx.requestId)
+    }
+  }, []);
+
 
   return (
     <div>
@@ -205,8 +197,10 @@ export default function MileageStatus(props: IProps) {
         renderCell={renderCell}
         columns={columns}
         rows={renderCtx?.mileageRow}
+        currentPage={renderCtx?.mileageCurrentPage}
         uniqueKey={"rowNum"}
-        total={0}
+        total={renderCtx?.mileageTotalPage}
+        onChange={(page) => onPageChange(page)}
       />
       <ToastContainer autoClose={2000} hideProgressBar={true} />
       <CommonModal

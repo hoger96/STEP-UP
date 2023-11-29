@@ -24,8 +24,8 @@ export default function AllTotalStepupP(props: IProps) {
       label: "스텝업 달성일",
     },
     {
-      key: "mileageUseYn",
-      label: "마일리지 사용 여부",
+      key: "delYn",
+      label: "삭제 여부",
     },
   ];
   const [currentPage, setCurrentPage] = useState<number>();
@@ -50,12 +50,12 @@ export default function AllTotalStepupP(props: IProps) {
   };
 
   const initTotalStepupTable = async (userId: string, currentPage: number) => {
-    await getAllTotalStepupData(userId, currentPage);
-    // if (result) {
-    //   setRows(result.data);
-    //   setCurrentPage(result.currentPage);
-    //   setTotalPage(result.totalPage);
-    // }
+    const result = await getAllTotalStepupData(userId, currentPage);
+    if (result) {
+      setRows(result.data);
+      setCurrentPage(result.currentPage);
+      setTotalPage(result.totalPage);
+    }
   };
 
   const onPageChange = (page: number) => {
@@ -78,10 +78,10 @@ export default function AllTotalStepupP(props: IProps) {
         emptyContent={"조회된 데이터가 없습니다."}
         tablekey={"total-step-table"}
         columns={columns}
-        rows={renderCtx?.totalRow}
+        rows={rows}
         uniqueKey={"rowNum"}
-        total={renderCtx?.totalPage ?? 0}
-        currentPage={renderCtx?.currentPage}
+        total={totalPage ?? 0}
+        currentPage={currentPage}
         onChange={(page) => onPageChange(page)}
       />
     </div>

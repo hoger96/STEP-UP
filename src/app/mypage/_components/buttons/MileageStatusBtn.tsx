@@ -8,7 +8,6 @@ import AllUsedMileageP from "../popup/AllUsedMileageP";
 import axios from "axios";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer, toast } from "react-toastify";
-import { useRouter } from "next/navigation";
 import { useRenderCtx } from "@/app/_providers/render";
 
 interface IApplyUseMileageParams {
@@ -19,7 +18,6 @@ interface IApplyUseMileageParams {
 
 interface IProps {
   requestId: string;
-  onRefreshTable: () => void;
 }
 
 export default function MileageStatusBtn(props: IProps) {
@@ -29,7 +27,6 @@ export default function MileageStatusBtn(props: IProps) {
 
   const [isUseMileagePOpen, setIsUseMileagePOpen] = useState(false);
   const [isAllUseMileagePOpen, setIsAllUseMileagePOpen] = useState(false);
-  const router = useRouter();
   const renderCtx = useRenderCtx();
 
   // 마일리지 사용 신청 팝업
@@ -61,26 +58,18 @@ export default function MileageStatusBtn(props: IProps) {
 
       return true;
     } catch (e) {
-      // if (e instanceof AxiosError) {
-      //     toast.error(e?.response?.data.message)
-      // }
       return false;
     }
   };
 
+  // 마일리지 사용 신청 
   const onConfirmUseMileageP = async () => {
-    // if (!renderCtx?.userId) {
-    //   router.push("/login");
-    //   return;
-    // }
-
-    const params = setParams(approvalReqDt, approvalReqType, renderCtx?.userId);
+    const params = setParams(approvalReqDt, approvalReqType, renderCtx?.userId); // 본인만 신청 가능
     const isSuccess = await applyUseMileage(params);
     if (isSuccess) {
       setIsUseMileagePOpen(false);
-      props.onRefreshTable();
       if (renderCtx) {
-        await renderCtx.fetchSession(renderCtx?.userId);
+        await renderCtx.fetchUserCurrentStatus(renderCtx?.userId);
         await renderCtx.fetchMileageTable(renderCtx?.userId);
       }
       toast.success(`마일리지 사용 신청을 완료했어요 :)`);
@@ -98,12 +87,6 @@ export default function MileageStatusBtn(props: IProps) {
     setIsAllUseMileagePOpen(false);
   };
 
-  // useEffect(() => {
-  //     const savedUserId = sessionStorage.getItem("userId");
-  //     if (savedUserId) {
-  //         setUserId(savedUserId);
-  //     }
-  // }, []);
 
   return (
     <>
@@ -114,7 +97,7 @@ export default function MileageStatusBtn(props: IProps) {
           radius={"sm"}
           color={"primary"}
           variant={"solid"}
-          isDisabled={renderCtx?.userId !== props.requestId}
+          isDisabled={renderCtx?.isReadMode}
           onClick={handleUseMileage}
         />
         <CommonModal

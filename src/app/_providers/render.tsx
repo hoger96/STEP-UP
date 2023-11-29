@@ -1,46 +1,55 @@
 "use client";
 
 import axios from "axios";
+import { log } from "console";
 import { useRouter } from "next/navigation";
 import { createContext, useContext, useEffect, useState } from "react";
-import { toast } from "react-toastify";
 
 type TRender = any;
 type RTU = ReturnType<typeof useState<TRender | null>>;
 type RenderContextType = {
+  isReadMode: RTU[0];
+  setIsReadMode: RTU[1];
+  requestId: RTU[0];
+  setRequestId: RTU[1];
   userId: RTU[0];
   setUserId: RTU[1];
   userNm: RTU[0];
   setUserNm: RTU[1];
-  master: RTU[0];
-  setMaster: RTU[1];
-  hold: RTU[0];
-  setHold: RTU[1];
+  masterYn: RTU[0];
+  setMasterYn: RTU[1];
+  holdYn: RTU[0];
+  setHoldYn: RTU[1];
   today: RTU[0];
   setToday: RTU[1];
   total: RTU[0];
   setTotal: RTU[1];
   mileage: RTU[0];
   setMileage: RTU[1];
-  mileageRow: RTU[0];
-  setMileageRow: RTU[1];
   todayRow: RTU[0];
   setTodayRow: RTU[1];
   totalRow: RTU[0];
   setTotalRow: RTU[1];
-  currentPage: RTU[0];
-  setCurrentPage: RTU[1];
-  totalPage: RTU[0];
-  setTotalPage: RTU[1];
+  totalCurrentPage: RTU[0];
+  setTotalCurrentPage: RTU[1];
+  totalTotalPage: RTU[0];
+  setTotalTotalPage: RTU[1];
+  mileageRow: RTU[0];
+  setMileageRow: RTU[1];
+  mileageCurrentPage: RTU[0];
+  setMileageCurrentPage: RTU[1];
+  mileageTotalPage: RTU[0];
+  setMileageTotalPage: RTU[1];
   holdRow: RTU[0];
   setHoldRow: RTU[1];
-  login: (userId: string, password: string) => Promise<void>;
-  reloadSession: (id: string) => Promise<void>;
-  fetchSession: (id: string) => Promise<void>;
-  fetchTodayTable: (userId: string) => Promise<void>;
-  fetchMileageTable: (userId: string) => Promise<void>;
+  fetchSession: () => Promise<void>;
+  changeShowMode: (readModeYn: boolean) => void
+  fetchUserCurrentStatus: (id: string) => Promise<void>;
+  fetchTodayStepup: (userId: string) => Promise<void>;
+  fetchMileageTable: (userId: string, currentPage: number) => Promise<void>;
   fetchTotalTable: (userId: string, currentPage: number) => Promise<void>;
   fetchHoldTable: (userId: string) => Promise<void>;
+  setSessionData: () => void
 };
 
 export const RenderContext = createContext<RenderContextType | undefined>(
@@ -52,65 +61,59 @@ export default function RenderProvider({
 }: {
   children: React.ReactNode;
 }) {
+  const [isReadMode, setIsReadMode] = useState<boolean>(false);
+  const [requestId, setRequestId] = useState<string>();
   const [userId, setUserId] = useState<string>();
   const [userNm, setUserNm] = useState<string>();
-  const [master, setMaster] = useState<string>();
-  const [hold, setHold] = useState<string>();
+  const [masterYn, setMasterYn] = useState<string>();
+  const [holdYn, setHoldYn] = useState<string>();
+  // 현황
   const [today, setToday] = useState<number>();
   const [total, setTotal] = useState<number>();
   const [mileage, setMileage] = useState<number>();
-  const [mileageRow, setMileageRow] = useState<[]>([]);
+  // 오늘의 스텝업
   const [todayRow, setTodayRow] = useState<[]>([]);
+  // 연속 스텝업
   const [totalRow, setTotalRow] = useState<[]>([]);
-  const [currentPage, setCurrentPage] = useState<number>();
-  const [totalPage, setTotalPage] = useState<number>();
+  const [totalCurrentPage, setTotalCurrentPage] = useState<number>();
+  const [totalTotalPage, setTotalTotalPage] = useState<number>();
+  // 마일리지 사용 현황
+  const [mileageRow, setMileageRow] = useState<[]>([]);
+  const [mileageCurrentPage, setMileageCurrentPage] = useState<number>();
+  const [mileageTotalPage, setMileageTotalPage] = useState<number>();
+  // 보류 내역
   const [holdRow, setHoldRow] = useState<[]>([]);
+
   const router = useRouter();
 
-  const login = async (userId: string, password: string) => {
+  // 세션 조회
+  const fetchSession = async () => {
     try {
-      const result = await axios.post("/stepup/api/login", {
-        userId,
-        password,
-      });
-      setUserId(result.data.body.userId);
-      setUserNm(result.data.body.userNm);
-      setMaster(result.data.body.masterYn);
-      setHold(result.data.body.holdYn);
-      if (result.data.body.masterYn === "Y") {
-        router.push("/confirm");
-      } else {
-        router.push(`/mypage/${userId}`);
+      const result = await axios.get("/stepup/api/common/session");
+
+      if (!result) {
+        router.push('/login')
       }
-    } catch (error: any) {
-      toast.error("아이디 또는 비밀번호를 확인해주세요.");
+      return result.data.body
+    } catch (e) {
+      console.error(e);
     }
   };
 
-  const reloadSession = async (id: string) => {
-    try {
-      const result = await axios.get("/stepup/api/common/session", {
-        params: {
-          userId: id,
-        },
-      });
-      setUserId(result.data.body.userId);
-      setUserNm(result.data.body.userNm);
-      setMaster(result.data.body.masterYn);
-      setHold(result.data.body.holdYn);
-    } catch (error: any) {
-      console.log(error);
-    }
-  };
+  // 요청자 상세보기 -> 읽기모드 설정
+  const changeShowMode = (readModeYn: boolean) => {
+    setIsReadMode(readModeYn)
+  }
 
-  const fetchSession = async (id: string) => {
+  // 사용자 나의 현황 정보 조회
+  const fetchUserCurrentStatus = async (userId: string) => {
     try {
       const result = await axios.get("/stepup/api/user", {
         params: {
-          userId: id,
+          userId,
         },
       });
-      setHold(result.data.body.holdYn);
+      setHoldYn(result.data.body.holdYn);
       setToday(result.data.body.todayStepUpCnt);
       setTotal(result.data.body.totalStepUpCnt);
       setMileage(result.data.body.mileageCnt);
@@ -119,49 +122,58 @@ export default function RenderProvider({
     }
   };
 
-  const fetchTodayTable = async (id: string) => {
+  // 오늘의 스텝업 테이블 데이터 조회
+  const fetchTodayStepup = async (userId: string) => {
     try {
       const result = await axios.get("/stepup/api/user/list/today-exercise", {
         params: {
-          userId: id,
+          userId,
         },
       });
+
       setTodayRow(result.data.body);
     } catch (e) {
       console.error(e);
     }
   };
 
-  const fetchMileageTable = async (id: string) => {
-    try {
-      const result = await axios.get("/stepup/api/user/list/mileage", {
-        params: {
-          userId: id,
-        },
-      });
-      setMileageRow(result.data.body);
-    } catch (e) {
-      console.error(e);
-    }
-  };
-
-  const fetchTotalTable = async (id: string, currentPage: number) => {
+  // 연속 스텝업 테이블 데이터 조회
+  const fetchTotalTable = async (userId: string, currentPage: number) => {
     try {
       const result = await axios.get("/stepup/api/user/list/exercise", {
         params: {
           currentPage,
           limit: 5,
-          userId: id,
+          userId,
         },
       });
       setTotalRow(result.data.body.data);
-      setCurrentPage(result.data.body.currentPage);
-      setTotalPage(result.data.body.totalPage);
+      setTotalCurrentPage(result.data.body.currentPage);
+      setTotalTotalPage(result.data.body.totalPage);
     } catch (e) {
       console.error(e);
     }
   };
 
+  // 마일리지 사용 현황 테이블 데이터 조회
+  const fetchMileageTable = async (userId: string, currentPage: number) => {
+    try {
+      const result = await axios.get("/stepup/api/user/list/mileage", {
+        params: {
+          userId,
+          currentPage,
+          limit: 5
+        },
+      });
+      setMileageRow(result.data.body.data);
+      setMileageCurrentPage(result.data.body.currentPage)
+      setMileageTotalPage(result.data.body.totalPage)
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  // 보류 내역 테이블 데이터 조회
   const fetchHoldTable = async (id: string) => {
     try {
       const result = await axios.get("/stepup/api/user/list/hold-exercise", {
@@ -175,47 +187,65 @@ export default function RenderProvider({
     }
   };
 
-  // useEffect(() => {
-  //   fetchSession();
-  //   //if (userId) fetchTotalTable(userId, 1);
-  // }, []);
+  const setSessionData = async () => {
+    const result = await fetchSession();
+    if (result) {
+      setUserId(result.userId);
+      setUserNm(result.userNm);
+      setMasterYn(result.masterYn);
+      setHoldYn(result.holdYn);
+    }
+  }
+
+  useEffect(() => {
+    setSessionData()
+  }, []);
 
   return (
     <RenderContext.Provider
       value={{
+        isReadMode,
+        setIsReadMode,
+        requestId,
+        setRequestId,
         userId,
         setUserId,
         userNm,
         setUserNm,
-        master,
-        setMaster,
-        hold,
-        setHold,
+        masterYn,
+        setMasterYn,
+        holdYn,
+        setHoldYn,
         today,
         setToday,
         total,
         setTotal,
         mileage,
         setMileage,
-        mileageRow,
-        setMileageRow,
         todayRow,
         setTodayRow,
         totalRow,
         setTotalRow,
-        currentPage,
-        setCurrentPage,
-        totalPage,
-        setTotalPage,
+        totalCurrentPage,
+        setTotalCurrentPage,
+        totalTotalPage,
+        setTotalTotalPage,
+        mileageRow,
+        setMileageRow,
+        mileageCurrentPage,
+        setMileageCurrentPage,
+        mileageTotalPage,
+        setMileageTotalPage,
         holdRow,
         setHoldRow,
-        login,
-        reloadSession,
         fetchSession,
-        fetchTodayTable,
+        changeShowMode,
+        fetchUserCurrentStatus,
+        fetchTodayStepup,
         fetchMileageTable,
         fetchTotalTable,
         fetchHoldTable,
+        setSessionData
       }}
     >
       {children}

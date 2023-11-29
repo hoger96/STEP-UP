@@ -5,9 +5,8 @@ import { Checkbox } from "@nextui-org/react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { ToastContainer, TypeOptions, toast } from "react-toastify";
+import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import Image from "next/image";
 import { useRenderCtx } from "@/app/_providers/render";
 
 export default function LoginForm() {
@@ -17,7 +16,7 @@ export default function LoginForm() {
   const [userPwCheck, setUserPwCheck] = useState(false);
   const [isRememberId, setIsRememberId] = useState(false);
   const router = useRouter();
-  const renderCtx = useRenderCtx();
+  // const renderCtx = useRenderCtx();
 
   const loginValidation = () => {
     let isValid = true;
@@ -33,8 +32,17 @@ export default function LoginForm() {
     return isValid;
   };
 
-  const showToast = (title: string, type?: TypeOptions) => {
-    toast(title, { type });
+  const login = async (userId: string, password: string) => {
+    try {
+      const result = await axios.post("/stepup/api/login", {
+        userId,
+        password,
+      });
+
+      return result.data.body
+    } catch {
+      toast.error("아이디 또는 비밀번호를 확인해주세요.");
+    }
   };
 
   const handleKeyUp = (event: React.KeyboardEvent<HTMLDivElement>) => {
@@ -51,12 +59,17 @@ export default function LoginForm() {
       }
       const isValid = loginValidation();
       if (isValid) {
-        if (renderCtx) {
-          await renderCtx.login(userId, password);
+        const result = await login(userId, password);
+        const loginedId = result.userId
+
+        if (result.masterYn === 'Y') {
+          router.push('/confirm')
+        } else {
+          router.push(`/mypage/${loginedId}`)
         }
       }
-    } catch (error: any) {
-      console.log(error);
+    } catch (e) {
+      console.error(e);
     }
   };
 
