@@ -8,6 +8,7 @@ import { Tooltip } from "@nextui-org/react";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
+import cn from "clsx";
 
 interface IRows {
   rowNum: string;
@@ -32,7 +33,7 @@ export default function TotalStepup() {
     },
   ];
 
-  const [requestId, setRequestId] = useState<string>()
+  const [requestId, setRequestId] = useState<string>();
   const [isConfirmOpen, setIsConfrimOpen] = useState(false);
   const [stepupId, setStepupId] = useState<string>();
   const renderCtx = useRenderCtx();
@@ -64,8 +65,19 @@ export default function TotalStepup() {
     switch (columnKey) {
       case "action":
         return (
-          <Tooltip color="danger" content={renderCtx?.isReadMode ? "본인이 아닌 경우 삭제할 수 없어요" : "버튼을 눌러 삭제해보아요!"}>
-            <span className="text-lg text-danger cursor-pointer active:opacity-50">
+          <Tooltip
+            color="secondary"
+            content={
+              renderCtx?.isReadMode
+                ? "본인이 아닌 경우 삭제할 수 없어요"
+                : "버튼을 눌러 삭제해보아요!"
+            }
+          >
+            <span
+              className={cn("inline-block text-danger cursor-pointer", {
+                "!cursor-not-allowed": renderCtx?.isReadMode,
+              })}
+            >
               <CommonButton
                 label={"삭제"}
                 size={"sm"}
@@ -96,21 +108,21 @@ export default function TotalStepup() {
     if (!requestId) {
       return;
     }
-    initTotalSetupTable(requestId, page)
+    initTotalSetupTable(requestId, page);
   };
 
   useEffect(() => {
     if (!requestId) {
-      return
+      return;
     }
-    initTotalSetupTable(requestId, 1)
-  }, [requestId])
+    initTotalSetupTable(requestId, 1);
+  }, [requestId]);
 
   useEffect(() => {
     if (!renderCtx?.isReadMode) {
-      setRequestId(renderCtx?.userId) // 로그인 사용자 아이디
+      setRequestId(renderCtx?.userId); // 로그인 사용자 아이디
     } else {
-      setRequestId(renderCtx.requestId) // 상세보기 사용자 아이디
+      setRequestId(renderCtx.requestId); // 상세보기 사용자 아이디
     }
   }, []);
 

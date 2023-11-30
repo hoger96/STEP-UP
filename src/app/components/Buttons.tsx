@@ -1,6 +1,7 @@
 "use client";
 import { Button } from "@nextui-org/button";
 import { MouseEventHandler, ReactNode } from "react";
+import cn from "clsx";
 
 interface IButtonProps {
   label?: string;
@@ -10,13 +11,13 @@ interface IButtonProps {
   radius?: "full" | "lg" | "md" | "sm" | "none";
   color: "default" | "primary" | "secondary" | "success" | "warning" | "danger";
   variant:
-  | "solid"
-  | "faded"
-  | "bordered"
-  | "light"
-  | "flat"
-  | "ghost"
-  | "shadow";
+    | "solid"
+    | "faded"
+    | "bordered"
+    | "light"
+    | "flat"
+    | "ghost"
+    | "shadow";
   isIconOnly?: boolean;
   // IConContents: ReactNode;
   onClick: () => void;
@@ -35,7 +36,7 @@ export default function CommonButton(props: IButtonProps) {
       variant={props.variant}
       isIconOnly={props.isIconOnly}
       onClick={props.onClick}
-      className={props.className}
+      className={cn(props.className)}
     >
       {props.label ? props.label : props.children}
     </Button>
