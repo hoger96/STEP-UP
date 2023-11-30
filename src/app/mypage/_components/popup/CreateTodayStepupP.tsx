@@ -78,12 +78,23 @@ const CreateTodayStepupP: React.FC<ICreateTodayStepupProps> = ({
         <CommonTimePicker
           name="시작/종료 시간"
           selected={startTm}
-          onChange={(selectedTime: any) => setStartTm(selectedTime)}
+          onChange={(selectedTime: any) => {
+            setStartTm(selectedTime);
+            if (endTm) {
+              if (endTm < selectedTime) setEndTm(selectedTime);
+              else setStartTm(selectedTime);
+            }
+          }}
         />
         <span className="inline-block text-small font-semibold mx-2">~</span>
         <CommonTimePicker
           selected={endTm}
-          onChange={(selectedTime: any) => setEndTm(selectedTime)}
+          onChange={(selectedTime: any) => {
+            if (startTm) {
+              if (startTm > selectedTime) setEndTm(startTm);
+              else setEndTm(selectedTime);
+            }
+          }}
         />
       </div>
       <div className="flex">

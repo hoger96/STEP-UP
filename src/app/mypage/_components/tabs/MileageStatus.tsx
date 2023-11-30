@@ -57,7 +57,7 @@ export default function MileageStatus() {
 
   const [isConfirmOpen, setIsConfrimOpen] = useState(false);
   const [approvalId, setApprovalId] = useState<string>();
-  const [requestId, setRequestId] = useState<string>()
+  const [requestId, setRequestId] = useState<string>();
 
   const statusColorMap: Record<string, ChipProps["color"]> = {
     APPROVAL: "success",
@@ -96,7 +96,8 @@ export default function MileageStatus() {
     const isSuccess = await cancelApproval(data);
     if (isSuccess) {
       setIsConfrimOpen(false);
-      await renderCtx?.fetchMileageTable(requestId ?? '');
+      await renderCtx?.fetchUserCurrentStatus(userId);
+      await renderCtx?.fetchMileageTable(requestId ?? "", 1);
       initMileageStatusTable(userId, 1);
       toast.success("신청이 취소되었어요!");
     }
@@ -123,17 +124,16 @@ export default function MileageStatus() {
             color="secondary"
             content={
               renderCtx?.isReadMode
-                ? "내 신청만 취소할 수 있어요!"
+                ? "본인이 아닌 경우 신청 취소할 수 없어요!"
                 : items?.approvalStus !== "WAIT"
-                  ? "신청을 취소할 수 없어요!"
-                  : "버튼을 누르면 신청을 취소할 수 있어요!"
+                ? "신청을 취소할 수 없어요!"
+                : "버튼을 누르면 신청을 취소할 수 있어요!"
             }
           >
             <span
               className={cn("inline-block text-danger cursor-pointer", {
                 "!cursor-not-allowed":
-                  items?.approvalStus !== "WAIT" ||
-                  renderCtx?.isReadMode,
+                  items?.approvalStus !== "WAIT" || renderCtx?.isReadMode,
               })}
             >
               <CommonButton
@@ -143,8 +143,7 @@ export default function MileageStatus() {
                 color={"secondary"}
                 variant={"bordered"}
                 isDisabled={
-                  items?.approvalStus !== "WAIT" ||
-                  renderCtx?.isReadMode
+                  items?.approvalStus !== "WAIT" || renderCtx?.isReadMode
                 }
                 onClick={() => {
                   setApprovalId(items?.approvalId);
@@ -160,7 +159,10 @@ export default function MileageStatus() {
     }
   }, []);
 
-  const initMileageStatusTable = async (userId: string, currentPage: number) => {
+  const initMileageStatusTable = async (
+    userId: string,
+    currentPage: number
+  ) => {
     await renderCtx?.fetchMileageTable(userId, currentPage);
   };
 
@@ -169,24 +171,23 @@ export default function MileageStatus() {
     if (!requestId) {
       return;
     }
-    initMileageStatusTable(requestId, page)
+    initMileageStatusTable(requestId, page);
   };
 
   useEffect(() => {
     if (!requestId) {
-      return
+      return;
     }
-    initMileageStatusTable(requestId, 1)
-  }, [requestId])
+    initMileageStatusTable(requestId, 1);
+  }, [requestId]);
 
   useEffect(() => {
     if (!renderCtx?.isReadMode) {
-      setRequestId(renderCtx?.userId)
+      setRequestId(renderCtx?.userId);
     } else {
-      setRequestId(renderCtx.requestId)
+      setRequestId(renderCtx.requestId);
     }
   }, []);
-
 
   return (
     <div>

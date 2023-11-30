@@ -25,7 +25,7 @@ export default function AllTotalStepupP(props: IProps) {
     },
     {
       key: "delYn",
-      label: "삭제 여부",
+      label: "사용자 삭제 여부",
     },
   ];
   const [currentPage, setCurrentPage] = useState<number>();

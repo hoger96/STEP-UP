@@ -22,20 +22,20 @@ export default function Header() {
     try {
       await axios.get("/stepup/api/logout");
 
-      return true
+      return true;
     } catch (e) {
-      console.error(e)
+      console.error(e);
 
-      return false
+      return false;
     }
-  }
+  };
 
   const handleLogout = async () => {
     try {
-      const isSuccess = await logout()
+      const isSuccess = await logout();
       if (isSuccess) {
-        renderCtx?.setIsReadMode(false)
-        router.push('/login')
+        renderCtx?.setIsReadMode(false);
+        router.push("/login");
       }
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -76,17 +76,22 @@ export default function Header() {
     return `${year}-${month}-${day}`;
   };
 
-  const requestHoldExercise = async (params: { holdStartDt: string; holdEndDt: string; holdCntn: string; userId: any; }) => {
+  const requestHoldExercise = async (params: {
+    holdStartDt: string;
+    holdEndDt: string;
+    holdCntn: string;
+    userId: any;
+  }) => {
     try {
       await axios.post("/stepup/api/user/hold/exercise", params);
 
-      return true
+      return true;
     } catch (e) {
-      console.error(e)
+      console.error(e);
       toast.error("보류 등록을 실패했습니다.");
-      return false
+      return false;
     }
-  }
+  };
   const handleConfirmBtnClick = async () => {
     const isValid = holdValidation();
     if (isValid) {
@@ -97,24 +102,23 @@ export default function Header() {
           holdCntn: reason,
           userId: renderCtx?.userId,
         };
-        const isRequestSuccess = await requestHoldExercise(params) // 본인만 보류 가능
+        const isRequestSuccess = await requestHoldExercise(params); // 본인만 보류 가능
 
         if (isRequestSuccess) {
           setOpenSignal(false);
           if (renderCtx) {
             await renderCtx.fetchUserCurrentStatus(renderCtx.userId);
-            await renderCtx.fetchHoldTable(renderCtx.userId);
+            await renderCtx.fetchHoldTable(renderCtx.userId, 1);
           }
           toast.success("보류 등록을 완료했습니다.");
         }
-
       }
     }
   };
 
   useEffect(() => {
-    renderCtx?.setSessionData()
-  }, [])
+    renderCtx?.setSessionData();
+  }, []);
 
   return (
     <div>
@@ -134,7 +138,7 @@ export default function Header() {
             href={`/mypage/${renderCtx?.userId}`}
             className="px-3 py-1 mx-3 cursor-pointer text-black-2 font-semibold hover:text-primary-4"
             onClick={() => {
-              renderCtx?.setIsReadMode(false)
+              renderCtx?.setIsReadMode(false);
             }}
           >
             나의 현황

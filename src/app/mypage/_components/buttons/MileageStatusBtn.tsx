@@ -62,7 +62,7 @@ export default function MileageStatusBtn(props: IProps) {
     }
   };
 
-  // 마일리지 사용 신청 
+  // 마일리지 사용 신청
   const onConfirmUseMileageP = async () => {
     const params = setParams(approvalReqDt, approvalReqType, renderCtx?.userId); // 본인만 신청 가능
     const isSuccess = await applyUseMileage(params);
@@ -70,7 +70,7 @@ export default function MileageStatusBtn(props: IProps) {
       setIsUseMileagePOpen(false);
       if (renderCtx) {
         await renderCtx.fetchUserCurrentStatus(renderCtx?.userId);
-        await renderCtx.fetchMileageTable(renderCtx?.userId);
+        await renderCtx.fetchMileageTable(renderCtx?.userId, 1);
       }
       toast.success(`마일리지 사용 신청을 완료했어요 :)`);
     } else {
@@ -87,7 +87,6 @@ export default function MileageStatusBtn(props: IProps) {
     setIsAllUseMileagePOpen(false);
   };
 
-
   return (
     <>
       <div className="flex justify-end mb-3">
@@ -97,7 +96,7 @@ export default function MileageStatusBtn(props: IProps) {
           radius={"sm"}
           color={"primary"}
           variant={"solid"}
-          isDisabled={renderCtx?.isReadMode}
+          isDisabled={renderCtx?.isReadMode || renderCtx?.mileage <= 0}
           onClick={handleUseMileage}
         />
         <CommonModal

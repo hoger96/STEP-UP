@@ -11,7 +11,7 @@ import { useRenderCtx } from "@/app/_providers/render";
 export default function TotalStepupBtn() {
   const [isConfirmOpen, setIsConfrimOpen] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
-  const [requestId, setRequestId] = useState<string>()
+  const [requestId, setRequestId] = useState<string>();
   const renderCtx = useRenderCtx();
 
   const changeToMileage = async (userId: string) => {
@@ -23,7 +23,7 @@ export default function TotalStepupBtn() {
       if (e instanceof AxiosError) {
         toast.error(e?.response?.data.message);
       }
-      setIsConfrimOpen(false)
+      setIsConfrimOpen(false);
       return false;
     }
   };
@@ -56,12 +56,11 @@ export default function TotalStepupBtn() {
 
   useEffect(() => {
     if (!renderCtx?.isReadMode) {
-      setRequestId(renderCtx?.userId)
+      setRequestId(renderCtx?.userId);
     } else {
-      setRequestId(renderCtx.requestId)
+      setRequestId(renderCtx.requestId);
     }
   }, []);
-
 
   return (
     <div className="flex justify-end mb-3">
@@ -71,7 +70,7 @@ export default function TotalStepupBtn() {
         radius={"sm"}
         color={"primary"}
         variant={"solid"}
-        isDisabled={renderCtx?.isReadMode}
+        isDisabled={renderCtx?.isReadMode || renderCtx?.total < 5}
         onClick={handleChaneMileageBtnClick}
       />
       <CommonButton
@@ -87,7 +86,7 @@ export default function TotalStepupBtn() {
         <div>
           <CommonModal
             title={"전체 스텝업"}
-            contents={<AllTotalStepupP requestId={requestId ?? ''} />}
+            contents={<AllTotalStepupP requestId={requestId ?? ""} />}
             size={"2xl"}
             isOpen={isOpen}
             onClose={onClose}

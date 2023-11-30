@@ -101,6 +101,7 @@ export default function TotalStepup() {
 
   const initTotalSetupTable = async (userId: string, currentPage: number) => {
     await renderCtx?.fetchTotalTable(userId, currentPage);
+    await renderCtx?.fetchUserCurrentStatus(userId);
   };
 
   // 페이지 변환

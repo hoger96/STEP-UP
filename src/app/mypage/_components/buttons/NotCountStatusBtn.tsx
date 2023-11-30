@@ -21,16 +21,16 @@ export default function NotCountStatusBtn() {
 
   useEffect(() => {
     if (!renderCtx?.isReadMode) {
-      setRequestId(renderCtx?.userId)
+      setRequestId(renderCtx?.userId);
     } else {
-      setRequestId(renderCtx.requestId)
+      setRequestId(renderCtx.requestId);
     }
   }, []);
 
   return (
     <div>
       <div className="flex justify-end mb-3">
-        <CommonButton
+        {/* <CommonButton
           label={"전체보기"}
           size={"sm"}
           radius={"sm"}
@@ -38,11 +38,11 @@ export default function NotCountStatusBtn() {
           variant={"bordered"}
           onClick={handleShowAllHoldStepup}
           className="border"
-        />
+        /> */}
       </div>
       <CommonModal
         title={"전체 스텝업 보류 내역"}
-        contents={<AllHoldStepupP requestId={requestId ?? ''} />}
+        contents={<AllHoldStepupP requestId={requestId ?? ""} />}
         size={"2xl"}
         isOpen={isAllHoldStepupPOpen}
         onClose={onCloseAllHoldStepupP}

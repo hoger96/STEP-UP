@@ -42,14 +42,18 @@ type RenderContextType = {
   setMileageTotalPage: RTU[1];
   holdRow: RTU[0];
   setHoldRow: RTU[1];
+  holdCurrentPage: RTU[0];
+  setHoldCurrentPage: RTU[1];
+  holdTotalPage: RTU[0];
+  setHoldTotalPage: RTU[1];
   fetchSession: () => Promise<void>;
-  changeShowMode: (readModeYn: boolean) => void
+  changeShowMode: (readModeYn: boolean) => void;
   fetchUserCurrentStatus: (id: string) => Promise<void>;
   fetchTodayStepup: (userId: string) => Promise<void>;
   fetchMileageTable: (userId: string, currentPage: number) => Promise<void>;
   fetchTotalTable: (userId: string, currentPage: number) => Promise<void>;
-  fetchHoldTable: (userId: string) => Promise<void>;
-  setSessionData: () => void
+  fetchHoldTable: (userId: string, currentPage: number) => Promise<void>;
+  setSessionData: () => void;
 };
 
 export const RenderContext = createContext<RenderContextType | undefined>(
@@ -83,6 +87,8 @@ export default function RenderProvider({
   const [mileageTotalPage, setMileageTotalPage] = useState<number>();
   // 보류 내역
   const [holdRow, setHoldRow] = useState<[]>([]);
+  const [holdCurrentPage, setHoldCurrentPage] = useState<number>();
+  const [holdTotalPage, setHoldTotalPage] = useState<number>();
 
   const router = useRouter();
 
@@ -92,9 +98,9 @@ export default function RenderProvider({
       const result = await axios.get("/stepup/api/common/session");
 
       if (!result) {
-        router.push('/login')
+        router.push("/login");
       }
-      return result.data.body
+      return result.data.body;
     } catch (e) {
       console.error(e);
     }
@@ -102,8 +108,8 @@ export default function RenderProvider({
 
   // 요청자 상세보기 -> 읽기모드 설정
   const changeShowMode = (readModeYn: boolean) => {
-    setIsReadMode(readModeYn)
-  }
+    setIsReadMode(readModeYn);
+  };
 
   // 사용자 나의 현황 정보 조회
   const fetchUserCurrentStatus = async (userId: string) => {
@@ -162,26 +168,33 @@ export default function RenderProvider({
         params: {
           userId,
           currentPage,
-          limit: 5
+          limit: 5,
         },
       });
       setMileageRow(result.data.body.data);
-      setMileageCurrentPage(result.data.body.currentPage)
-      setMileageTotalPage(result.data.body.totalPage)
+      setMileageCurrentPage(result.data.body.currentPage);
+      setMileageTotalPage(result.data.body.totalPage);
     } catch (e) {
       console.error(e);
     }
   };
 
   // 보류 내역 테이블 데이터 조회
-  const fetchHoldTable = async (id: string) => {
+  const fetchHoldTable = async (id: string, currentPage: number) => {
     try {
-      const result = await axios.get("/stepup/api/user/list/hold-exercise", {
-        params: {
-          userId: id,
-        },
-      });
-      setHoldRow(result.data.body);
+      const result = await axios.get(
+        "/stepup/api/user/entire-list/hold-exercise",
+        {
+          params: {
+            userId: id,
+            currentPage,
+            limit: 5,
+          },
+        }
+      );
+      setHoldRow(result.data.body.data);
+      setHoldCurrentPage(result.data.body.currentPage);
+      setHoldTotalPage(result.data.body.totalPage);
     } catch (e) {
       console.error(e);
     }
@@ -195,10 +208,10 @@ export default function RenderProvider({
       setMasterYn(result.masterYn);
       setHoldYn(result.holdYn);
     }
-  }
+  };
 
   useEffect(() => {
-    setSessionData()
+    setSessionData();
   }, []);
 
   return (
@@ -238,6 +251,10 @@ export default function RenderProvider({
         setMileageTotalPage,
         holdRow,
         setHoldRow,
+        holdCurrentPage,
+        setHoldCurrentPage,
+        holdTotalPage,
+        setHoldTotalPage,
         fetchSession,
         changeShowMode,
         fetchUserCurrentStatus,
@@ -245,7 +262,7 @@ export default function RenderProvider({
         fetchMileageTable,
         fetchTotalTable,
         fetchHoldTable,
-        setSessionData
+        setSessionData,
       }}
     >
       {children}

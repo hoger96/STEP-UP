@@ -25,6 +25,10 @@ export default function AllUsedMileageP(props: IProps) {
       key: "approvalReqTypeNm",
       label: "신청 타입",
     },
+    {
+      key: "approvalStusNm",
+      label: "상태",
+    },
   ];
 
   const [rows, setRows] = useState<ITotalStepupData[]>([]);
