@@ -54,7 +54,7 @@ export default function TotalStepup() {
     const isSuccess = await deleteStepupList(stepupId);
     if (isSuccess) {
       setIsConfrimOpen(false);
-      initTotalSetupTable(renderCtx?.userId, 1); // 본인만 삭제 가능
+      initTotalSetupTable(renderCtx?.userId, renderCtx?.totalCurrentPage); // 본인만 삭제 가능
       toast.success("삭제되었어요!");
     }
   };
@@ -101,6 +101,7 @@ export default function TotalStepup() {
 
   const initTotalSetupTable = async (userId: string, currentPage: number) => {
     await renderCtx?.fetchTotalTable(userId, currentPage);
+    await renderCtx?.fetchUserCurrentStatus(userId);
   };
 
   // 페이지 변환

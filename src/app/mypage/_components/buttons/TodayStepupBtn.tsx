@@ -94,16 +94,23 @@ export default function TodayStepupBtn() {
   };
 
   return (
-    <div className="mb-3 flex justify-end">
-      <CommonButton
-        label={"오늘의 스텝업 기록하기"}
-        size={"sm"}
-        radius={"sm"}
-        color={"primary"}
-        variant={"solid"}
-        isDisabled={renderCtx?.isReadMode || renderCtx?.holdYn === "Y"}
-        onClick={handelOpenCreateTodayStepupPopup}
-      />
+    <div>
+      <div className="flex justify-end">
+        <CommonButton
+          label={"오늘의 스텝업 기록하기"}
+          size={"sm"}
+          radius={"sm"}
+          color={"primary"}
+          variant={"solid"}
+          isDisabled={
+            renderCtx?.isReadMode ||
+            renderCtx?.holdYn === "Y" ||
+            renderCtx?.today >= 3
+          }
+          onClick={handelOpenCreateTodayStepupPopup}
+          className="mb-3"
+        />
+      </div>
       <ToastContainer position="top-right" autoClose={2000} />
       <CommonModal
         title={"오늘의 스텝업 기록하기"}

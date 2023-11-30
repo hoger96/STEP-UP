@@ -25,24 +25,31 @@ export default function NotCountStatus() {
     },
   ];
 
-  const [requestId, setRequestId] = useState<string>()
+  const [requestId, setRequestId] = useState<string>();
 
-  const InitHoldStepupTable = async (userId: string) => {
-    await renderCtx?.fetchHoldTable(userId);
+  const InitHoldStepupTable = async (userId: string, currentPage: number) => {
+    await renderCtx?.fetchHoldTable(userId, currentPage);
+  };
+
+  const onPageChange = (page: number) => {
+    if (!requestId) {
+      return;
+    }
+    InitHoldStepupTable(requestId, page);
   };
 
   useEffect(() => {
     if (!requestId) {
-      return
+      return;
     }
-    InitHoldStepupTable(requestId)
-  }, [requestId])
+    InitHoldStepupTable(requestId, 1);
+  }, [requestId]);
 
   useEffect(() => {
     if (!renderCtx?.isReadMode) {
-      setRequestId(renderCtx?.userId)
+      setRequestId(renderCtx?.userId);
     } else {
-      setRequestId(renderCtx.requestId)
+      setRequestId(renderCtx.requestId);
     }
   }, []);
 
@@ -54,7 +61,9 @@ export default function NotCountStatus() {
         columns={columns}
         rows={renderCtx?.holdRow}
         uniqueKey={"rowNum"}
-        total={0}
+        currentPage={renderCtx?.holdCurrentPage}
+        total={renderCtx?.holdTotalPage}
+        onChange={(page) => onPageChange(page)}
       />
     </div>
   );
