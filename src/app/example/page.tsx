@@ -11,6 +11,7 @@ import CommonInput from "../components/Input";
 import CommonModal from "../components/Confirm";
 import ModalExample from "../mypage/_components/ModalExample";
 import { ToastContainer, toast } from "react-toastify";
+import cn from "clsx";
 
 export default function Home() {
   // ----------------------------- input -----------------------------------
@@ -145,7 +146,11 @@ export default function Home() {
               items.status !== "Active" ? "취소가 불가합니다." : "신청 취소하기"
             }
           >
-            <span className="inline-block text-danger cursor-pointer">
+            <span
+              className={cn("inline-block text-danger cursor-pointer", {
+                "!cursor-not-allowed": items.status !== "Active",
+              })}
+            >
               <CommonButton
                 label={"삭제"}
                 size={"sm"}

@@ -34,7 +34,7 @@ const CreateTodayStepupP: React.FC<ICreateTodayStepupProps> = ({
   );
   const { getRootProps, getInputProps, acceptedFiles } = useDropzone({
     onDrop,
-    multiple: false
+    multiple: false,
   });
 
   // const handleRemove = () => {
@@ -114,7 +114,7 @@ const CreateTodayStepupP: React.FC<ICreateTodayStepupProps> = ({
             </button>
           </div>
 
-          <ul className="text-sm text-default-300">{files}</ul>
+          <ul className="text-sm text-default-300 mt-3">{files}</ul>
         </div>
       </div>
     </div>

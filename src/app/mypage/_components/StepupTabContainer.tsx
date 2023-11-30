@@ -58,26 +58,24 @@ export default function StepupTab(props: IProps) {
   ];
 
   return (
-    <div>
-      <div className="flex m-auto my-8 max-w-[1500px] flex-col">
-        <Tabs aria-label="step-up-tab" items={tabs}>
-          {(item: {
-            id: string;
-            label: string;
-            btnContent: ReactNode;
-            content: ReactNode;
-          }) => (
-            <Tab key={item.id} title={item.label}>
-              <Card>
-                <CardBody>
-                  <div>{item.btnContent}</div>
-                  <div>{item.content}</div>
-                </CardBody>
-              </Card>
-            </Tab>
-          )}
-        </Tabs>
-      </div>
+    <div className="flex my-8 flex-col">
+      <Tabs aria-label="step-up-tab" items={tabs}>
+        {(item: {
+          id: string;
+          label: string;
+          btnContent: ReactNode;
+          content: ReactNode;
+        }) => (
+          <Tab key={item.id} title={item.label}>
+            <Card>
+              <CardBody>
+                <div>{item.btnContent}</div>
+                <div>{item.content}</div>
+              </CardBody>
+            </Card>
+          </Tab>
+        )}
+      </Tabs>
     </div>
   );
 }

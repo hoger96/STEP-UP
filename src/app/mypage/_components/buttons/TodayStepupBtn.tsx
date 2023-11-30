@@ -94,44 +94,37 @@ export default function TodayStepupBtn() {
   };
 
   return (
-    <div>
-      <div className="flex justify-end">
-        <CommonButton
-          label={"오늘의 스텝업 기록하기"}
-          size={"sm"}
-          radius={"sm"}
-          color={"primary"}
-          variant={"solid"}
-          isDisabled={
-            renderCtx?.isReadMode || renderCtx?.holdYn === "Y"
-          }
-          onClick={handelOpenCreateTodayStepupPopup}
-          className="mb-3"
-        />
-      </div>
+    <div className="mb-3 flex justify-end">
+      <CommonButton
+        label={"오늘의 스텝업 기록하기"}
+        size={"sm"}
+        radius={"sm"}
+        color={"primary"}
+        variant={"solid"}
+        isDisabled={renderCtx?.isReadMode || renderCtx?.holdYn === "Y"}
+        onClick={handelOpenCreateTodayStepupPopup}
+      />
       <ToastContainer position="top-right" autoClose={2000} />
-      <div>
-        <CommonModal
-          title={"오늘의 스텝업 기록하기"}
-          scrollBehavior={"inside"}
-          contents={
-            <CreateTodayStepupP
-              todayDate={todayDate}
-              startTm={startTm}
-              endTm={endTm}
-              file={file}
-              setTodayDate={setTodayDate}
-              setStartTm={setStartTm}
-              setEndTm={setEndTm}
-              setFile={setFile}
-            />
-          }
-          size={"2xl"}
-          isOpen={isOpen}
-          onConfirmBtn={onConfirmBtn}
-          onClose={onClose}
-        />
-      </div>
+      <CommonModal
+        title={"오늘의 스텝업 기록하기"}
+        scrollBehavior={"inside"}
+        contents={
+          <CreateTodayStepupP
+            todayDate={todayDate}
+            startTm={startTm}
+            endTm={endTm}
+            file={file}
+            setTodayDate={setTodayDate}
+            setStartTm={setStartTm}
+            setEndTm={setEndTm}
+            setFile={setFile}
+          />
+        }
+        size={"2xl"}
+        isOpen={isOpen}
+        onConfirmBtn={onConfirmBtn}
+        onClose={onClose}
+      />
     </div>
   );
 }
