@@ -97,8 +97,7 @@ export default function MileageStatus() {
     if (isSuccess) {
       setIsConfrimOpen(false);
       await renderCtx?.fetchUserCurrentStatus(userId);
-      await renderCtx?.fetchMileageTable(requestId ?? "", 1);
-      initMileageStatusTable(userId, 1);
+      initMileageStatusTable(userId, renderCtx?.mileageCurrentPage);
       toast.success("신청이 취소되었어요!");
     }
   };
