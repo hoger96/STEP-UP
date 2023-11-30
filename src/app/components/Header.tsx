@@ -84,7 +84,6 @@ export default function Header() {
   }) => {
     try {
       await axios.post("/stepup/api/user/hold/exercise", params);
-
       return true;
     } catch (e) {
       console.error(e);
@@ -226,7 +225,7 @@ export default function Header() {
               handleConfirmBtnClick();
             }}
           />
-          <CommonModal
+          {/* <CommonModal
             title={"스텝업 보류하기"}
             scrollBehavior={"inside"}
             contents={
@@ -247,7 +246,7 @@ export default function Header() {
             onConfirmBtn={() => {
               handleConfirm();
             }}
-          />
+          /> */}
         </div>
       </div>
     </div>
