@@ -47,10 +47,10 @@ const config: Config = {
         },
       },
     }),
-    plugin(function ({ addVariant, e, addComponents }) {
+    plugin(function ({ addVariant, e, addComponents }: any) {
       // TODO: pub 아래 코드 확인 필요
-      addVariant("cm-checkbox", ({ modifySelectors, separator }) => {
-        modifySelectors(({ className }) => {
+      addVariant("cm-checkbox", ({ modifySelectors, separator }: any) => {
+        modifySelectors(({ className }: any) => {
           return `.${e(
             `cm-checkbox${separator}${className}`
           )} > span[aria-hidden]`;
