@@ -125,8 +125,8 @@ export default function MileageStatus() {
               renderCtx?.isReadMode
                 ? "본인이 아닌 경우 신청 취소할 수 없어요!"
                 : items?.approvalStus !== "WAIT"
-                ? "신청을 취소할 수 없어요!"
-                : "버튼을 누르면 신청을 취소할 수 있어요!"
+                  ? "신청을 취소할 수 없어요!"
+                  : "버튼을 누르면 신청을 취소할 수 있어요!"
             }
           >
             <span

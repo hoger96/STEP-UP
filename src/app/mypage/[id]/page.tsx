@@ -9,7 +9,7 @@ export default function Mypage(props: {
 
   return (
     <div>
-      <StepupStatus requestId={props.params.id} />
+      <StepupStatus />
       <StepupTabs requestId={props.params.id} />
     </div>
   );
